@@ -7,6 +7,8 @@ import it.sorguido.unconnected.domain.Rules
 import java.io.File
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 /** One bounded atomic document; no contacts queries, call history, network or backups. */
 class SettingsStore(context: Context) {
@@ -42,7 +44,7 @@ class SettingsStore(context: Context) {
             output = file.startWrite()
             output.write(raw)
             file.finishWrite(output)
-            sessionPaused.set(false)
+            setSessionPaused(false)
             true
         } catch (_: Exception) {
             file.failWrite(output)
@@ -54,8 +56,16 @@ class SettingsStore(context: Context) {
         private val lock = Any()
         internal val revision = AtomicLong(0)
         val sessionPaused = AtomicBoolean(false)
+        private val pauseUpdates = MutableStateFlow(false)
+        val sessionPauseFlow = pauseUpdates.asStateFlow()
+        // A short publication lock, separate from the disk lock, keeps both readers aligned.
+        @Synchronized
+        private fun setSessionPaused(paused: Boolean) {
+            sessionPaused.set(paused)
+            pauseUpdates.value = paused
+        }
         fun beginUpdate() {
-            sessionPaused.set(true)
+            setSessionPaused(true)
             revision.incrementAndGet()
         }
     }

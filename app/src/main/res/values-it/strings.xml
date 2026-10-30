@@ -7,6 +7,8 @@
     <string name="filtering_off">Filtro disattivato</string>
     <string name="filtering_on">La tua programmazione è attiva</string>
     <string name="state_paused">Filtro in pausa</string>
+    <string name="state_saving">Salvataggio impostazioni</string>
+    <string name="saving_detail">Il filtro è temporaneamente in pausa durante il salvataggio delle modifiche.</string>
     <string name="off_detail">Tutte le chiamate sono consentite. Le impostazioni restano salvate.</string>
     <string name="on_detail">I numeri abilitati possono chiamare negli orari consentiti e vengono filtrati al di fuori.</string>
     <string name="paused_detail">Completa la configurazione qui sotto. Tutte le chiamate sono consentite quando manca un permesso necessario.</string>

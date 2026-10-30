@@ -1,3 +1,7 @@
+# Latest candidate: 1.0.1 (issue #1)
+
+The current candidate and measured patch results are in [issue #1 verification](../runs/issue-1-1.0.1/verification.md). It has 35 passing tests, successful debug/release build and lint, and the original signer. Physical retest is pending; issue #1 remains open. The 1.0.0 evidence below is historical and its hashes do not identify the new candidate.
+
 # unconnected 1.0.0 candidate verification
 
 Date: 2026-10-30 (Europe/Rome). Source baseline: `main` at `9e2a899a6952e8bb4a4c23a2989c033b07cfd8fa`; implementation is in the uncommitted working tree and the supplied source archive. Protected canonical files are unchanged.

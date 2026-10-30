@@ -9,30 +9,36 @@
     "P1 implementation, JVM tests, lint and APK builds"
   ],
   "pending_gates": [
-    "P2 physical-phone verification",
-    "P3 physical installation acceptance and public release approval"
+    "Issue #1 physical UI retest before closure",
+    "P2 remaining physical-phone acceptance",
+    "P3 public release approval"
   ],
   "host_modified": true,
   "relevant_artifacts": [
-    "evidence/current/verification.md",
-    "evidence/current/review.md",
-    "evidence/current/signature.json",
-    "docs/DEVICE_TEST_GATE.md",
-    "docs/BUILD.md"
+    "evidence/runs/issue-1-1.0.1/verification.md",
+    "evidence/runs/issue-1-1.0.1/review.md",
+    "evidence/runs/issue-1-1.0.1/signature.json",
+    "docs/BUILD.md",
+    "docs/DEVICE_TEST_GATE.md"
   ],
   "relevant_corroborations": [
     "C1",
     "C2",
     "C3"
   ],
-  "next_action": "Obtain the owner-approved physical Android test device and execute the documented acceptance gate. Do not repeat completed builds or claim production completion. Signed original-key candidate is prepared locally; no device or public release has been modified.",
-  "last_verified_head": "9e2a899a6952e8bb4a4c23a2989c033b07cfd8fa",
+  "next_action": "User performs issue #1 physical UI retest on signed 1.0.1 candidate. Keep issue open until confirmed; filtering itself continues to work per user report. Broader P2 acceptance/public-release gates remain.",
+  "last_verified_head": "60828f98f8dee324c0dc50212ca7d11a0d5b730f",
   "host_changes": [
     "Used Gradle dependency/build caches",
     "Started host ADB server for read-only device enumeration"
   ],
   "device_changes": [],
-  "source_state": "uncommitted implementation; source archive in development/deliverables",
-  "signed_candidate": "development/deliverables/unconnected-1.0.0-candidate.apk",
-  "verification_date": "2026-10-30"
+  "source_state": "Issue #1 patch and measured receipts are recorded by the enclosing Git commit on main; see source-inputs.sha256 in the run.",
+  "signed_candidate": "development/deliverables/issue-1-1.0.1/unconnected-1.0.1-candidate.apk",
+  "verification_date": "2026-10-30",
+  "active_issue": {
+    "number": 1,
+    "url": "https://github.com/sorguido/unconnected/issues/1",
+    "status": "open; patch candidate awaits phone verification"
+  }
 }

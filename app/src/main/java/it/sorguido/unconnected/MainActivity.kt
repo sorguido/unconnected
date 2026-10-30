@@ -108,6 +108,7 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
         loaded = true
     }
     var busy by remember { mutableStateOf(false) }
+    val sessionPaused by SettingsStore.sessionPauseFlow.collectAsState()
     var message by remember { mutableStateOf<Int?>(null) }
     var permissionVersion by remember { mutableIntStateOf(0) }
     var numberEditor by remember { mutableStateOf<NumberRule?>(null) }
@@ -123,7 +124,6 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
     val contacts = remember(resumeVersion, permissionVersion) { ScreeningAccess.hasContacts(context) }
     val roleAvailable = remember(resumeVersion) { ScreeningAccess.roleAvailable(context) }
     val permissionsReady = role && contacts
-    val ready = permissionsReady && !SettingsStore.sessionPaused.get()
     var now by remember { mutableStateOf(ZonedDateTime.now()) }
     // A foreground-only clock refreshes the summary; screening never depends on it.
     LaunchedEffect(foreground, resumeVersion) {
@@ -180,8 +180,11 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
                     }
                 } else {
                     val enabled = current.enabled
-                    Section(stringResource(if (!enabled) R.string.filtering_off else if (ready) R.string.filtering_on else R.string.state_paused)) {
-                        Text(stringResource(if (!enabled) R.string.off_detail else if (ready) R.string.on_detail else if (SettingsStore.sessionPaused.get()) R.string.session_paused_detail else R.string.paused_detail))
+                    // One observable sample supplies both heading and explanation, including
+                    // when this composition starts while another save is still finishing.
+                    val status = filterStatus(enabled, permissionsReady, busy, sessionPaused)
+                    Section(stringResource(status.title)) {
+                        Text(stringResource(status.detail))
                         Button(
                             onClick = { if (enabled) persist(current.copy(enabled = false)) else requestSave(current.copy(enabled = true)) },
                             enabled = !busy && (enabled || permissionsReady),

@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-30",
+  "source_baseline": "60828f98f8dee324c0dc50212ca7d11a0d5b730f",
+  "candidate_version": "1.0.1",
+  "version_code": 2,
+  "tests": [
+    {
+      "name": "it.sorguido.unconnected.FilterStatusTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "reproducesOldCapturedReadinessAcrossChildScopeUpdates",
+        "savingOffActiveAndRealPausesHaveConsistentCopy",
+        "observedPauseClearsAfterBackgroundCompletionWithoutSettingsChangeOrResume",
+        "repeatedSavesFailureAndRetryKeepPublishedStateInSync"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.SettingsCodecTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "rejectsInvalidStateAndUnknownSchema",
+        "malformedOrOversizedContentNeverBecomesDefaults",
+        "everyRequiredFieldMustBePresent",
+        "roundTripPreservesCompleteSnapshot",
+        "emptyScheduleConfirmationIsPersistedExplicitly",
+        "rejectsTypeCoercionAndFractionalMinutes"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.domain.NumbersTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "rejectsUnsafeLexicalFormsAndInvalidNumbers",
+        "canonicalStorageRequiresExactE164",
+        "requiresAnExplicitValidRegion",
+        "normalizesRegionalAndInternationalInput"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.domain.RulesTest",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "emptyScheduleRequiresExplicitConfirmation",
+        "overnightWindowBelongsToItsStartingDay",
+        "allowedUntilDistinguishesRepeatedHourIntervals",
+        "allowedUntilFindsYesterdayOvernightEnd",
+        "workingDayBoundariesAreStartInclusiveEndExclusive",
+        "continuouslyAllowedUnionHasNoEnd",
+        "incomingInternationalTrunkPrefixIsNotSilentlyRepaired",
+        "allUncertainCallerIdentitiesFailOpen",
+        "weeklyRecurrenceAndWeekendRollover",
+        "fallbackCanReenterAlreadyStartedWindow",
+        "splitShiftsAndOverlapsUseUnionOfWindows",
+        "corruptConfigurationFailsOpen",
+        "allowedUntilFindsEndOfOverlappingUnionAndSplitShift",
+        "invalidScheduleCannotBePresentedAsNextOpening",
+        "deviceTimezoneAtCallArrivalControlsSchedule",
+        "defaultInstallAllowsEveryCall",
+        "strictFullNumberMatchAndIndividualEnableState",
+        "masterAndPermissionsAlwaysOverrideBlocking",
+        "repeatedHourAllowsBothOffsetsAndFindsSecondOpening",
+        "allowedUntilHandlesSkippedEndInSpringGap",
+        "springGapUsesActualLocalTimeAndNextExistentOpening"
+      ]
+    }
+  ],
+  "total_tests": 35,
+  "lint": {
+    "debug": {
+      "errors": 0,
+      "warnings": 8
+    },
+    "release": {
+      "errors": 0,
+      "warnings": 8
+    }
+  },
+  "resource_parity": {
+    "english": 77,
+    "italian": 77
+  },
+  "physical_issue_1_retest": "pending; issue remains open"
+}

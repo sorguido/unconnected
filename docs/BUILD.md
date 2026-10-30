@@ -2,7 +2,9 @@
 
 ## Status and prerequisites
 
-unconnected 1.0.0 is an implemented **release candidate**, pending physical-phone acceptance and release approval. Android 10 (API 29) or newer is required. Automated checks do not establish real call, notification, carrier or OEM behavior.
+The 1.0.1 candidate addresses issue #1's stale post-save status. See the [patch evidence and physical retest](../evidence/runs/issue-1-1.0.1/verification.md); the issue remains open until the phone retest.
+
+unconnected 1.0.1 is an implemented **release candidate**, pending physical-phone acceptance and release approval. Android 10 (API 29) or newer is required. Automated checks do not establish real call, notification, carrier or OEM behavior.
 
 The pinned toolchain is Gradle 9.6.0, Android Gradle Plugin 9.4.0, Kotlin Compose compiler 2.2.10, Android SDK platform 36 and build-tools 36.0.0. Use a Gradle-compatible JDK (the recorded build uses OpenJDK 25). Set `ANDROID_HOME` to your installed Android SDK or set `sdk.dir` in an ignored `local.properties`. Dependencies download from Google Maven and Maven Central; the installed application has no Internet permission. The Gradle distribution checksum is pinned in the wrapper.
 
@@ -33,7 +35,7 @@ Installation, changing Android roles/permissions, and real calls require the dev
 ```bash
 adb -s DEVICE_SERIAL shell pm list users
 # After confirming that 0 is the personal user:
-adb -s DEVICE_SERIAL install --user 0 -r development/deliverables/unconnected-1.0.0-candidate.apk
+adb -s DEVICE_SERIAL install --user 0 -r development/deliverables/issue-1-1.0.1/unconnected-1.0.1-candidate.apk
 ```
 
 **Important for work-profile phones:** Plain `adb install` may provision the APK in both the personal and managed profiles. Never omit `--user` for test installs on these devices. If the APK was already installed in a work profile, first find the actual work ID using `adb shell pm list users`, verify installation with `adb shell pm list packages --user WORK_USER_ID it.sorguido.unconnected`, and—only after owner approval—remove that profile's installation with `adb uninstall --user WORK_USER_ID it.sorguido.unconnected`. This retains the personal installation. Do not bypass company device restrictions. Never run profile-unspecified `adb uninstall` on a multi-profile phone.

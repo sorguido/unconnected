@@ -1,6 +1,7 @@
 # Private development material, build output, secrets and Android IDE caches
 /development/
 .gradle/
+.kotlin/
 **/build/
 .idea/
 *.iml
