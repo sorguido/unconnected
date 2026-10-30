@@ -1,29 +1,47 @@
 # unconnected
 
-**Quiet, scheduled call filtering for Android.**
+**Choose who can reach you, and when.**
 
-> **Development status:** Android release candidate implemented. Build, tests, signature receipts and remaining limitations are tracked in [verification](evidence/runs/contacts-1.0.0-vc3/verification.md). Physical-phone acceptance and explicit release approval are still required; this is not a verified production release.
+unconnected lets you pick specific phone numbers and decide the days and hours they are allowed to call you. Outside those hours their calls are filtered quietly. A number you have not listed is not affected by the app.
 
-unconnected lets you add multiple phone numbers manually or select a specific number from Android contacts, then define the weekly days and hours when those callers may reach you. Outside the allowed windows, the app aims to block only listed callers silently, without ringing or an ordinary missed-call notification where Android permits. A prominent green **ACTIVATE** button enables the rule and changes to a red **DEACTIVATE** button, which suspends all filtering. The list, days, and time windows are editable.
+## What it does
 
-The app is local-first, offline, requires no account or root access, and does not replace the Phone app. Android's call-screening role is required. English is the fallback language and Italian is selected automatically for Italian system locales. The user interface must be polished, accessible and functional—not a mock-up.
+- **Several numbers.** Keep as many numbers as you need in one list.
+- **From your contacts, or typed in.** Choose a number straight from your Android contacts, or enter it manually with its country code.
+- **A weekly schedule that fits your routine.** Set the days and hours when listed callers may reach you, including windows that cross midnight.
+- **On and off in one tap.** One button turns the filter on. The same button turns it off straight away and keeps every setting you made.
+- **Works offline.** The app has no Internet permission at all, so it cannot send anything anywhere.
+- **No account.** Nothing to sign up for and nothing to remember.
 
-## Important platform limitations
+## Installing
 
-Only the caller number presented to Android can be matched. Forwarded calls may display the **original caller**, rather than the forwarding switchboard number. Call logs may still contain blocked calls, and manufacturer behavior differs. Saved-contact calls may require the Contacts permission. The product must clearly communicate these limits and allow all calls if caller identity or rules are uncertain.
+1. Download the APK from the [latest release](https://github.com/sorguido/unconnected/releases).
+2. Open the file on your phone and allow the installation if Android asks you to.
+3. Open **unconnected**.
+4. Grant the two things it needs: the call-screening role, and the Contacts permission. The setup card in the app walks you through both.
+5. Add your numbers, set your hours, and turn the filter on.
 
-## Development
+**Requires Android 10 or later.**
 
-- [Build, install, disable and uninstall](docs/BUILD.md)
-- [Physical-device acceptance gate](docs/DEVICE_TEST_GATE.md)
-- [Independent review](evidence/runs/contacts-1.0.0-vc3/review.md)
+## Good to know
 
-- [Agent bootstrap](START.md)
-- [Product requirements](docs/PRODUCT_SPEC.md)
-- [Goal-mode delegation for AI PM](docs/AI_PM_GOAL.md)
-- [Build/signing policy](docs/SIGNING.md)
-- [Technical evidence](CORROBORATIONS.md)
+- **Forwarded calls.** When a call is forwarded to you, your phone may show the original caller rather than the number that forwarded it. unconnected can only act on the number your phone actually reports.
+- **Hidden or incomplete numbers.** If a caller cannot be identified — because the number is withheld, restricted or incomplete — that call is allowed through. Whenever unconnected is unsure, it deliberately lets the call pass rather than risk blocking the wrong person.
+- **Your call log.** Whether a filtered call still appears in your call history depends on your phone and its phone app. unconnected does not remove entries from your call log.
+- **Phones differ.** Filtering behaviour varies between manufacturers and carriers, so results may not be identical on every device.
 
-No user phone numbers or signing secrets belong in this repository.
+## Privacy
 
-Copyright © 2026 sorguido. See [LICENSE](LICENSE).
+There is no account, no advertising, no analytics and no online tracking. Your numbers and your schedule stay on your phone, and they are excluded from cloud backup and transfer to a new device. unconnected uses the Contacts permission only to read the name and phone numbers of the one contact you choose yourself; it does not scan, copy or upload your address book.
+
+## Turning it off
+
+Turn the filter off inside the app whenever you like, or remove unconnected as your call-screening app in Android settings. Uninstalling the app through Android settings deletes everything it stored. unconnected never changes your call forwarding, Do Not Disturb, default phone app or any other phone setting on its own.
+
+## License
+
+unconnected is free software under the [BSD 2-Clause License](LICENSE).
+
+---
+
+Building from source, installation over adb, signing and maintenance are documented in [docs/BUILD.md](docs/BUILD.md). Third-party components are listed in [NOTICE.md](NOTICE.md).

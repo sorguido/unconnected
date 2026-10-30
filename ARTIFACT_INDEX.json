@@ -9,7 +9,7 @@
   },
   "state_cache": "PROJECT_STATE.json",
   "product_spec": "docs/PRODUCT_SPEC.md",
-  "delegation_goal": "docs/AI_PM_GOAL.md",
+  "delegation_goal": "development/archive/AI_PM_GOAL.md (local only, not published)",
   "signing": "docs/SIGNING.md",
   "phase_artifacts": {
     "P0": "docs/phase-specific/P0.md",
@@ -33,8 +33,9 @@
   "delivery_receipt": "evidence/runs/dynamic-layout-1.0.0-vc6/signature.json",
   "local_deliverables": "development/deliverables/ (ignored)",
   "issue_1_retest": "evidence/runs/issue-1-1.0.1/verification.md#human_required--issue_1_physical_retest",
-  "contact_picker_retest": "evidence/runs/issue-2-1.0.0-vc4/verification.md#human_required--issue_2_physical_acceptance",
-  "issue_2_retest": "evidence/runs/issue-2-1.0.0-vc4/verification.md#human_required--issue_2_physical_acceptance",
-  "stable_ui_retest": "evidence/runs/stable-ui-1.0.0-vc5/verification.md#human_required--stable_ui_physical_acceptance",
-  "dynamic_layout_retest": "evidence/runs/dynamic-layout-1.0.0-vc6/verification.md#human_required--dynamic_layout_physical_acceptance"
+  "contact_picker_retest": "development/archive/evidence-runs/issue-2-1.0.0-vc4/verification.md (local only, superseded by code 6)",
+  "issue_2_retest": "development/archive/evidence-runs/issue-2-1.0.0-vc4/verification.md (local only, superseded by code 6)",
+  "stable_ui_retest": "development/archive/evidence-runs/stable-ui-1.0.0-vc5/verification.md (local only, superseded by code 6)",
+  "dynamic_layout_retest": "evidence/runs/dynamic-layout-1.0.0-vc6/verification.md#human_required--dynamic_layout_physical_acceptance",
+  "release_report": "evidence/runs/release-v1.0.0/publication.md"
 }

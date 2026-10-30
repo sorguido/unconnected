@@ -2,9 +2,9 @@
 
 ## Status and prerequisites
 
-The current first-public-release candidate is **1.0.0 / versionCode 6**. It sizes the status card to the text actually visible and keeps the committed copy on screen while a save runs, removing the empty block the owner saw above **DEACTIVATE** in code 5 without reintroducing save/toggle flicker. The issue #1 status fix and the issue #2 contact picker are retained. See [new candidate evidence and physical retest](../evidence/runs/dynamic-layout-1.0.0-vc6/verification.md). Codes 1–5 and their historical evidence remain available; code 6 updates without uninstalling or clearing rules. No official Release has been approved.
+The published release is **1.0.0 / versionCode 6**, tagged `v1.0.0`. It sizes the status card to the text actually visible and keeps the committed copy on screen while a save runs, removing the empty block the owner saw above **DEACTIVATE** in code 5 without reintroducing save/toggle flicker. The issue #1 status fix and the issue #2 contact picker are retained. See [release evidence and the owner's physical checklist](../evidence/runs/dynamic-layout-1.0.0-vc6/verification.md) and the [publication report](../evidence/runs/release-v1.0.0/publication.md). Codes 1–5 update in place without uninstalling or clearing rules; the code-3, code-4 and code-5 receipts are archived locally under ignored `development/archive/`, and the code-1 and issue #1 receipts remain in the public tree because preserved records link to them.
 
-unconnected 1.0.0 is an implemented **release candidate**, pending physical-phone acceptance and release approval. Android 10 (API 29) or newer is required. Automated checks do not establish real call, notification, carrier or OEM behavior.
+unconnected 1.0.0 is the released build. The owner tested it on a physical phone and approved publication. Android 10 (API 29) or newer is required. Automated checks do not establish real call, notification, carrier or OEM behavior.
 
 The pinned toolchain is Gradle 9.6.0, Android Gradle Plugin 9.4.0, Kotlin Compose compiler 2.2.10, Android SDK platform 36 and build-tools 36.0.0. Use a Gradle-compatible JDK (the recorded build uses OpenJDK 25). Set `ANDROID_HOME` to your installed Android SDK or set `sdk.dir` in an ignored `local.properties`. Dependencies download from Google Maven and Maven Central; the installed application has no Internet permission. The Gradle distribution checksum is pinned in the wrapper.
 
@@ -26,7 +26,7 @@ The unsigned artifact cannot be installed or distributed as the official release
 UNCONNECTED_SIGNING_ROOT=../chromecast-killswitch-app ./gradlew :app:assembleRelease :app:testDebugUnitTest :app:lint
 ```
 
-See [SIGNING.md](SIGNING.md). The original private PKCS#12 and properties remain in the existing Chromecast checkout; they are read, never copied or changed. Compare the APK signer with the independently published Chromecast APK before distributing. Candidate APKs, build logs and source archives live under ignored `development/`; public verification receipts live in `evidence/runs/dynamic-layout-1.0.0-vc6/`, alongside preserved earlier runs.
+See [SIGNING.md](SIGNING.md). The original private PKCS#12 and properties remain in the existing Chromecast checkout; they are read, never copied or changed. Compare the APK signer with the independently published Chromecast APK before distributing. Candidate APKs, build logs, source archives and the superseded code-3/4/5 receipts live under ignored `development/`; the public verification receipts for the released build live in `evidence/runs/dynamic-layout-1.0.0-vc6/`, and the publication record for `v1.0.0` in `evidence/runs/release-v1.0.0/`.
 
 ## Install on a test phone — human action required
 

@@ -28,15 +28,15 @@ Never attach actual personal call numbers or private signing keys as evidence.
 
 ## Contact-picking candidate extension (1.0.0 / code 3)
 
-Current picker checks and limits: [verification](../evidence/runs/contacts-1.0.0-vc3/verification.md). Automated adapter, cancellation, error and shared duplicate/number-validation cases pass; native multi-number choice, no-save-until-confirmation, personal-profile update and rendered/lifecycle checks still require the documented phone retest. Earlier candidate results remain in their historical receipts.
+Automated adapter, cancellation, error and shared duplicate/number-validation cases passed; native multi-number choice, no-save-until-confirmation, personal-profile update and rendered/lifecycle checks required the documented phone retest. Its receipt is archived locally under ignored `development/archive/` and is superseded by the code-6 run.
 
 ## Issue #2 extension (1.0.0 / code 4)
 
-The owner reports that the code-3 picker tests passed except duplicated phone rows in the native selector (issue #2); device/OEM details were not supplied. This does not establish code-4 physical acceptance. See [new verification and owner retest](../evidence/runs/issue-2-1.0.0-vc4/verification.md) for scoped aggregate queries, unique-number/label grouping, ambiguous alternatives, cancelled drafts, explicit Save, and the retained filter/status regression suites. Historical receipts above remain unchanged.
+The owner reported that the code-3 picker tests passed except duplicated phone rows in the native selector (issue #2); device/OEM details were not supplied. The code-4 receipt covering scoped aggregate queries, unique-number/label grouping, ambiguous alternatives, cancelled drafts, explicit Save and the retained filter/status regression suites is archived locally under ignored `development/archive/` and is superseded by the code-6 run.
 
 ## Stable-save presentation extension (1.0.0 / code 5)
 
-The owner reports code 4 functions correctly, with a remaining visual flicker during saves/toggles. [Code-5 evidence and physical checklist](../evidence/runs/stable-ui-1.0.0-vc5/verification.md) distinguish automated natural-size/placement tests from unverified native rendering. Repeat time/day edits, number additions/deletions, master toggles, failure/retry where safely available, and scrolled/light/dark/large-font/TalkBack checks. All earlier test receipts remain unchanged.
+The owner reported code 4 functioning correctly, with a remaining visual flicker during saves/toggles. The code-5 receipt distinguishing automated natural-size/placement tests from unverified native rendering is archived locally under ignored `development/archive/` and is superseded by the code-6 run.
 
 ## Dynamic status-card layout extension (1.0.0 / code 6)
 
