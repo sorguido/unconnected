@@ -29,3 +29,7 @@ Never attach actual personal call numbers or private signing keys as evidence.
 ## Contact-picking candidate extension (1.0.0 / code 3)
 
 Current picker checks and limits: [verification](../evidence/runs/contacts-1.0.0-vc3/verification.md). Automated adapter, cancellation, error and shared duplicate/number-validation cases pass; native multi-number choice, no-save-until-confirmation, personal-profile update and rendered/lifecycle checks still require the documented phone retest. Earlier candidate results remain in their historical receipts.
+
+## Issue #2 extension (1.0.0 / code 4)
+
+The owner reports that the code-3 picker tests passed except duplicated phone rows in the native selector (issue #2); device/OEM details were not supplied. This does not establish code-4 physical acceptance. See [new verification and owner retest](../evidence/runs/issue-2-1.0.0-vc4/verification.md) for scoped aggregate queries, unique-number/label grouping, ambiguous alternatives, cancelled drafts, explicit Save, and the retained filter/status regression suites. Historical receipts above remain unchanged.

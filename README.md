@@ -10,7 +10,7 @@ The app is local-first, offline, requires no account or root access, and does no
 
 ## Important platform limitations
 
-Only the caller number presented to Android can be matched. Forwarded calls may display the **original caller**, rather than the forwarding office number. Call logs may still contain blocked calls, and manufacturer behavior differs. Saved-contact calls may require the Contacts permission. The product must clearly communicate these limits and allow all calls if caller identity or rules are uncertain.
+Only the caller number presented to Android can be matched. Forwarded calls may display the **original caller**, rather than the forwarding switchboard number. Call logs may still contain blocked calls, and manufacturer behavior differs. Saved-contact calls may require the Contacts permission. The product must clearly communicate these limits and allow all calls if caller identity or rules are uncertain.
 
 ## Development
 

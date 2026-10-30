@@ -13,7 +13,7 @@
     <string name="on_detail">I numeri abilitati possono chiamare negli orari consentiti e vengono filtrati al di fuori.</string>
     <string name="paused_detail">Completa la configurazione qui sotto. Tutte le chiamate sono consentite quando manca un permesso necessario.</string>
     <string name="setup">Configurazione telefono</string>
-    <string name="setup_detail">Android deve scegliere unconnected come app per filtrare le chiamate. Il permesso Contatti permette ad Android di includere i numeri salvati; l’app legge solo il numero e il nome scelti esplicitamente nel selettore della rubrica.</string>
+    <string name="setup_detail">Android deve scegliere unconnected come app per filtrare le chiamate. Il permesso Contatti permette ad Android di includere i numeri salvati; l’app legge solo il nome e i numeri del contatto che scegli esplicitamente.</string>
     <string name="role_granted">Filtro chiamate: pronto</string>
     <string name="role_missing">Filtro chiamate: non selezionato</string>
     <string name="role_unavailable">Il filtro chiamate non è disponibile su questo dispositivo.</string>
@@ -77,8 +77,15 @@
     <string name="next_continuous">Sempre consentito a partire da %1$s</string>
     <string name="next_interval">Prossima fascia consentita: %1$s → %2$s</string>
     <string name="choose_contact">Scegli dalla rubrica</string>
-    <string name="contact_pick_help">Scegli un solo numero, controlla o modifica i campi, poi tocca Salva. Nessun numero viene salvato senza conferma.</string>
-    <string name="contact_loading">Lettura del numero selezionato…</string>
-    <string name="contact_pick_failed">Impossibile leggere il numero selezionato. Riprova oppure inseriscilo manualmente.</string>
+    <string name="contact_pick_help">Scegli un contatto e, se necessario, uno dei suoi numeri distinti. Controlla o modifica i campi e tocca Salva per confermare.</string>
+    <string name="contact_loading">Lettura dei numeri del contatto selezionato…</string>
+    <string name="contact_pick_failed">Impossibile leggere questo contatto. Riprova oppure inserisci il numero manualmente.</string>
     <string name="contact_picker_unavailable">Il selettore della rubrica non è disponibile oppure l’accesso è stato negato. Puoi comunque inserire il numero manualmente.</string>
+    <string name="contact_permission_needed">Serve il permesso Contatti per leggere il contatto scelto. Usa Consenti Contatti nella schermata principale oppure inserisci il numero manualmente.</string>
+    <string name="contact_no_numbers">Questo contatto non ha numeri telefonici. Scegli un altro contatto oppure inserisci un numero manualmente.</string>
+    <string name="contact_invalid_numbers">Non è possibile interpretare questi numeri senza ambiguità per il paese selezionato. Controlla il paese e riprova oppure inserisci manualmente il numero internazionale completo.</string>
+    <string name="contact_too_many">Questo contatto contiene troppe voci telefoniche da mostrare in modo sicuro. Inserisci manualmente il numero desiderato.</string>
+    <string name="contact_choose_number">Scegli un numero</string>
+    <string name="contact_number_help">I formati equivalenti compaiono una sola volta. Scegli un numero per precompilare i campi; nulla viene salvato finché non tocchi Salva.</string>
+    <string name="contact_some_invalid">Alcune voci non sono interpretabili senza ambiguità per il paese selezionato. Sono mostrati solo i numeri verificati. Annulla per controllare il paese o inserire manualmente un altro numero.</string>
 </resources>

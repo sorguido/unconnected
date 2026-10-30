@@ -10,6 +10,7 @@ import android.content.res.Configuration
 import android.os.LocaleList
 import androidx.core.net.toUri
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Phone
 import android.provider.Settings as AndroidSettings
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
@@ -338,7 +339,16 @@ private fun NumberEditor(original: NumberRule?, settings: Settings, onDismiss: (
     var error by remember { mutableStateOf<Int?>(null) }
     val context = LocalContext.current
     var pendingContactUri by rememberSaveable { mutableStateOf<String?>(null) }
-    val loadingContact = pendingContactUri != null
+    var contactChoices by remember { mutableStateOf<ContactPickResult.Choices?>(null) }
+    val loadingContact = pendingContactUri != null && contactChoices == null
+    fun acceptContact(result: ContactPickResult) {
+        val draft = applyContactPick(NumberDraft(label, raw), result)
+        label = draft.label
+        raw = draft.number
+        error = validateNumberEntry(raw, region, settings.numbers, original?.id).error
+        contactChoices = null
+        pendingContactUri = null
+    }
     val contactPicker = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) pendingContactUri = result.data?.data?.toString() ?: ""
         // Cancel (including an empty native picker) leaves the existing draft untouched.
@@ -346,17 +356,50 @@ private fun NumberEditor(original: NumberRule?, settings: Settings, onDismiss: (
     LaunchedEffect(pendingContactUri) {
         val uri = pendingContactUri ?: return@LaunchedEffect
         val result = withContext(Dispatchers.IO) {
-            readContactPick(Activity.RESULT_OK, uri) { selectedUri, projection ->
-                context.contentResolver.query(selectedUri.toUri(), projection, null, null, null)
+            readContactPick(Activity.RESULT_OK, uri, region, ScreeningAccess.hasContacts(context)) { selectedUri, projection, selection, args ->
+                context.contentResolver.query(selectedUri.toUri(), projection, selection, args, null)
             }
         }
-        if (result is ContactPickResult.Selected) {
-            val draft = applyContactPick(NumberDraft(label, raw), result)
-            label = draft.label
-            raw = draft.number
-            error = validateNumberEntry(raw, region, settings.numbers, original?.id).error
-        } else if (result == ContactPickResult.Failed) error = R.string.contact_pick_failed
-        pendingContactUri = null
+        when (result) {
+            is ContactPickResult.Selected -> acceptContact(result)
+            is ContactPickResult.Choices -> contactChoices = result // Keep URI for safe recreation/re-query.
+            else -> {
+                error = when (result) {
+                    ContactPickResult.PermissionDenied -> R.string.contact_permission_needed
+                    ContactPickResult.Empty -> R.string.contact_no_numbers
+                    ContactPickResult.InvalidNumbers -> R.string.contact_invalid_numbers
+                    ContactPickResult.TooMany -> R.string.contact_too_many
+                    ContactPickResult.Cancelled -> error
+                    else -> R.string.contact_pick_failed
+                }
+                pendingContactUri = null
+            }
+        }
+    }
+    contactChoices?.let { choices ->
+        AlertDialog(
+            onDismissRequest = { contactChoices = null; pendingContactUri = null },
+            title = { Text(stringResource(R.string.contact_choose_number)) },
+            text = {
+                Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    choices.name?.let { Text(it) }
+                    Text(stringResource(R.string.contact_number_help))
+                    if (choices.hasUnusableNumbers) Text(stringResource(R.string.contact_some_invalid), color = MaterialTheme.colorScheme.error)
+                    choices.numbers.forEach { number ->
+                        OutlinedButton(onClick = { acceptContact(chooseContactNumber(choices, number.e164)) }, modifier = Modifier.fillMaxWidth()) {
+                            Column {
+                                Text(number.e164)
+                                val labels = number.labels.map { Phone.getTypeLabel(context.resources, it.type, it.custom).toString() }.distinct()
+                                Text(labels.joinToString(" · "), style = MaterialTheme.typography.bodySmall)
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { contactChoices = null; pendingContactUri = null }) { Text(stringResource(R.string.cancel)) } },
+        )
+        return
     }
     val locale = displayLocale()
     AlertDialog(onDismissRequest = onDismiss,
@@ -365,7 +408,8 @@ private fun NumberEditor(original: NumberRule?, settings: Settings, onDismiss: (
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 if (original == null) {
                     OutlinedButton(onClick = {
-                        try { contactPicker.launch(contactPickerIntent()) }
+                        if (!ScreeningAccess.hasContacts(context)) error = R.string.contact_permission_needed
+                        else try { contactPicker.launch(contactPickerIntent()) }
                         catch (_: RuntimeException) { error = R.string.contact_picker_unavailable }
                     }, enabled = !loadingContact, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.choose_contact)) }
                     Text(stringResource(R.string.contact_pick_help), style = MaterialTheme.typography.bodySmall)
@@ -383,9 +427,7 @@ private fun NumberEditor(original: NumberRule?, settings: Settings, onDismiss: (
             }
         },
         confirmButton = { TextButton(enabled = !loadingContact, onClick = {
-            val validation = validateNumberEntry(raw, region, settings.numbers, original?.id)
-            if (validation.error != null) error = validation.error
-            else onSave(NumberRule(original?.id ?: UUID.randomUUID().toString(), label.trim(), validation.e164!!, original?.enabled ?: true), region)
+            error = saveNumberEntry(NumberDraft(label, raw), region, settings.numbers, original, onSave)
         }) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }

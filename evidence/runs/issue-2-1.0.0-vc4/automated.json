@@ -1,0 +1,154 @@
+{
+  "date": "2026-10-30",
+  "source_baseline": "65856c2eeef87e5c44c715ff1243a17acb71bfe0",
+  "version_name": "1.0.0",
+  "version_code": 4,
+  "tests": [
+    {
+      "name": "it.sorguido.unconnected.ContactPickingTest",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "providerAndPermissionExceptionsAtEitherQueryAreRecoverable",
+        "readLimitRejectsOverflowEvenWhenProviderIgnoresRequestedLimit",
+        "absentNameRetainsManualLabelAndNamesAndCustomLabelsStayBounded",
+        "singleNumberQueriesOnlyChosenAggregateAndItsBoundedPhoneRows",
+        "distinctNumbersRequireAnExplicitChoiceAndNeverDefaultToFirst",
+        "exactDuplicatesProduceOnePrefill",
+        "invalidAndAmbiguousRowsProduceClearOutcomeWithoutReplacingDraft",
+        "cancellationAtEitherStageLeavesDraftAndNeverQueriesOnNativeCancel",
+        "fourEquivalentItalianRepresentationsKeepOneNumberAndRetainDistinctAlternative",
+        "missingOrInvalidAggregateRowsDoNotQueryPhones",
+        "equivalentRowsPreserveDistinctTypeAndCustomLabels",
+        "mixedUnusableRowsRetainEveryValidAlternativeAndRequireChoiceWithWarning",
+        "similarSuffixesAndDifferentCountriesStayDistinct",
+        "deniedExistingPermissionNeverQueries",
+        "internationalTrunkRepairsAreNeverMergedWithValidNumber",
+        "contactWithoutPhoneNumbersLeavesManualDraftAvailable",
+        "cursorFailureClosesCursorAndCannotReturnPartialDraft",
+        "unsafeOrNonIndividualPickerUrisNeverQuery",
+        "validNationalTrunkAndRegionalInternationalPrefixRemainSupported",
+        "rowsFromOtherContactAndMissingPhoneColumnsFailWithoutPartialPrefill",
+        "asyncCancellationPropagatesAtBothQueryStages",
+        "localLookupUrisResolveOnlyChosenContactIncludingUpdatedIdHint",
+        "missingOptionalPhoneLabelsDoNotLoseValidNumbers"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.FilterStatusTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "reproducesOldCapturedReadinessAcrossChildScopeUpdates",
+        "savingOffActiveAndRealPausesHaveConsistentCopy",
+        "observedPauseClearsAfterBackgroundCompletionWithoutSettingsChangeOrResume",
+        "repeatedSavesFailureAndRetryKeepPublishedStateInSync"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.NumberEntryTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "manualAndPickedDuplicatesIncludingDisabledRulesCannotInvokeSave",
+        "pickingChoosingCancellingAndEditingCannotPersistBeforeExplicitSave",
+        "editingOwnNumberPreservesIdentityAndDisabledStateButRejectsOtherDuplicate",
+        "invalidNumbersOrRegionCannotInvokeSaveAndRemainManuallyCorrectable"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.SettingsCodecTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "rejectsInvalidStateAndUnknownSchema",
+        "malformedOrOversizedContentNeverBecomesDefaults",
+        "everyRequiredFieldMustBePresent",
+        "roundTripPreservesCompleteSnapshot",
+        "emptyScheduleConfirmationIsPersistedExplicitly",
+        "rejectsTypeCoercionAndFractionalMinutes"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.domain.NumbersTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "rejectsUnsafeLexicalFormsAndInvalidNumbers",
+        "canonicalStorageRequiresExactE164",
+        "requiresAnExplicitValidRegion",
+        "normalizesRegionalAndInternationalInput"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.domain.RulesTest",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "emptyScheduleRequiresExplicitConfirmation",
+        "overnightWindowBelongsToItsStartingDay",
+        "allowedUntilDistinguishesRepeatedHourIntervals",
+        "allowedUntilFindsYesterdayOvernightEnd",
+        "workingDayBoundariesAreStartInclusiveEndExclusive",
+        "continuouslyAllowedUnionHasNoEnd",
+        "incomingInternationalTrunkPrefixIsNotSilentlyRepaired",
+        "allUncertainCallerIdentitiesFailOpen",
+        "weeklyRecurrenceAndWeekendRollover",
+        "fallbackCanReenterAlreadyStartedWindow",
+        "splitShiftsAndOverlapsUseUnionOfWindows",
+        "corruptConfigurationFailsOpen",
+        "allowedUntilFindsEndOfOverlappingUnionAndSplitShift",
+        "invalidScheduleCannotBePresentedAsNextOpening",
+        "deviceTimezoneAtCallArrivalControlsSchedule",
+        "defaultInstallAllowsEveryCall",
+        "strictFullNumberMatchAndIndividualEnableState",
+        "masterAndPermissionsAlwaysOverrideBlocking",
+        "repeatedHourAllowsBothOffsetsAndFindsSecondOpening",
+        "allowedUntilHandlesSkippedEndInSpringGap",
+        "springGapUsesActualLocalTimeAndNextExistentOpening"
+      ]
+    }
+  ],
+  "total_tests": 62,
+  "lint": {
+    "debug": {
+      "errors": 0,
+      "warnings": 8,
+      "ids": [
+        "AndroidGradlePluginVersion",
+        "GradleDependency",
+        "NewerVersionAvailable",
+        "OldTargetApi"
+      ]
+    },
+    "release": {
+      "errors": 0,
+      "warnings": 8,
+      "ids": [
+        "AndroidGradlePluginVersion",
+        "GradleDependency",
+        "NewerVersionAvailable",
+        "OldTargetApi"
+      ]
+    }
+  },
+  "resource_parity": {
+    "english": 89,
+    "italian": 89
+  },
+  "switchboard_warning_unchanged": true,
+  "native_picker_and_physical_tests": "not run for code4; pending owner test",
+  "issue_1": "source unchanged; all four regression tests pass"
+}
