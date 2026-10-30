@@ -1,0 +1,29 @@
+{
+  "id": 429496972,
+  "tag_name": "v1.0.0",
+  "target_commitish": "main",
+  "name": "unconnected v1.0.0",
+  "html_url": "https://github.com/sorguido/unconnected/releases/tag/v1.0.0",
+  "draft": false,
+  "prerelease": false,
+  "body": "**unconnected v1.0.0 \u2014 First release**\r\n\r\nTake control of when selected callers can reach you.\r\n\r\nChoose phone numbers from your contacts or add them manually, set your weekly calling hours, and turn the filter on or off whenever you need.\r\n\r\n- Flexible weekly schedules\r\n- Multiple phone numbers\r\n- Easy contact selection\r\n- Works offline\r\n- No account required\r\n\r\n**Requires Android 10 or later.**\r\n\r\nDownload the APK below, install it on your phone, and follow the in-app setup instructions.\r\n\r\nCall screening behavior may vary depending on your device and how incoming calls are identified.\r\n\r\n---\r\n\r\nVerify your download: `sha256sum -c unconnected-1.0.0-vc6.apk.sha256`\r\n\r\n`2e400b5ea089f5702925301bc7afedcd2159478c4bbb9b38befb630360462a88`\r\n\r\nSigned with release certificate SHA-256 `2936676a220e4a9682171fbf0c9b91552acd8fc4f120318c6a0aebe6e6722ecc`.\r\nPackage `it.sorguido.unconnected`, versionName 1.0.0, versionCode 6.\r\nRelease audit and verification record: [publication report](https://github.com/sorguido/unconnected/blob/v1.0.0/evidence/runs/release-v1.0.0/publication.md).\r\n",
+  "assets": [
+    {
+      "id": 693442942,
+      "name": "unconnected-1.0.0-vc6.apk",
+      "size": 18716483,
+      "digest": "sha256:2e400b5ea089f5702925301bc7afedcd2159478c4bbb9b38befb630360462a88",
+      "browser_download_url": "https://github.com/sorguido/unconnected/releases/download/v1.0.0/unconnected-1.0.0-vc6.apk"
+    },
+    {
+      "id": 693442943,
+      "name": "unconnected-1.0.0-vc6.apk.sha256",
+      "size": 92,
+      "digest": "sha256:f1012771551b1b94d82f0c181591ec319e3153745bbbbe1b734ba6462fc3e073",
+      "browser_download_url": "https://github.com/sorguido/unconnected/releases/download/v1.0.0/unconnected-1.0.0-vc6.apk.sha256"
+    }
+  ],
+  "old_main": "71577e1f351a3c0f5a04f5353c8e3ce8e896ed39",
+  "old_tag_object": "ffd7178692cd8e3240801e1392504160a4a6c5aa",
+  "old_tag_commit": "0a814be6213b808c038851536c15e63b47504335"
+}

@@ -15,14 +15,16 @@
     "Public security audit of every tracked file and of all 171 unique blobs in Git history: no key, keystore, credential, token, real phone number or private screenshot found",
     "Repository cleanup: code-3, code-4 and code-5 receipts and the AI PM delegation prompt relocated to ignored development/archive/",
     "End-user README rewrite",
-    "P3 release: tag v1.0.0 and official non-draft GitHub Release with the original signed APK and its SHA-256 checksum, both assets downloaded back and verified byte-identical"
+    "P3 release: tag v1.0.0 and official non-draft GitHub Release with the original signed APK and its SHA-256 checksum, both assets downloaded back and verified byte-identical",
+    "Owner-authorized GPL-3.0-or-later correction: official GNU license, global or-later declaration, unchanged signed code-6 APK, reviewed third-party source inventory and source companion; replace only private v1.0.0 tag/Release, then targeted local cleanup"
   ],
   "pending_gates": [
-    "Repository visibility change to public. The owner authorized the Release but explicitly chose to keep the repository PRIVATE, so the Release, its assets and the v1.0.0 tag are reachable only by the owner and collaborators. The public security audit passed and nothing blocks the change; until it happens, README.md's Releases link and its download instruction are not actionable for an end user.",
     "Owner decision on the two recorded code6 accessibility limitations, published as known limitations of v1.0.0: no audible save completion, and the temporary-pause sentence is announced but not displayed. No functional change was made for the release."
   ],
   "host_modified": true,
   "relevant_artifacts": [
+    "evidence/runs/gpl-v1.0.0/verification.md",
+    "docs/LICENSING.md",
     "evidence/runs/release-v1.0.0/publication.md",
     "evidence/runs/dynamic-layout-1.0.0-vc6/verification.md",
     "evidence/runs/dynamic-layout-1.0.0-vc6/review.md",
@@ -36,15 +38,14 @@
     "C2",
     "C3"
   ],
-  "next_action": "Owner decides whether to make the repository public; that is the only step between the current state and an end-user-accessible v1.0.0. Any functional follow-up starts from the published tag and must decide explicitly whether to close the two recorded accessibility limitations.",
-  "last_verified_head": "85782418d122338ab4a188494b9284cd1311794b",
+  "next_action": "Repository visibility is PRIVATE by explicit owner instruction, with no pending publication/visibility gate for this task. Consult development/archive/gpl-v1.0.0/postflight.json for the measured remote replacement and cleanup results. Any functional follow-up must address the existing accessibility limitations explicitly.",
   "host_changes": [
     "Used Gradle dependency/build caches",
     "Started host ADB server for read-only device enumeration; no device attached",
     "Read the release candidate APK with build-tools 36.0.0 apksigner and aapt2 for verification only"
   ],
   "device_changes": [],
-  "source_state": "The released APK was re-verified against 8578241: all 32 hashed build inputs in evidence/runs/dynamic-layout-1.0.0-vc6/source-inputs.sha256 are byte-identical to the working tree, all 90 English string resource names are present in the APK, and state_saving is absent from it, which is the code-6 discriminator. The tagged release commit 0a814be and the follow-up commit recording the owner's visibility decision both change documentation, indexes and repository layout only; no application source, manifest, resource or Gradle file was modified, so versionCode stays at 6.",
+  "source_state": "All 32 input hashes from the code-6 manifest remain byte-identical. The GPL correction changes licensing/documentation/caches only; versionName 1.0.0 and versionCode 6 are retained and the original signed APK is reused. The corrected annotated v1.0.0 tag resolves to its enclosing license commit on main; earlier BSD grants and Git history remain intact.",
   "signed_candidate": "development/deliverables/dynamic-layout-1.0.0-vc6/unconnected-1.0.0-vc6-candidate.apk",
   "published_apk_sha256": "2e400b5ea089f5702925301bc7afedcd2159478c4bbb9b38befb630360462a88",
   "verification_date": "2026-10-30",
@@ -56,10 +57,9 @@
     "tag": "v1.0.0",
     "title": "unconnected v1.0.0",
     "url": "https://github.com/sorguido/unconnected/releases/tag/v1.0.0",
-    "tagged_commit": "0a814be6213b808c038851536c15e63b47504335",
     "draft": false,
     "prerelease": false,
-    "repository_visibility": "PRIVATE by owner decision. The tag was cut before that decision, so the tagged copy of the publication report still describes a sequence ending in 'make public'; its own 'Repository visibility — owner decision' section, added on main, supersedes that sentence and the published tag was deliberately not replaced.",
+    "repository_visibility": "PRIVATE by explicit owner instruction; no visibility change is authorized or pending.",
     "assets": [
       {
         "name": "unconnected-1.0.0-vc6.apk",
@@ -72,8 +72,17 @@
         "size": 92,
         "sha256sum_c_result": "OK"
       }
+    ],
+    "tagged_commit_ref": "refs/tags/v1.0.0 (dereference annotated tag to commit)",
+    "license": "GPL-3.0-or-later",
+    "replacement_evidence": "evidence/runs/gpl-v1.0.0/verification.md; final measured receipt in ignored development/archive/gpl-v1.0.0/postflight.json",
+    "additional_assets": [
+      "LICENSE",
+      "unconnected-1.0.0-source.tar.gz",
+      "unconnected-1.0.0-source.tar.gz.sha256"
     ]
   },
   "owner_report": "Owner states that the application has been tested on a physical phone and explicitly authorized publishing the first official release. Asked separately about repository visibility, the owner authorized the Release but chose to keep the repository private. No OEM/model, Android version or per-step acceptance record was supplied with the acceptance, so the release report documents it as owner-asserted rather than agent-measured.",
-  "active_task": "None; v1.0.0 is tagged and released on a private repository, awaiting the owner's visibility decision"
+  "active_task": "None after successful postflight; GPL-3.0-or-later private Release correction and cleanup results are in development/archive/gpl-v1.0.0/postflight.json",
+  "verified_source_baseline": "85782418d122338ab4a188494b9284cd1311794b"
 }

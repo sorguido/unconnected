@@ -1,5 +1,14 @@
 # Publication report — unconnected v1.0.0
 
+**License correction, 2026-10-30:** The owner subsequently authorized replacing
+the private `v1.0.0` tag and Release with the GPL-3.0-or-later revision, retaining
+the exact code-6 APK and private visibility. The current license is
+**GNU GPL version 3 or any later version**. See the
+[correction receipt](../gpl-v1.0.0/verification.md) and
+[global declaration and source directions](../../../docs/LICENSING.md).
+The first-publication chronology below is historical; its statements that the
+tag was left untouched are superseded by this expressly authorized correction.
+
 Date: 2026-10-30 (Europe/Rome). Release tag **`v1.0.0`**, title **`unconnected v1.0.0`**, package **`it.sorguido.unconnected`**, versionName **1.0.0**, versionCode **6**. Signed with the original Chromecast Kill Switch release identity; no key was generated, rotated or replaced, and debug signing was not used.
 
 The owner states that the application was tested on a physical phone and explicitly authorized preparing and publishing the first official release. That authorization is owner-asserted: no handset model, Android version or per-step acceptance record accompanied it, so this report contains no agent-measured device evidence. The enclosing commit is the release commit; the source baseline the published APK was built from is `85782418d122338ab4a188494b9284cd1311794b`.
@@ -36,7 +45,7 @@ Scope: every tracked file, plus **all 171 unique blobs** reachable from any ref 
 - **Binaries.** The only binary blob in the whole history is the standard `gradle/wrapper/gradle-wrapper.jar`. No APK, AAB, image or archive was ever tracked; `development/` was never tracked.
 - **Local paths.** Two categories appear, both benign and both pre-existing at the release baseline: `/home/guido/Repository/unconnected/...` as lint finding prefixes in `../dynamic-layout-1.0.0-vc6/lint-debug.txt` and `lint-release.txt` (8 lines each), and one cross-project reference at `../dynamic-layout-1.0.0-vc6/signature.json:43` to the independently published Chromecast APK used as the signer reference. No keystore or signing-material path is disclosed. The `/home/custom` and `/home/mobile` strings in `docs/BUILD.md` and the code-3 receipt are the Android contact phone-type labels *home* and *mobile*, not paths.
 - **Personal identity.** Commit authorship throughout history is `Guido Sorarù <sorguido@gmail.com>` and `sorguido <sorguido@gmail.com>`. Making the repository public permanently exposes that name and address to indexing and scraping. This is the owner's own identity on the owner's own project and is already implied by `LICENSE:3` and the public repository URL, so it is recorded as an **accepted disclosure**, not a finding. No history rewrite was performed, and none is recommended.
-- **Licensing.** `LICENSE` is BSD 2-Clause. Runtime dependencies are AndroidX Activity/Compose/Material 3 and Google libphonenumber, both Apache-2.0 and attributed in `NOTICE.md`; Gradle wrapper tooling is Apache-2.0. `junit` (EPL-1.0) and `org.json` (public domain) are `testImplementation` only and are not packaged into the released APK. Compatible with public binary distribution.
+- **Licensing at first publication (historical).** The first tag contained BSD 2-Clause; the current corrected tag contains GPL-3.0-or-later. Earlier BSD grants remain valid. Runtime dependencies retain Apache-2.0 and their notices in `NOTICE.md`; Gradle wrapper tooling is Apache-2.0. `junit` (EPL-1.0) and `org.json` (public domain) are `testImplementation` only and are not packaged into the released APK. The correction adds a dependency source inventory and source companion beside the binary.
 
 ## Repository cleanup
 

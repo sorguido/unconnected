@@ -37,5 +37,10 @@
   "issue_2_retest": "development/archive/evidence-runs/issue-2-1.0.0-vc4/verification.md (local only, superseded by code 6)",
   "stable_ui_retest": "development/archive/evidence-runs/stable-ui-1.0.0-vc5/verification.md (local only, superseded by code 6)",
   "dynamic_layout_retest": "evidence/runs/dynamic-layout-1.0.0-vc6/verification.md#human_required--dynamic_layout_physical_acceptance",
-  "release_report": "evidence/runs/release-v1.0.0/publication.md"
+  "release_report": "evidence/runs/release-v1.0.0/publication.md",
+  "license_declaration": "docs/LICENSING.md",
+  "license_correction": "evidence/runs/gpl-v1.0.0/verification.md",
+  "dependency_sources": "evidence/runs/gpl-v1.0.0/dependency-sources.json",
+  "upstream_source_trees": "evidence/runs/gpl-v1.0.0/upstream-trees.json",
+  "local_cleanup_postflight": "development/archive/gpl-v1.0.0/postflight.json (ignored; measured after final cleanup)"
 }

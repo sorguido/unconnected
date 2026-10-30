@@ -1,0 +1,14 @@
+{
+  "coordinate": "androidx.graphics:graphics-path:1.0.1",
+  "release_notes": "https://developer.android.com/jetpack/androidx/releases/graphics#graphics-path-1.0.1",
+  "revision": "8a05a22af450d589ef911d772a001a49dcb05b71",
+  "url": "https://android.googlesource.com/platform/frameworks/support/+archive/8a05a22af450d589ef911d772a001a49dcb05b71/graphics/graphics-path.tar.gz",
+  "file": "graphics-path-1.0.1-upstream.tar.gz",
+  "sha256": "5b7f1b0e39512a0a0586778fc1fab4aaf87665d78b0545d4f01299d71374b2e3",
+  "includes": [
+    "src/main/cpp/",
+    "src/main/cpp/CMakeLists.txt",
+    "build.gradle"
+  ],
+  "license": "Apache-2.0"
+}

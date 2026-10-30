@@ -40,7 +40,7 @@ Turn the filter off inside the app whenever you like, or remove unconnected as y
 
 ## License
 
-unconnected is free software under the [BSD 2-Clause License](LICENSE).
+unconnected is free software under the [GNU GPL version 3 or later](LICENSE) (`GPL-3.0-or-later`).
 
 ---
 

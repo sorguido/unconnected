@@ -1,0 +1,446 @@
+[
+  {
+    "revision": "a8c757d3d74ce0f52c23b8562468fbcc09a7e62f",
+    "module": "compose/material3",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/compose-material3"
+    ],
+    "coordinates": [
+      "androidx.compose.material3:material3-android:1.3.2"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/a8c757d3d74ce0f52c23b8562468fbcc09a7e62f/compose/material3.tar.gz",
+    "file": "androidx-compose-material3-a8c757d3d74c.tar.gz",
+    "sha256": "1e6c41deb27c7da129dbca12a306f63e80f6ed7e36afe4088b8a2de4120297eb",
+    "bytes": 2098954,
+    "entries": 1195
+  },
+  {
+    "revision": "215cdfd8cb9c0762dd0347c383250644057c367f",
+    "module": "compose/animation",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/compose-animation",
+      "https://developer.android.com/jetpack/androidx/releases/compose-animation"
+    ],
+    "coordinates": [
+      "androidx.compose.animation:animation-core-android:1.7.8",
+      "androidx.compose.animation:animation-android:1.7.8"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/215cdfd8cb9c0762dd0347c383250644057c367f/compose/animation.tar.gz",
+    "file": "androidx-compose-animation-215cdfd8cb9c.tar.gz",
+    "sha256": "5b3cbb1cfd1911a9a8a5f9cb8fed8a31091b84d4b285134f5c25e94da920bfcf",
+    "bytes": 3334463,
+    "entries": 843
+  },
+  {
+    "revision": "4c61c4d68d2bf0ccc61e316bc2a03754bb6979cf",
+    "module": "compose/material",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/compose-material"
+    ],
+    "coordinates": [
+      "androidx.compose.material:material-icons-core-android:1.6.0"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/4c61c4d68d2bf0ccc61e316bc2a03754bb6979cf/compose/material.tar.gz",
+    "file": "androidx-compose-material-4c61c4d68d2b.tar.gz",
+    "sha256": "0109b6be1021ae41c1fbc1b2d47f7e9a9af88be04d73262aa894db25baaccd9a",
+    "bytes": 3684442,
+    "entries": 11540
+  },
+  {
+    "revision": "38ffb9c315c3f894412184bda180c1b58b2a8556",
+    "module": "compose/material",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/compose-material"
+    ],
+    "coordinates": [
+      "androidx.compose.material:material-ripple-android:1.7.0"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/38ffb9c315c3f894412184bda180c1b58b2a8556/compose/material.tar.gz",
+    "file": "androidx-compose-material-38ffb9c315c3.tar.gz",
+    "sha256": "b49f068e62b32c722543211c844ae4ea16ee970951c27920b27cb71d67d0b3c8",
+    "bytes": 3838572,
+    "entries": 11644
+  },
+  {
+    "revision": "215cdfd8cb9c0762dd0347c383250644057c367f",
+    "module": "compose/foundation",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/compose-foundation",
+      "https://developer.android.com/jetpack/androidx/releases/compose-foundation"
+    ],
+    "coordinates": [
+      "androidx.compose.foundation:foundation-layout-android:1.7.8",
+      "androidx.compose.foundation:foundation-android:1.7.8"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/215cdfd8cb9c0762dd0347c383250644057c367f/compose/foundation.tar.gz",
+    "file": "androidx-compose-foundation-215cdfd8cb9c.tar.gz",
+    "sha256": "e646f1b1d2bf0f4f47a342e37cab44e90bfc5cb12892d484ace21293360d2917",
+    "bytes": 2521889,
+    "entries": 1927
+  },
+  {
+    "revision": "215cdfd8cb9c0762dd0347c383250644057c367f",
+    "module": "compose/ui",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/compose-ui",
+      "https://developer.android.com/jetpack/androidx/releases/compose-ui",
+      "https://developer.android.com/jetpack/androidx/releases/compose-ui",
+      "https://developer.android.com/jetpack/androidx/releases/compose-ui",
+      "https://developer.android.com/jetpack/androidx/releases/compose-ui",
+      "https://developer.android.com/jetpack/androidx/releases/compose-ui"
+    ],
+    "coordinates": [
+      "androidx.compose.ui:ui-util-android:1.7.8",
+      "androidx.compose.ui:ui-unit-android:1.7.8",
+      "androidx.compose.ui:ui-text-android:1.7.8",
+      "androidx.compose.ui:ui-graphics-android:1.7.8",
+      "androidx.compose.ui:ui-geometry-android:1.7.8",
+      "androidx.compose.ui:ui-android:1.7.8"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/215cdfd8cb9c0762dd0347c383250644057c367f/compose/ui.tar.gz",
+    "file": "androidx-compose-ui-215cdfd8cb9c.tar.gz",
+    "sha256": "6b1ed177d217dcc4e2f2bc24bdcf22b7b5c205303b204142234bc5ffa70f33e8",
+    "bytes": 5858219,
+    "entries": 4781
+  },
+  {
+    "revision": "261165aaaecdddde7e136be4f706bb9f5e1b8b34",
+    "module": "activity",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/activity",
+      "https://developer.android.com/jetpack/androidx/releases/activity",
+      "https://developer.android.com/jetpack/androidx/releases/activity"
+    ],
+    "coordinates": [
+      "androidx.activity:activity:1.10.1",
+      "androidx.activity:activity-ktx:1.10.1",
+      "androidx.activity:activity-compose:1.10.1"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/261165aaaecdddde7e136be4f706bb9f5e1b8b34/activity.tar.gz",
+    "file": "androidx-activity-261165aaaecd.tar.gz",
+    "sha256": "3b7e25b23882caf0c4a40b8e4f87f6abde547ed9ce762267fcfe366ac45eb087",
+    "bytes": 178468,
+    "entries": 435
+  },
+  {
+    "revision": "34328d238b2999f231e824d2a9149acdbe3d5c00",
+    "module": "autofill",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/autofill"
+    ],
+    "coordinates": [
+      "androidx.autofill:autofill:1.0.0"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/34328d238b2999f231e824d2a9149acdbe3d5c00/autofill.tar.gz",
+    "file": "androidx-autofill-34328d238b29.tar.gz",
+    "sha256": "5919ecb7e87b9a0dd212de241489ae98a70c15a562fc1a12a1fba95803a452ef",
+    "bytes": 6903,
+    "entries": 41
+  },
+  {
+    "revision": "a31add952e44ab4aa0fac28de27e3d2f8a7a726b",
+    "module": "emoji2",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/emoji2"
+    ],
+    "coordinates": [
+      "androidx.emoji2:emoji2:1.3.0"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/a31add952e44ab4aa0fac28de27e3d2f8a7a726b/emoji2.tar.gz",
+    "file": "androidx-emoji2-a31add952e44.tar.gz",
+    "sha256": "368e89a560987dd362ef5caaf8f685e346dab41e31e8d19d28011873756616de",
+    "bytes": 203607,
+    "entries": 670
+  },
+  {
+    "revision": "8a05a22af450d589ef911d772a001a49dcb05b71",
+    "module": "graphics/graphics-path",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/graphics"
+    ],
+    "coordinates": [
+      "androidx.graphics:graphics-path:1.0.1"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/8a05a22af450d589ef911d772a001a49dcb05b71/graphics/graphics-path.tar.gz",
+    "file": "androidx-graphics-graphics-path-8a05a22af450.tar.gz",
+    "sha256": "c03696ec91fa9ee59e2cf04a9401d7ea59ff078462f3000012c06d5ecc59e737",
+    "bytes": 24327,
+    "entries": 45
+  },
+  {
+    "revision": "3be294a272164cf1920219d3e09cbabfefeb1de6",
+    "module": "core",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/core",
+      "https://developer.android.com/jetpack/androidx/releases/core"
+    ],
+    "coordinates": [
+      "androidx.core:core:1.13.1",
+      "androidx.core:core-ktx:1.13.1"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/3be294a272164cf1920219d3e09cbabfefeb1de6/core.tar.gz",
+    "file": "androidx-core-3be294a27216.tar.gz",
+    "sha256": "2360b6e8c9a905d230e99cc18ed355ce440e46d178655ae28e763527c3e746c9",
+    "bytes": 9929433,
+    "entries": 2412
+  },
+  {
+    "revision": "896cdb98fff309410bc1bab9f46188a70bb1af3b",
+    "module": "core",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/core"
+    ],
+    "coordinates": [
+      "androidx.core:core-viewtree:1.0.0"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/896cdb98fff309410bc1bab9f46188a70bb1af3b/core.tar.gz",
+    "file": "androidx-core-896cdb98fff3.tar.gz",
+    "sha256": "41b94f07b17a0651347930f69e1e449996128df930f459f0f49cddd488bd1d04",
+    "bytes": 9849267,
+    "entries": 2410
+  },
+  {
+    "revision": "1e0793130863c72dc4a2d02bc975128f3ef0158b",
+    "module": "customview/customview-poolingcontainer",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/customview"
+    ],
+    "coordinates": [
+      "androidx.customview:customview-poolingcontainer:1.0.0"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/1e0793130863c72dc4a2d02bc975128f3ef0158b/customview/customview-poolingcontainer.tar.gz",
+    "file": "androidx-customview-customview-poolingcontainer-1e0793130863.tar.gz",
+    "sha256": "3f5ce9303b4a0e8aa1128ed84e22c344fffb0d75d0fafffe04f02a1fd80d056c",
+    "bytes": 5757,
+    "entries": 41
+  },
+  {
+    "revision": "800c80137427602e8e003b8aad0e3051436bdd17",
+    "module": "savedstate",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/savedstate",
+      "https://developer.android.com/jetpack/androidx/releases/savedstate"
+    ],
+    "coordinates": [
+      "androidx.savedstate:savedstate-ktx:1.2.1",
+      "androidx.savedstate:savedstate:1.2.1"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/800c80137427602e8e003b8aad0e3051436bdd17/savedstate.tar.gz",
+    "file": "androidx-savedstate-800c80137427.tar.gz",
+    "sha256": "9af54043c7feb25c851e4c686963f8745a794d09b8aa2acb416af61f28eb69ea",
+    "bytes": 13930,
+    "entries": 81
+  },
+  {
+    "revision": "92cc6e5d71efd12345ce7ba558cbc2a29926e9ac",
+    "module": "lifecycle",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/lifecycle",
+      "https://developer.android.com/jetpack/androidx/releases/lifecycle",
+      "https://developer.android.com/jetpack/androidx/releases/lifecycle",
+      "https://developer.android.com/jetpack/androidx/releases/lifecycle",
+      "https://developer.android.com/jetpack/androidx/releases/lifecycle",
+      "https://developer.android.com/jetpack/androidx/releases/lifecycle",
+      "https://developer.android.com/jetpack/androidx/releases/lifecycle",
+      "https://developer.android.com/jetpack/androidx/releases/lifecycle",
+      "https://developer.android.com/jetpack/androidx/releases/lifecycle",
+      "https://developer.android.com/jetpack/androidx/releases/lifecycle"
+    ],
+    "coordinates": [
+      "androidx.lifecycle:lifecycle-livedata-core:2.8.3",
+      "androidx.lifecycle:lifecycle-runtime-compose-android:2.8.3",
+      "androidx.lifecycle:lifecycle-process:2.8.3",
+      "androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.3",
+      "androidx.lifecycle:lifecycle-common-java8:2.8.3",
+      "androidx.lifecycle:lifecycle-viewmodel-android:2.8.3",
+      "androidx.lifecycle:lifecycle-runtime-android:2.8.3",
+      "androidx.lifecycle:lifecycle-common-jvm:2.8.3",
+      "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3",
+      "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.3"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/92cc6e5d71efd12345ce7ba558cbc2a29926e9ac/lifecycle.tar.gz",
+    "file": "androidx-lifecycle-92cc6e5d71ef.tar.gz",
+    "sha256": "330b3dcca7b2674ea7b8b7e65343d8bb6f8720f79fe26de2b05bafdcaf245da6",
+    "bytes": 323933,
+    "entries": 1609
+  },
+  {
+    "revision": "215cdfd8cb9c0762dd0347c383250644057c367f",
+    "module": "compose/runtime",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/compose-runtime",
+      "https://developer.android.com/jetpack/androidx/releases/compose-runtime"
+    ],
+    "coordinates": [
+      "androidx.compose.runtime:runtime-saveable-android:1.7.8",
+      "androidx.compose.runtime:runtime-android:1.7.8"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/215cdfd8cb9c0762dd0347c383250644057c367f/compose/runtime.tar.gz",
+    "file": "androidx-compose-runtime-215cdfd8cb9c.tar.gz",
+    "sha256": "2720b2a7d77e6ed56257f75ad3547fc53d37da1e9ace5c9b7f8d1aa25cec2069",
+    "bytes": 1220010,
+    "entries": 1232
+  },
+  {
+    "revision": "cb993e8594b035615bb12e0cb8294769eb7c10d1",
+    "module": "annotation/annotation-experimental",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/annotation"
+    ],
+    "coordinates": [
+      "androidx.annotation:annotation-experimental:1.4.1"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/cb993e8594b035615bb12e0cb8294769eb7c10d1/annotation/annotation-experimental.tar.gz",
+    "file": "androidx-annotation-annotation-experimental-cb993e8594b0.tar.gz",
+    "sha256": "157dbc0ffc9423f44fa448d1dd671bfc7eba3a94c5c628255948c5b97bd1e84b",
+    "bytes": 6322,
+    "entries": 42
+  },
+  {
+    "revision": "1c31837541924de174f7b1b14106bc9bc29a0080",
+    "module": "annotation/annotation",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/annotation"
+    ],
+    "coordinates": [
+      "androidx.annotation:annotation-jvm:1.8.1"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/1c31837541924de174f7b1b14106bc9bc29a0080/annotation/annotation.tar.gz",
+    "file": "androidx-annotation-annotation-1c3183754192.tar.gz",
+    "sha256": "11d10d37ffa93dddf41c1616dad77e0bfb85497456b0990df668b540dc25514f",
+    "bytes": 57700,
+    "entries": 126
+  },
+  {
+    "revision": "d00300b06c00dbf348f871980400948cdf7b10dc",
+    "module": "arch/core",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/arch-core",
+      "https://developer.android.com/jetpack/androidx/releases/arch-core"
+    ],
+    "coordinates": [
+      "androidx.arch.core:core-runtime:2.2.0",
+      "androidx.arch.core:core-common:2.2.0"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/d00300b06c00dbf348f871980400948cdf7b10dc/arch/core.tar.gz",
+    "file": "androidx-arch-core-d00300b06c00.tar.gz",
+    "sha256": "332f41a2106b13a566dbbb27b77d4f1c613afdfbc41cce12586fac39807d219c",
+    "bytes": 19389,
+    "entries": 122
+  },
+  {
+    "revision": "3bc0fb3beaccef509bb170cd69ddaad907b493b8",
+    "module": "profileinstaller/profileinstaller",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/profileinstaller"
+    ],
+    "coordinates": [
+      "androidx.profileinstaller:profileinstaller:1.4.0"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/3bc0fb3beaccef509bb170cd69ddaad907b493b8/profileinstaller/profileinstaller.tar.gz",
+    "file": "androidx-profileinstaller-profileinstaller-3bc0fb3beacc.tar.gz",
+    "sha256": "f8810aba1f12c1f65eefe52f378de029c4e3f3e964367e7f7ba623258cd14180",
+    "bytes": 579173,
+    "entries": 103
+  },
+  {
+    "revision": "8337e0c05174a73ea6db825b680f461c33144bf4",
+    "module": "startup/startup-runtime",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/startup"
+    ],
+    "coordinates": [
+      "androidx.startup:startup-runtime:1.1.1"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/8337e0c05174a73ea6db825b680f461c33144bf4/startup/startup-runtime.tar.gz",
+    "file": "androidx-startup-startup-runtime-8337e0c05174.tar.gz",
+    "sha256": "fe0715c322978438de80f8b4b0d973b74d6e52137a5afe34fca7ff43f7927e98",
+    "bytes": 8340,
+    "entries": 45
+  },
+  {
+    "revision": "2a518b53bb3172e4945cba723ae628e9c18bcd23",
+    "module": "tracing",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/tracing"
+    ],
+    "coordinates": [
+      "androidx.tracing:tracing:1.0.0"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/2a518b53bb3172e4945cba723ae628e9c18bcd23/tracing.tar.gz",
+    "file": "androidx-tracing-2a518b53bb31.tar.gz",
+    "sha256": "a233b6f49b76b636abf3697b624ba6f92fceec6e23b5964f37ffe55f22d80028",
+    "bytes": 8832,
+    "entries": 50
+  },
+  {
+    "revision": "a14b33c6c6a435ff5409f18396180e9b61b1425a",
+    "module": "concurrent",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/concurrent"
+    ],
+    "coordinates": [
+      "androidx.concurrent:concurrent-futures:1.1.0"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/a14b33c6c6a435ff5409f18396180e9b61b1425a/concurrent.tar.gz",
+    "file": "androidx-concurrent-a14b33c6c6a4.tar.gz",
+    "sha256": "12e087600648238679382739a740160a69af38066a010952717ef7fbff158308",
+    "bytes": 36865,
+    "entries": 100
+  },
+  {
+    "revision": "9fd278801e06c07a5d230fd7edbb97e16c322949",
+    "module": "versionedparcelable",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/versionedparcelable"
+    ],
+    "coordinates": [
+      "androidx.versionedparcelable:versionedparcelable:1.1.1"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/9fd278801e06c07a5d230fd7edbb97e16c322949/versionedparcelable.tar.gz",
+    "file": "androidx-versionedparcelable-9fd278801e06.tar.gz",
+    "sha256": "b0928ea0dfbaf0265b545e61da4b74db2faf90f595f64a5acfddc0974b6191bd",
+    "bytes": 31097,
+    "entries": 73
+  },
+  {
+    "revision": "6d60ba37c125c305d09c6bc89b062a31fd913628",
+    "module": "collection",
+    "release_pages": [
+      "https://developer.android.com/jetpack/androidx/releases/collection",
+      "https://developer.android.com/jetpack/androidx/releases/collection"
+    ],
+    "coordinates": [
+      "androidx.collection:collection-ktx:1.4.4",
+      "androidx.collection:collection-jvm:1.4.4"
+    ],
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/6d60ba37c125c305d09c6bc89b062a31fd913628/collection.tar.gz",
+    "file": "androidx-collection-6d60ba37c125.tar.gz",
+    "sha256": "68137ebe59ccf6809a427488cf4bb8866de6b555b91467cf9c4fc7913b38ee10",
+    "bytes": 431647,
+    "entries": 302
+  },
+  {
+    "coordinates": [
+      "androidx.interpolator:interpolator:1.0.0"
+    ],
+    "revision": "9fd278801e06c07a5d230fd7edbb97e16c322949",
+    "module": "interpolator",
+    "url": "https://android.googlesource.com/platform/frameworks/support/+archive/9fd278801e06c07a5d230fd7edbb97e16c322949/interpolator.tar.gz",
+    "file": "androidx-interpolator-9fd278801e06.tar.gz",
+    "sha256": "dc61d3e214a3d6f78cb203a0c9e0e44d27689233d3ab8f6564792f6a53b3b49e",
+    "bytes": 5125,
+    "verification": "All four original Java source files are byte-identical to the published 1.0.0 source JAR; this is a verified equivalent tree, not a claimed 1.0.0 release commit."
+  },
+  {
+    "coordinates": [
+      "com.googlecode.libphonenumber:libphonenumber:8.13.55"
+    ],
+    "url": "https://api.github.com/repos/google/libphonenumber/tarball/v8.13.55",
+    "ref": "v8.13.55",
+    "file": "libphonenumber-v8.13.55-upstream.tar.gz",
+    "sha256": "085061d6e2cc2cd3109af28c56a273d0bb1100e8342fc778fd5ee138a7635a32",
+    "bytes": 13005404,
+    "verification": "Includes resources/PhoneNumberMetadata.xml, metadata generator sources, build POMs and upstream notices."
+  }
+]
