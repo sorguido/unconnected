@@ -15,64 +15,12 @@ import androidx.compose.ui.unit.constrainWidth
 import org.junit.Assert.*
 import org.junit.Test
 
-/** Tests the production Compose policy, not Android text shaping or perceived handset flicker. */
+/**
+ * The retained policy serves the two master-button labels only. The status card composes just its
+ * visible state, so nothing here may reserve bounds for text that is not on screen.
+ * Synthetic measurements: not Android text shaping and not perceived handset flicker.
+ */
 class StableContentLayoutTest {
-    @Test fun repeatedSavesToggleAndRealPauseKeepTheSameHeaderBounds() {
-        val sequence = listOf(
-            filterStatus(false, true, false, false),
-            filterStatus(false, true, true, true),
-            filterStatus(true, true, true, false), // Disk completed, UI save still finishing.
-            filterStatus(true, true, false, false),
-            filterStatus(true, true, true, true),
-            filterStatus(true, true, false, true), // Failure remains a genuine pause.
-            filterStatus(true, true, true, true),
-            filterStatus(true, true, false, false),
-            filterStatus(true, true, true, true),
-            filterStatus(false, true, false, false),
-            filterStatus(true, false, false, false),
-        )
-        repeat(3) {
-            for (status in sequence) {
-                val children = children()
-                val result = measure(status, children, Constraints(maxWidth = 320))
-                assertEquals(320, result.width)
-                assertEquals(150, result.height)
-                assertTrue(children.all { it.measures == 1 })
-                result.placeChildren()
-                assertEquals(listOf(status.ordinal), children.indices.filter { children[it].positions.isNotEmpty() })
-                assertEquals(listOf(IntOffset.Zero), children[status.ordinal].positions)
-            }
-        }
-    }
-
-    @Test fun largerTextAndNarrowerWidthsGrowNaturallyWithoutAStatusSpecificHeightCap() {
-        for (width in listOf(200, 320, 600)) for (scale in listOf(1, 2, 3)) {
-            val heights = FilterStatus.entries.map { status ->
-                // Synthetic measured text blocks: intentionally not an Android font-rendering test.
-                (1 + (status.ordinal + 1) * 400 / width) * 24 * scale
-            }
-            val sizes = FilterStatus.entries.map { status ->
-                val children = heights.map { Child(width, it) }
-                val result = measure(status, children, Constraints(minWidth = width, maxWidth = width))
-                assertEquals(heights.max(), result.height)
-                IntSize(result.width, result.height)
-            }
-            assertEquals(1, sizes.distinct().size)
-        }
-    }
-
-    @Test fun parentBoundsAreRespectedWithoutStretchingEachTextAlternativeToMinimumHeight() {
-        val children = children()
-        val result = measure(FilterStatus.ACTIVE, children, Constraints(minWidth = 360, maxWidth = 400, minHeight = 200, maxHeight = 300))
-        assertEquals(360, result.width)
-        assertEquals(200, result.height)
-        assertTrue(children.all { it.lastConstraints!!.minHeight == 0 })
-        assertTrue(children.all { it.lastConstraints!!.maxHeight == 300 })
-        val constrained = measure(FilterStatus.SAVING, children(), Constraints(maxWidth = 280, maxHeight = 100))
-        assertEquals(280, constrained.width)
-        assertEquals(100, constrained.height)
-    }
-
     @Test fun masterLabelsKeepTheSameButtonHeightWhenOnlyDeactivateWraps() {
         val constraints = Constraints(minWidth = 180, maxWidth = 180)
         for (selected in 0..1) {
@@ -81,13 +29,40 @@ class StableContentLayoutTest {
             assertEquals(64, result.height)
             result.placeChildren()
             assertEquals(listOf(selected), labels.indices.filter { labels[it].positions.isNotEmpty() })
+            assertEquals(listOf(IntOffset.Zero), labels[selected].positions)
         }
     }
 
-    private fun children() = listOf(80, 60, 110, 150, 120).map { Child(320, it) }
+    @Test fun widerAndLargerLabelsGrowTheButtonNaturallyWithoutALabelSpecificCap() {
+        for (width in listOf(120, 180, 320)) for (scale in listOf(1, 2, 3)) {
+            val heights = listOf(24 * scale, (1 + 360 / width) * 24 * scale)
+            val sizes = (0..1).map { selected ->
+                val labels = heights.map { Child(width, it) }
+                val result = with(stableContentMeasurePolicy(selected)) {
+                    Scope.measure(labels, Constraints(minWidth = width, maxWidth = width))
+                }
+                assertEquals(heights.max(), result.height)
+                assertTrue(labels.all { it.measures == 1 })
+                IntSize(result.width, result.height)
+            }
+            assertEquals(1, sizes.distinct().size)
+        }
+    }
 
-    private fun measure(status: FilterStatus, children: List<Child>, constraints: Constraints): MeasureResult =
-        with(stableContentMeasurePolicy(status.ordinal)) { Scope.measure(children, constraints) }
+    @Test fun parentBoundsAreRespectedWithoutStretchingEachLabelToMinimumHeight() {
+        val labels = listOf(Child(180, 32), Child(180, 64))
+        val result = with(stableContentMeasurePolicy(0)) {
+            Scope.measure(labels, Constraints(minWidth = 180, maxWidth = 220, minHeight = 100, maxHeight = 200))
+        }
+        assertEquals(180, result.width)
+        assertEquals(100, result.height)
+        assertTrue(labels.all { it.lastConstraints!!.minHeight == 0 })
+        assertTrue(labels.all { it.lastConstraints!!.maxHeight == 200 })
+        val tight = listOf(Child(180, 32), Child(180, 64))
+        val capped = with(stableContentMeasurePolicy(1)) { Scope.measure(tight, Constraints(maxWidth = 160, maxHeight = 40)) }
+        assertEquals(160, capped.width)
+        assertEquals(40, capped.height)
+    }
 
     private object Scope : MeasureScope {
         override val density = 1f

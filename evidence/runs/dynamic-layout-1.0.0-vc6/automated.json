@@ -1,0 +1,212 @@
+{
+  "date": "2026-10-30",
+  "source_baseline": "ffaa2649792cf82501d880d066aa549d6ec130cf",
+  "version_name": "1.0.0",
+  "version_code": 6,
+  "tests": [
+    {
+      "name": "it.sorguido.unconnected.ContactPickingTest",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "providerAndPermissionExceptionsAtEitherQueryAreRecoverable",
+        "readLimitRejectsOverflowEvenWhenProviderIgnoresRequestedLimit",
+        "absentNameRetainsManualLabelAndNamesAndCustomLabelsStayBounded",
+        "singleNumberQueriesOnlyChosenAggregateAndItsBoundedPhoneRows",
+        "distinctNumbersRequireAnExplicitChoiceAndNeverDefaultToFirst",
+        "exactDuplicatesProduceOnePrefill",
+        "invalidAndAmbiguousRowsProduceClearOutcomeWithoutReplacingDraft",
+        "cancellationAtEitherStageLeavesDraftAndNeverQueriesOnNativeCancel",
+        "fourEquivalentItalianRepresentationsKeepOneNumberAndRetainDistinctAlternative",
+        "missingOrInvalidAggregateRowsDoNotQueryPhones",
+        "equivalentRowsPreserveDistinctTypeAndCustomLabels",
+        "mixedUnusableRowsRetainEveryValidAlternativeAndRequireChoiceWithWarning",
+        "similarSuffixesAndDifferentCountriesStayDistinct",
+        "deniedExistingPermissionNeverQueries",
+        "internationalTrunkRepairsAreNeverMergedWithValidNumber",
+        "contactWithoutPhoneNumbersLeavesManualDraftAvailable",
+        "cursorFailureClosesCursorAndCannotReturnPartialDraft",
+        "unsafeOrNonIndividualPickerUrisNeverQuery",
+        "validNationalTrunkAndRegionalInternationalPrefixRemainSupported",
+        "rowsFromOtherContactAndMissingPhoneColumnsFailWithoutPartialPrefill",
+        "asyncCancellationPropagatesAtBothQueryStages",
+        "localLookupUrisResolveOnlyChosenContactIncludingUpdatedIdHint",
+        "missingOptionalPhoneLabelsDoNotLoseValidNumbers"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.FilterStatusTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "reproducesOldCapturedReadinessAcrossChildScopeUpdates",
+        "observedPauseClearsAfterBackgroundCompletionWithoutSettingsChangeOrResume",
+        "theCardOnlyOffersRealCommittedStatesWithDistinguishableCopy",
+        "offActiveSetupAndRealPauseHaveConsistentCopy",
+        "repeatedSavesFailureAndRetryKeepPublishedStateInSync",
+        "anInFlightSaveNeverReplacesTheCommittedCardCopy"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.NumberEntryTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "manualAndPickedDuplicatesIncludingDisabledRulesCannotInvokeSave",
+        "pickingChoosingCancellingAndEditingCannotPersistBeforeExplicitSave",
+        "editingOwnNumberPreservesIdentityAndDisabledStateButRejectsOtherDuplicate",
+        "invalidNumbersOrRegionCannotInvokeSaveAndRemainManuallyCorrectable"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.SettingsCodecTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "rejectsInvalidStateAndUnknownSchema",
+        "malformedOrOversizedContentNeverBecomesDefaults",
+        "everyRequiredFieldMustBePresent",
+        "roundTripPreservesCompleteSnapshot",
+        "emptyScheduleConfirmationIsPersistedExplicitly",
+        "rejectsTypeCoercionAndFractionalMinutes"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.StableContentLayoutTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "masterLabelsKeepTheSameButtonHeightWhenOnlyDeactivateWraps",
+        "parentBoundsAreRespectedWithoutStretchingEachLabelToMinimumHeight",
+        "widerAndLargerLabelsGrowTheButtonNaturallyWithoutALabelSpecificCap"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.domain.NumbersTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "rejectsUnsafeLexicalFormsAndInvalidNumbers",
+        "canonicalStorageRequiresExactE164",
+        "requiresAnExplicitValidRegion",
+        "normalizesRegionalAndInternationalInput"
+      ]
+    },
+    {
+      "name": "it.sorguido.unconnected.domain.RulesTest",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "emptyScheduleRequiresExplicitConfirmation",
+        "overnightWindowBelongsToItsStartingDay",
+        "allowedUntilDistinguishesRepeatedHourIntervals",
+        "allowedUntilFindsYesterdayOvernightEnd",
+        "workingDayBoundariesAreStartInclusiveEndExclusive",
+        "continuouslyAllowedUnionHasNoEnd",
+        "incomingInternationalTrunkPrefixIsNotSilentlyRepaired",
+        "allUncertainCallerIdentitiesFailOpen",
+        "weeklyRecurrenceAndWeekendRollover",
+        "fallbackCanReenterAlreadyStartedWindow",
+        "splitShiftsAndOverlapsUseUnionOfWindows",
+        "corruptConfigurationFailsOpen",
+        "allowedUntilFindsEndOfOverlappingUnionAndSplitShift",
+        "invalidScheduleCannotBePresentedAsNextOpening",
+        "deviceTimezoneAtCallArrivalControlsSchedule",
+        "defaultInstallAllowsEveryCall",
+        "strictFullNumberMatchAndIndividualEnableState",
+        "masterAndPermissionsAlwaysOverrideBlocking",
+        "repeatedHourAllowsBothOffsetsAndFindsSecondOpening",
+        "allowedUntilHandlesSkippedEndInSpringGap",
+        "springGapUsesActualLocalTimeAndNextExistentOpening"
+      ]
+    }
+  ],
+  "total_tests": 67,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "builds": {
+    "assembleDebug": "SUCCESS",
+    "assembleRelease": "SUCCESS (original external signing key via UNCONNECTED_SIGNING_ROOT)"
+  },
+  "lint": {
+    "debug": {
+      "errors": 0,
+      "warnings": 8,
+      "warning_ids": [
+        "AndroidGradlePluginVersion",
+        "GradleDependency",
+        "NewerVersionAvailable",
+        "OldTargetApi"
+      ]
+    },
+    "release": {
+      "errors": 0,
+      "warnings": 8,
+      "warning_ids": [
+        "AndroidGradlePluginVersion",
+        "GradleDependency",
+        "NewerVersionAvailable",
+        "OldTargetApi"
+      ]
+    }
+  },
+  "resource_parity": {
+    "english": 90,
+    "italian": 90,
+    "matching_names": true
+  },
+  "string_changes": {
+    "removed": [
+      "state_saving"
+    ],
+    "added": [],
+    "value_changed": [],
+    "reason": "state_saving was rendered only by the transient SAVING card state, which no longer exists; the non-displacing save strip now announces the truthful saving_detail sentence, which already states the temporary filtering pause"
+  },
+  "existing_strings_unchanged": true,
+  "changed_compiled_inputs": [
+    "app/build.gradle.kts (versionCode 5 -> 6)",
+    "app/src/main/java/it/sorguido/unconnected/FilterStatus.kt",
+    "app/src/main/java/it/sorguido/unconnected/MainActivity.kt",
+    "app/src/main/java/it/sorguido/unconnected/StableContentLayout.kt (KDoc only)",
+    "app/src/main/res/values/strings.xml",
+    "app/src/main/res/values-it/strings.xml",
+    "app/src/test/java/it/sorguido/unconnected/FilterStatusTest.kt",
+    "app/src/test/java/it/sorguido/unconnected/StableContentLayoutTest.kt"
+  ],
+  "byte_identical_to_vc5": [
+    "app/src/main/AndroidManifest.xml",
+    "app/src/main/java/it/sorguido/unconnected/ScreeningService.kt",
+    "app/src/main/java/it/sorguido/unconnected/SettingsStore.kt",
+    "app/src/main/java/it/sorguido/unconnected/SettingsCodec.kt",
+    "app/src/main/java/it/sorguido/unconnected/ContactPicking.kt",
+    "app/src/main/java/it/sorguido/unconnected/NumberEntry.kt",
+    "app/src/main/java/it/sorguido/unconnected/ScreeningAccess.kt",
+    "app/src/main/java/it/sorguido/unconnected/domain/Rules.kt",
+    "app/gradle.lockfile",
+    "app/src/main/res/values/themes.xml",
+    "app/src/main/res/xml/data_extraction_rules.xml",
+    "gradle wrapper and root build scripts"
+  ],
+  "layout_tests": "Production Compose MeasurePolicy exercised with controlled measured children for the retained master-button labels only; the status card is now a plain Column, so its natural height is structural and has no JVM proof. No Android text shaping, rendering or accessibility proof.",
+  "status_model_tests": "Production filterStatus/cardStatus driven by the real SettingsStore.sessionPauseFlow publisher across save, toggle, failure and retry sequences; not a substitute for a physical save/rotation/UI test.",
+  "physical_tests": "NOT_RUN for code 6; no device was attached. Owner reports code 5 removed the flicker but left a large empty block above DEACTIVATE.",
+  "ui_runtime_tests": "NOT_RUN; no emulator, instrumented harness or dependency was added to manufacture cosmetic evidence",
+  "adb_enumeration": "adb server started for read-only enumeration; no devices attached",
+  "unchanged_regressions": "All 62 pre-code-5 tests retained, including issue #1 pause observability, issue #2 contact picking/deduplication, screening, schedules/DST and persistence codec. Code 5 added 4 layout tests: 1 kept and extended for the button labels, 2 obsolete max-height-reservation tests replaced, 1 constraints test retargeted to labels. 2 new status-model tests added. 66 -> 67."
+}

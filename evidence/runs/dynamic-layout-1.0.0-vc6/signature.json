@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-30",
+  "status": "signed candidate; physical installation and call behavior unverified",
+  "original_release": "https://github.com/sorguido/chromecast-killswitch-app/releases/tag/v1.1.0",
+  "original_asset_id": 671937453,
+  "original_published_asset_sha256": "4e1583fc7421ba2ed508966ec8c567a336c0f0be5d6fa775a3a001885bf13e43",
+  "original_public_digest_matches_local_apk": true,
+  "verification_commands": [
+    "sha256sum development/deliverables/dynamic-layout-1.0.0-vc6/*.apk",
+    "$ANDROID_HOME/build-tools/36.0.0/apksigner verify --verbose --print-certs APK",
+    "$ANDROID_HOME/build-tools/36.0.0/aapt2 dump badging APK"
+  ],
+  "artifacts": [
+    {
+      "artifact": "unconnected candidate",
+      "path": "development/deliverables/dynamic-layout-1.0.0-vc6/unconnected-1.0.0-vc6-candidate.apk",
+      "sha256": "2e400b5ea089f5702925301bc7afedcd2159478c4bbb9b38befb630360462a88",
+      "size": 18716483,
+      "signer_dn": "CN=Chromecast Kill Switch",
+      "signer_sha256": "2936676a220e4a9682171fbf0c9b91552acd8fc4f120318c6a0aebe6e6722ecc",
+      "signer_sha1": "7450ef711dcfcaf713449c34caa02e88a3226fa1",
+      "package": "package: name='it.sorguido.unconnected' versionCode='6' versionName='1.0.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+      "application_label": "unconnected",
+      "permissions": [
+        "uses-permission: name='android.permission.READ_CONTACTS'",
+        "uses-permission: name='it.sorguido.unconnected.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'"
+      ],
+      "sdk": [
+        "minSdkVersion:'29'",
+        "targetSdkVersion:'36'"
+      ],
+      "signature_schemes": {
+        "v1": false,
+        "v2": true,
+        "v3": false,
+        "v3_1": false,
+        "v4": false
+      },
+      "signature_verified": true
+    },
+    {
+      "artifact": "Chromecast published v1.1.0",
+      "path": "/home/guido/Repository/chromecast-killswitch-app/development/releases/1.1.0/downloaded/chromecast-killswitch-1.1.0.apk",
+      "sha256": "4e1583fc7421ba2ed508966ec8c567a336c0f0be5d6fa775a3a001885bf13e43",
+      "size": 18604537,
+      "signer_dn": "CN=Chromecast Kill Switch",
+      "signer_sha256": "2936676a220e4a9682171fbf0c9b91552acd8fc4f120318c6a0aebe6e6722ecc",
+      "signer_sha1": "7450ef711dcfcaf713449c34caa02e88a3226fa1",
+      "package": "package: name='it.sorguido.chromecastkillswitch' versionCode='2' versionName='1.1.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+      "permissions": [
+        "uses-permission: name='android.permission.INTERNET'",
+        "uses-permission: name='android.permission.ACCESS_NETWORK_STATE'",
+        "uses-permission: name='android.permission.ACCESS_WIFI_STATE'",
+        "uses-permission: name='android.permission.CHANGE_WIFI_MULTICAST_STATE'",
+        "uses-permission: name='it.sorguido.chromecastkillswitch.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'"
+      ],
+      "sdk": [
+        "minSdkVersion:'26'",
+        "targetSdkVersion:'36'"
+      ],
+      "signature_verified": true,
+      "note": "Independent public reference; distinct applicationId, identical signer certificate."
+    },
+    {
+      "artifact": "unconnected debug",
+      "path": "development/deliverables/dynamic-layout-1.0.0-vc6/unconnected-1.0.0-vc6-debug.apk",
+      "sha256": "560e21c0e21e5e1f4c3c50730ea3906df1f8660934a287e8c3f1046801a101ca",
+      "size": 23567073,
+      "signer_dn": "CN=Android Debug, O=Android, C=US",
+      "signer_sha256": "c89c1294008f3b46c0bbaca0acc0146744730591ac443acc35472a7efa6a2262",
+      "package": "package: name='it.sorguido.unconnected.debug' versionCode='6' versionName='1.0.0-debug' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+      "application_label": "unconnected",
+      "permissions": [
+        "uses-permission: name='android.permission.READ_CONTACTS'",
+        "uses-permission: name='it.sorguido.unconnected.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'"
+      ],
+      "sdk": [
+        "minSdkVersion:'29'",
+        "targetSdkVersion:'36'"
+      ],
+      "signature_verified": true,
+      "note": "Development package with debug signing only; not distributable as the official release."
+    }
+  ],
+  "signer_certificate_matches_original": true,
+  "byte_reproducibility": "not claimed; a second build from sources differing only in one comment produced the same release size but a different archive digest, so the digests above identify these exact delivered artifacts rather than a reproducible build",
+  "key_generation_or_rotation": "none; the existing external PKCS#12 was read through UNCONNECTED_SIGNING_ROOT and never copied, changed or committed",
+  "update_path": "package it.sorguido.unconnected with identical signer and versionCode 6 > 5 supports `adb install --user 0 -r` over candidates 1-5 without uninstalling or clearing rules; preservation on the real phone remains an owner check"
+}

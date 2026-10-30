@@ -9,18 +9,21 @@
     "P1 implementation, JVM tests, lint and APK builds",
     "Native contact picker: 44 JVM tests, build/lint and original-key APK verification",
     "Issue #2 aggregated-contact picker: 62 JVM tests, debug/release build and lint, independent review and original-key APK verification",
-    "Stable save/toggle presentation: 66 JVM tests, debug/release build and lint, independent review and original-key code5 APK verification"
+    "Stable save/toggle presentation: 66 JVM tests, debug/release build and lint, independent review and original-key code5 APK verification",
+    "Dynamic status-card layout: 67 JVM tests, debug/release build and lint, independent review and original-key code6 APK verification"
   ],
   "pending_gates": [
-    "Code5 physical save/toggle stability, scrolling and accessibility acceptance",
+    "Code6 physical acceptance: no empty block above DEACTIVATE, no returning flicker, large fonts, narrow/rotated viewports, TalkBack and settings preservation",
+    "Owner decision on the two recorded code6 accessibility limitations: no audible save completion, and the temporary-pause sentence is announced but not displayed",
     "Remaining P2 real-phone acceptance with device metadata",
     "Explicit approval for first public Release"
   ],
   "host_modified": true,
   "relevant_artifacts": [
-    "evidence/runs/stable-ui-1.0.0-vc5/verification.md",
-    "evidence/runs/stable-ui-1.0.0-vc5/review.md",
-    "evidence/runs/stable-ui-1.0.0-vc5/signature.json",
+    "evidence/runs/dynamic-layout-1.0.0-vc6/verification.md",
+    "evidence/runs/dynamic-layout-1.0.0-vc6/review.md",
+    "evidence/runs/dynamic-layout-1.0.0-vc6/signature.json",
+    "docs/PRODUCT_SPEC.md",
     "docs/BUILD.md"
   ],
   "relevant_corroborations": [
@@ -28,20 +31,20 @@
     "C2",
     "C3"
   ],
-  "next_action": "Owner confirms the personal profile before updating to 1.0.0/code5 with --user 0 -r, then tests repeated saves, toggles, scroll, large fonts and accessibility. No official Release before physical acceptance and explicit approval.",
-  "last_verified_head": "4fdfcad2200474f8b29f1eecd1393ff83806d39d",
+  "next_action": "Owner confirms the personal profile before updating to 1.0.0/code6 with --user 0 -r, then checks the gap above DISATTIVA/DEACTIVATE in both committed states, repeated saves and toggles at a fixed scroll offset, long paused/setup text, large fonts, both themes, both locales and TalkBack. No official Release before physical acceptance and explicit approval.",
+  "last_verified_head": "ffaa2649792cf82501d880d066aa549d6ec130cf",
   "host_changes": [
     "Used Gradle dependency/build caches",
-    "Started host ADB server for read-only device enumeration"
+    "Started host ADB server for read-only device enumeration; no device attached"
   ],
   "device_changes": [],
-  "source_state": "Code5 presentation changes and receipts are recorded by the enclosing main commit; source-inputs.sha256 identifies compiled inputs. Earlier evidence remains unchanged.",
-  "signed_candidate": "development/deliverables/stable-ui-1.0.0-vc5/unconnected-1.0.0-vc5-candidate.apk",
+  "source_state": "Code6 presentation changes and receipts are recorded by the enclosing main commit; source-inputs.sha256 identifies the compiled inputs and shows 24 of 32 byte-identical to code5, including ScreeningService, SettingsStore, SettingsCodec, Rules, ContactPicking and the manifest. Earlier evidence remains unchanged.",
+  "signed_candidate": "development/deliverables/dynamic-layout-1.0.0-vc6/unconnected-1.0.0-vc6-candidate.apk",
   "verification_date": "2026-10-30",
   "candidate_version": {
     "versionName": "1.0.0",
-    "versionCode": 5
+    "versionCode": 6
   },
-  "owner_report": "Owner confirms code4 functions correctly; remaining defect is visual save/toggle flicker. No OEM/OS metadata supplied. This does not verify code5 or every P2 telephone scenario.",
-  "active_task": "Eliminate transient save/toggle layout movement without changing filter behavior"
+  "owner_report": "Owner reports a large empty block between the status description and the red DEACTIVATE button in code 5, verified visually on the phone; the correction must not reintroduce the earlier save/toggle flicker. No OEM/OS metadata supplied, and no claim that code 5 was otherwise accepted. This does not verify code 6 or every P2 telephone scenario.",
+  "active_task": "Size the status card to the text actually visible while keeping saves and toggles free of transient movement"
 }

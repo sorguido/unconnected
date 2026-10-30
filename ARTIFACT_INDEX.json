@@ -14,8 +14,8 @@
   "phase_artifacts": {
     "P0": "docs/phase-specific/P0.md",
     "P1": "app/",
-    "P2": "evidence/runs/stable-ui-1.0.0-vc5/verification.md",
-    "P3": "evidence/runs/stable-ui-1.0.0-vc5/signature.json"
+    "P2": "evidence/runs/dynamic-layout-1.0.0-vc6/verification.md",
+    "P3": "evidence/runs/dynamic-layout-1.0.0-vc6/signature.json"
   },
   "corroboration_dossiers": {
     "C1": "research/corroborations/C1.md",
@@ -23,17 +23,18 @@
     "C3": "research/corroborations/C3.md"
   },
   "verification_matrix": "tests/TEST_MATRIX.md",
-  "evidence_current": "evidence/runs/stable-ui-1.0.0-vc5/verification.md",
+  "evidence_current": "evidence/runs/dynamic-layout-1.0.0-vc6/verification.md",
   "evidence_runs": "evidence/runs/ (create as needed)",
-  "independent_review": "evidence/runs/stable-ui-1.0.0-vc5/review.md",
+  "independent_review": "evidence/runs/dynamic-layout-1.0.0-vc6/review.md",
   "build_guide": "docs/BUILD.md",
   "human_gate": "docs/DEVICE_TEST_GATE.md",
-  "automated_receipt": "evidence/runs/stable-ui-1.0.0-vc5/automated.json",
-  "source_input_manifest": "evidence/runs/stable-ui-1.0.0-vc5/source-inputs.sha256",
-  "delivery_receipt": "evidence/runs/stable-ui-1.0.0-vc5/signature.json",
+  "automated_receipt": "evidence/runs/dynamic-layout-1.0.0-vc6/automated.json",
+  "source_input_manifest": "evidence/runs/dynamic-layout-1.0.0-vc6/source-inputs.sha256",
+  "delivery_receipt": "evidence/runs/dynamic-layout-1.0.0-vc6/signature.json",
   "local_deliverables": "development/deliverables/ (ignored)",
   "issue_1_retest": "evidence/runs/issue-1-1.0.1/verification.md#human_required--issue_1_physical_retest",
   "contact_picker_retest": "evidence/runs/issue-2-1.0.0-vc4/verification.md#human_required--issue_2_physical_acceptance",
   "issue_2_retest": "evidence/runs/issue-2-1.0.0-vc4/verification.md#human_required--issue_2_physical_acceptance",
-  "stable_ui_retest": "evidence/runs/stable-ui-1.0.0-vc5/verification.md#human_required--stable_ui_physical_acceptance"
+  "stable_ui_retest": "evidence/runs/stable-ui-1.0.0-vc5/verification.md#human_required--stable_ui_physical_acceptance",
+  "dynamic_layout_retest": "evidence/runs/dynamic-layout-1.0.0-vc6/verification.md#human_required--dynamic_layout_physical_acceptance"
 }

@@ -7,7 +7,6 @@
     <string name="filtering_off">Filtering is off</string>
     <string name="filtering_on">Your schedule is active</string>
     <string name="state_paused">Filtering is paused</string>
-    <string name="state_saving">Saving settings</string>
     <string name="saving_detail">Filtering is temporarily paused while your changes are saved.</string>
     <string name="off_detail">All calls are allowed. Your settings stay here.</string>
     <string name="on_detail">Enabled numbers are allowed during your windows and filtered outside them.</string>

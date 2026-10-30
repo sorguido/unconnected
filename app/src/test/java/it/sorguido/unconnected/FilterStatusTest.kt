@@ -15,21 +15,64 @@ import org.junit.Test
 import java.util.concurrent.atomic.AtomicBoolean
 
 class FilterStatusTest {
-    @Test fun savingOffActiveAndRealPausesHaveConsistentCopy() {
-        for (enabled in listOf(false, true)) for (permissions in listOf(false, true)) {
-            for (paused in listOf(false, true)) {
-                assertEquals(FilterStatus.SAVING, filterStatus(enabled, permissions, true, paused))
-            }
-        }
-        assertEquals(FilterStatus.OFF, filterStatus(false, true, false, false))
-        assertEquals(FilterStatus.OFF, filterStatus(false, false, false, true))
-        assertEquals(FilterStatus.ACTIVE, filterStatus(true, true, false, false))
-        assertEquals(FilterStatus.SETUP_REQUIRED, filterStatus(true, false, false, false))
-        assertEquals(FilterStatus.SESSION_PAUSED, filterStatus(true, true, false, true))
+    @Test fun offActiveSetupAndRealPauseHaveConsistentCopy() {
+        assertEquals(FilterStatus.OFF, filterStatus(false, true, false))
+        assertEquals(FilterStatus.OFF, filterStatus(false, false, true))
+        assertEquals(FilterStatus.ACTIVE, filterStatus(true, true, false))
+        assertEquals(FilterStatus.SETUP_REQUIRED, filterStatus(true, false, false))
+        assertEquals(FilterStatus.SESSION_PAUSED, filterStatus(true, true, true))
+        assertEquals(R.string.off_detail, FilterStatus.OFF.detail)
         assertEquals(R.string.on_detail, FilterStatus.ACTIVE.detail)
-        assertEquals(R.string.saving_detail, FilterStatus.SAVING.detail)
         assertEquals(R.string.session_paused_detail, FilterStatus.SESSION_PAUSED.detail)
         assertEquals(R.string.paused_detail, FilterStatus.SETUP_REQUIRED.detail)
+    }
+
+    @Test fun theCardOnlyOffersRealCommittedStatesWithDistinguishableCopy() {
+        assertEquals(
+            listOf(FilterStatus.OFF, FilterStatus.ACTIVE, FilterStatus.SESSION_PAUSED, FilterStatus.SETUP_REQUIRED),
+            FilterStatus.entries,
+        )
+        val copy = FilterStatus.entries.map { it.title to it.detail }
+        assertEquals(copy.size, copy.distinct().size)
+        // The transient saving sentence belongs to the non-displacing strip, never to the card.
+        assertFalse(copy.any { (title, detail) -> title == R.string.saving_detail || detail == R.string.saving_detail })
+    }
+
+    @Test fun anInFlightSaveNeverReplacesTheCommittedCardCopy() = runBlocking {
+        publishPause(false)
+        // Mirrors Home: the committed sample feeds the card, and a save holds the previous copy.
+        var held = filterStatus(true, true, SettingsStore.sessionPauseFlow.value)
+        fun card(enabled: Boolean, busy: Boolean): FilterStatus {
+            val shown = cardStatus(filterStatus(enabled, true, SettingsStore.sessionPauseFlow.value), busy, held)
+            if (!busy) held = shown
+            return shown
+        }
+        try {
+            assertEquals(FilterStatus.ACTIVE, card(true, false))
+            SettingsStore.beginUpdate(); yield()
+            assertEquals("A save must not swap in transient copy", FilterStatus.ACTIVE, card(true, true))
+            withContext(Dispatchers.IO) { publishPause(false) }; yield()
+            assertEquals(FilterStatus.ACTIVE, card(true, false))
+
+            SettingsStore.beginUpdate(); yield()
+            assertEquals(FilterStatus.ACTIVE, card(true, true))
+            withContext(Dispatchers.IO) { publishPause(false) }; yield()
+            assertEquals("Only completion changes the committed state", FilterStatus.OFF, card(false, false))
+
+            SettingsStore.beginUpdate(); yield()
+            assertEquals(FilterStatus.OFF, card(false, true))
+            withContext(Dispatchers.IO) { publishPause(false) }; yield()
+            assertEquals(FilterStatus.ACTIVE, card(true, false))
+
+            SettingsStore.beginUpdate(); yield() // This save fails: the pause is never cleared.
+            assertEquals(FilterStatus.ACTIVE, card(true, true))
+            assertEquals("A failure surfaces the genuine pause", FilterStatus.SESSION_PAUSED, card(true, false))
+
+            SettingsStore.beginUpdate(); yield() // Retry while genuinely paused.
+            assertEquals("A retry never flashes the active state", FilterStatus.SESSION_PAUSED, card(true, true))
+            withContext(Dispatchers.IO) { publishPause(false) }; yield()
+            assertEquals(FilterStatus.ACTIVE, card(true, false))
+        } finally { publishPause(false) }
     }
 
     @Test fun reproducesOldCapturedReadinessAcrossChildScopeUpdates() {
@@ -58,11 +101,11 @@ class FilterStatusTest {
     @Test fun observedPauseClearsAfterBackgroundCompletionWithoutSettingsChangeOrResume() = runBlocking {
         SettingsStore.beginUpdate()
         val observedPause = mutableStateOf(SettingsStore.sessionPauseFlow.value)
-        val busy = mutableStateOf(false) // New composition attached during an existing save.
         val observer = SnapshotStateObserver { it() }
         val scope = Any()
         var invalidated = false
-        fun status() = filterStatus(true, true, busy.value, observedPause.value)
+        // A composition attached during an existing save has no held copy, so it shows the real pause.
+        fun status() = filterStatus(true, true, observedPause.value)
         val collector = launch(start = CoroutineStart.UNDISPATCHED) {
             // The same StateFlow -> snapshot State bridge used by collectAsState in Home.
             SettingsStore.sessionPauseFlow.collect { observedPause.value = it }
@@ -95,19 +138,18 @@ class FilterStatusTest {
                 assertTrue(SettingsStore.sessionPaused.get())
                 assertTrue(SettingsStore.sessionPauseFlow.value)
                 assertEquals(revision + 1, SettingsStore.revision.get())
-                assertEquals(FilterStatus.SAVING, filterStatus(true, true, true, true))
                 withContext(Dispatchers.IO) { publishPause(false) }
                 yield()
                 assertFalse(SettingsStore.sessionPaused.get())
-                assertEquals(FilterStatus.ACTIVE, filterStatus(true, true, false, SettingsStore.sessionPauseFlow.value))
+                assertEquals(FilterStatus.ACTIVE, filterStatus(true, true, SettingsStore.sessionPauseFlow.value))
             }
             SettingsStore.beginUpdate() // A failed save never publishes false.
             yield()
-            assertEquals(FilterStatus.SESSION_PAUSED, filterStatus(true, true, false, SettingsStore.sessionPauseFlow.value))
+            assertEquals(FilterStatus.SESSION_PAUSED, filterStatus(true, true, SettingsStore.sessionPauseFlow.value))
             SettingsStore.beginUpdate() // Retry succeeds; no settings equality/resume dependency.
             withContext(Dispatchers.IO) { publishPause(false) }
             yield()
-            assertEquals(FilterStatus.ACTIVE, filterStatus(true, true, false, SettingsStore.sessionPauseFlow.value))
+            assertEquals(FilterStatus.ACTIVE, filterStatus(true, true, SettingsStore.sessionPauseFlow.value))
             assertEquals(listOf(false, true, false, true, false, true, false, true, false), seen)
         } finally { collector.cancelAndJoin(); publishPause(false) }
     }

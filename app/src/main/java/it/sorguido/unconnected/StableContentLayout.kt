@@ -4,7 +4,7 @@ import androidx.compose.ui.layout.MeasurePolicy
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
 
-/** Measure every alternative at its natural height; place only the current one in that stable space. */
+/** Reserve the natural maximum of the short master-button labels; status text must size to what is visible. */
 internal fun stableContentMeasurePolicy(selected: Int) = MeasurePolicy { measurables, constraints ->
     val alternatives = measurables.map { it.measure(constraints.copy(minHeight = 0)) }
     layout(

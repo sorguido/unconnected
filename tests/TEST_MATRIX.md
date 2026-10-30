@@ -37,3 +37,7 @@ The owner reports that the code-3 picker tests passed except duplicated phone ro
 ## Stable-save presentation extension (1.0.0 / code 5)
 
 The owner reports code 4 functions correctly, with a remaining visual flicker during saves/toggles. [Code-5 evidence and physical checklist](../evidence/runs/stable-ui-1.0.0-vc5/verification.md) distinguish automated natural-size/placement tests from unverified native rendering. Repeat time/day edits, number additions/deletions, master toggles, failure/retry where safely available, and scrolled/light/dark/large-font/TalkBack checks. All earlier test receipts remain unchanged.
+
+## Dynamic status-card layout extension (1.0.0 / code 6)
+
+The owner reports that code 5 left a large empty block between the status description and the red **DEACTIVATE** button, and that the correction must not bring back the earlier save/toggle flicker; handset details were not supplied. [Code-6 evidence and physical checklist](../evidence/runs/dynamic-layout-1.0.0-vc6/verification.md) separate the automated results — status model, committed-copy retention across in-flight saves, failures and retries, and the retained master-button label policy — from unverified native rendering. The natural height of the visible status text and the absence of perceived flicker remain owner checks on the real phone: repeat time/day edits, number additions/deletions, master toggles, failure/retry where safely available, and narrow/rotated, large-font, light/dark and TalkBack passes. All earlier test receipts remain unchanged.

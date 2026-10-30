@@ -184,13 +184,15 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
                     }
                 } else {
                     val enabled = current.enabled
-                    // One observable sample supplies both heading and explanation, including
-                    // when this composition starts while another save is still finishing.
-                    val status = filterStatus(enabled, permissionsReady, busy, sessionPaused)
+                    // One observable sample supplies both heading and explanation; a save holds that
+                    // copy instead of swapping in transient text of a different length.
+                    val committed = filterStatus(enabled, permissionsReady, sessionPaused)
+                    var held by remember { mutableStateOf(committed) }
+                    SideEffect { if (!busy) held = committed }
                     val buttonColors = ButtonDefaults.buttonColors(
                         containerColor = if (enabled) Color(0xFFB3261E) else Color(0xFF17613D), contentColor = Color.White,
                     )
-                    Section(title = { StableFilterStatus(status) }) {
+                    Section(title = { FilterStatusText(cardStatus(committed, busy, held)) }) {
                         Button(
                             onClick = { if (enabled) persist(current.copy(enabled = false)) else requestSave(current.copy(enabled = true)) },
                             enabled = !busy && (enabled || permissionsReady),
@@ -282,7 +284,8 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
             // Permanent viewport strip outside the scroll area; never changes the column geometry.
             Box(Modifier.widthIn(max = 720.dp).fillMaxWidth().padding(horizontal = 20.dp).height(4.dp)) {
                 if (busy) {
-                    val saving = stringResource(R.string.state_saving)
+                    // The card keeps its committed copy, so this strip is the whole save feedback: it states the real pause.
+                    val saving = stringResource(R.string.saving_detail)
                     LinearProgressIndicator(Modifier.fillMaxWidth().semantics {
                         contentDescription = saving
                         liveRegion = LiveRegionMode.Polite
@@ -356,24 +359,16 @@ private fun Section(title: @Composable () -> Unit, content: @Composable ColumnSc
     }
 }
 
-/** Natural maximum size follows the actual locale, width and font scale without truncation. */
+/** Only the visible state is composed, so the card is exactly as tall as its own text needs. */
 @Composable
-private fun StableFilterStatus(status: FilterStatus) {
-    Layout(
-        modifier = Modifier.fillMaxWidth().semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
-        content = {
-            FilterStatus.entries.forEach { candidate ->
-                Column(
-                    if (candidate == status) Modifier else Modifier.clearAndSetSemantics {},
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                ) {
-                    Text(stringResource(candidate.title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-                    Text(stringResource(candidate.detail))
-                }
-            }
-        },
-        measurePolicy = stableContentMeasurePolicy(status.ordinal),
-    )
+private fun FilterStatusText(status: FilterStatus) {
+    Column(
+        Modifier.fillMaxWidth().semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        Text(stringResource(status.title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+        Text(stringResource(status.detail))
+    }
 }
 
 @Composable
