@@ -12,7 +12,10 @@
   "delegation_goal": "docs/AI_PM_GOAL.md",
   "signing": "docs/SIGNING.md",
   "phase_artifacts": {
-    "P0": "docs/phase-specific/P0.md"
+    "P0": "docs/phase-specific/P0.md",
+    "P1": "app/",
+    "P2": "evidence/current/verification.md",
+    "P3": "evidence/current/signature.json"
   },
   "corroboration_dossiers": {
     "C1": "research/corroborations/C1.md",
@@ -20,6 +23,13 @@
     "C3": "research/corroborations/C3.md"
   },
   "verification_matrix": "tests/TEST_MATRIX.md",
-  "evidence_current": "evidence/current/verification.md (only after actual evidence)",
-  "evidence_runs": "evidence/runs/ (create as needed)"
+  "evidence_current": "evidence/current/verification.md",
+  "evidence_runs": "evidence/runs/ (create as needed)",
+  "independent_review": "evidence/current/review.md",
+  "build_guide": "docs/BUILD.md",
+  "human_gate": "docs/DEVICE_TEST_GATE.md",
+  "automated_receipt": "evidence/current/automated.json",
+  "source_input_manifest": "evidence/current/source-inputs.sha256",
+  "delivery_receipt": "evidence/current/delivery.json",
+  "local_deliverables": "development/deliverables/ (ignored)"
 }

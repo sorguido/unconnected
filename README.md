@@ -2,7 +2,7 @@
 
 **Quiet, scheduled call filtering for Android.**
 
-> **Development status:** Repository initialized. This is not yet a working or installable application. An actual signed APK and physical-device evidence are required before release.
+> **Development status:** Android release candidate implemented. Build, tests, signature receipts and remaining limitations are tracked in [verification](evidence/current/verification.md). Physical-phone acceptance and explicit release approval are still required; this is not a verified production release.
 
 unconnected lets you add multiple phone numbers and define the weekly days and hours when those callers may reach you. Outside the allowed windows, the app aims to block only listed callers silently, without ringing or an ordinary missed-call notification where Android permits. A prominent green **ACTIVATE** button enables the rule and changes to a red **DEACTIVATE** button, which suspends all filtering. The list, days, and time windows are editable.
 
@@ -13,6 +13,10 @@ The app is local-first, offline, requires no account or root access, and does no
 Only the caller number presented to Android can be matched. Forwarded calls may display the **original caller**, rather than the forwarding office number. Call logs may still contain blocked calls, and manufacturer behavior differs. Saved-contact calls may require the Contacts permission. The product must clearly communicate these limits and allow all calls if caller identity or rules are uncertain.
 
 ## Development
+
+- [Build, install, disable and uninstall](docs/BUILD.md)
+- [Physical-device acceptance gate](docs/DEVICE_TEST_GATE.md)
+- [Independent review](evidence/current/review.md)
 
 - [Agent bootstrap](START.md)
 - [Product requirements](docs/PRODUCT_SPEC.md)

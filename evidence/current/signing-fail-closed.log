@@ -1,0 +1,17 @@
+> Task :app:preBuild UP-TO-DATE
+> Task :app:requireOriginalSigning FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:requireOriginalSigning' (registered in build file 'app/build.gradle.kts').
+> HUMAN_REQUIRED: original Chromecast signing configuration unavailable. Set UNCONNECTED_SIGNING_ROOT, or use -Punsigned only for an explicitly unsigned non-release artifact.
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 952ms
+1 actionable task: 1 executed

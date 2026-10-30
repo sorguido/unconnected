@@ -2,26 +2,37 @@
   "schema_version": 1,
   "authoritative": false,
   "execution_path": "PRIMARY",
-  "phase": "P0",
-  "phase_status": "NOT_STARTED",
-  "completed_gates": [],
-  "pending_gates": [
-    "P0 API feasibility",
-    "P1 functional APK",
-    "P2 physical-phone verification",
-    "P3 original-key signed release"
+  "phase": "P2",
+  "phase_status": "HUMAN_REQUIRED",
+  "completed_gates": [
+    "P0 API feasibility and test plan",
+    "P1 implementation, JVM tests, lint and APK builds"
   ],
-  "host_modified": false,
+  "pending_gates": [
+    "P2 physical-phone verification",
+    "P3 physical installation acceptance and public release approval"
+  ],
+  "host_modified": true,
   "relevant_artifacts": [
-    "docs/phase-specific/P0.md",
-    "docs/PRODUCT_SPEC.md",
-    "docs/SIGNING.md"
+    "evidence/current/verification.md",
+    "evidence/current/review.md",
+    "evidence/current/signature.json",
+    "docs/DEVICE_TEST_GATE.md",
+    "docs/BUILD.md"
   ],
   "relevant_corroborations": [
     "C1",
     "C2",
     "C3"
   ],
-  "next_action": "AI PM Goal: confirm screening response semantics, then implement and test a real Android app; preserve existing Chromecast signing identity.",
-  "last_verified_head": null
+  "next_action": "Obtain the owner-approved physical Android test device and execute the documented acceptance gate. Do not repeat completed builds or claim production completion. Signed original-key candidate is prepared locally; no device or public release has been modified.",
+  "last_verified_head": "9e2a899a6952e8bb4a4c23a2989c033b07cfd8fa",
+  "host_changes": [
+    "Used Gradle dependency/build caches",
+    "Started host ADB server for read-only device enumeration"
+  ],
+  "device_changes": [],
+  "source_state": "uncommitted implementation; source archive in development/deliverables",
+  "signed_candidate": "development/deliverables/unconnected-1.0.0-candidate.apk",
+  "verification_date": "2026-10-30"
 }

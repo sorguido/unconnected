@@ -27,7 +27,7 @@ Suggested maintainer invocation from the unconnected working tree:
 UNCONNECTED_SIGNING_ROOT=../chromecast-killswitch-app ./gradlew :app:assembleRelease
 ```
 
-This command is an interface target for AI PM: **Gradle files do not yet exist in the bootstrap**. Implement, test and document this interface before calling it ready.
+This interface is implemented in `app/build.gradle.kts`. A normal release build without this configuration fails before release compilation. `-Punsigned` explicitly produces an unsigned development artifact; debug uses its separate development package. See `docs/BUILD.md` and the verification receipt for measured results.
 
 For public contributors, document unsigned release/debug builds independently. Do not put keystore, properties, passwords, key aliases containing secret data, or signed binary packages in Git. Keep `development/` ignored.
 

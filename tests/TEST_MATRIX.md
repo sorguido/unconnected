@@ -2,6 +2,8 @@
 
 Record actual test status and evidence; an API flag test is not proof of real phone behavior.
 
+Current measured results for every row: [verification receipt](../evidence/current/verification.md). Physical-device procedure: [acceptance gate](../docs/DEVICE_TEST_GATE.md).
+
 | ID | Scenario | Expected |
 |---|---|---|
 | T01 | Add/edit/delete/disable three phone numbers | Persist correct normalized values; other callers unaffected |
