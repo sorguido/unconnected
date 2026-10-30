@@ -10,8 +10,12 @@ The candidate and source are prepared locally. See [build/install instructions](
 
 ```bash
 adb devices -l
-adb -s DEVICE_SERIAL install -r development/deliverables/unconnected-1.0.0-candidate.apk
+adb -s DEVICE_SERIAL shell pm list users
+# Confirm personal user ID (normally 0), then install ONLY there:
+adb -s DEVICE_SERIAL install --user 0 -r development/deliverables/unconnected-1.0.0-candidate.apk
 ```
+
+**Work-profile safety:** On phones with a managed/work profile, plain `adb install` may install the APK into **both** profiles. Always specify the personal user ID and verify it using `pm list users`; do not assume ID 10 means work on every device. If already installed in the work profile, identify its actual user ID and confirm the package there with `adb -s DEVICE_SERIAL shell pm list packages --user WORK_USER_ID it.sorguido.unconnected`. After the owner authorizes removal, use `adb -s DEVICE_SERIAL uninstall --user WORK_USER_ID it.sorguido.unconnected`. **Never run `adb uninstall` without `--user`**, as this can remove the personal installation too. Respect any enterprise-management restriction; do not bypass device policy.
 
 Open the app manually; grant the call-screening role and Contacts permission only through the displayed Android prompts. For permission-revocation trials, use Android's app settings. Reboot and place calls manually as agreed with the owner. Do not automate real calls, forwarding, role changes or permission grants.
 
