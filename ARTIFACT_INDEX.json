@@ -14,8 +14,8 @@
   "phase_artifacts": {
     "P0": "docs/phase-specific/P0.md",
     "P1": "app/",
-    "P2": "evidence/runs/issue-1-1.0.1/verification.md",
-    "P3": "evidence/runs/issue-1-1.0.1/signature.json"
+    "P2": "evidence/runs/contacts-1.0.0-vc3/verification.md",
+    "P3": "evidence/runs/contacts-1.0.0-vc3/signature.json"
   },
   "corroboration_dossiers": {
     "C1": "research/corroborations/C1.md",
@@ -23,14 +23,15 @@
     "C3": "research/corroborations/C3.md"
   },
   "verification_matrix": "tests/TEST_MATRIX.md",
-  "evidence_current": "evidence/runs/issue-1-1.0.1/verification.md",
+  "evidence_current": "evidence/runs/contacts-1.0.0-vc3/verification.md",
   "evidence_runs": "evidence/runs/ (create as needed)",
-  "independent_review": "evidence/runs/issue-1-1.0.1/review.md",
+  "independent_review": "evidence/runs/contacts-1.0.0-vc3/review.md",
   "build_guide": "docs/BUILD.md",
   "human_gate": "docs/DEVICE_TEST_GATE.md",
-  "automated_receipt": "evidence/runs/issue-1-1.0.1/automated.json",
-  "source_input_manifest": "evidence/runs/issue-1-1.0.1/source-inputs.sha256",
-  "delivery_receipt": "evidence/runs/issue-1-1.0.1/signature.json",
+  "automated_receipt": "evidence/runs/contacts-1.0.0-vc3/automated.json",
+  "source_input_manifest": "evidence/runs/contacts-1.0.0-vc3/source-inputs.sha256",
+  "delivery_receipt": "evidence/runs/contacts-1.0.0-vc3/signature.json",
   "local_deliverables": "development/deliverables/ (ignored)",
-  "issue_1_retest": "evidence/runs/issue-1-1.0.1/verification.md#human_required--issue_1_physical_retest"
+  "issue_1_retest": "evidence/runs/issue-1-1.0.1/verification.md#human_required--issue_1_physical_retest",
+  "contact_picker_retest": "evidence/runs/contacts-1.0.0-vc3/verification.md#human_required--contact_picker_physical_acceptance"
 }

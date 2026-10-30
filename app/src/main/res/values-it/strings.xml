@@ -13,7 +13,7 @@
     <string name="on_detail">I numeri abilitati possono chiamare negli orari consentiti e vengono filtrati al di fuori.</string>
     <string name="paused_detail">Completa la configurazione qui sotto. Tutte le chiamate sono consentite quando manca un permesso necessario.</string>
     <string name="setup">Configurazione telefono</string>
-    <string name="setup_detail">Android deve scegliere unconnected come app per filtrare le chiamate. Il permesso Contatti permette ad Android di includere i numeri salvati; l’app non legge mai la rubrica.</string>
+    <string name="setup_detail">Android deve scegliere unconnected come app per filtrare le chiamate. Il permesso Contatti permette ad Android di includere i numeri salvati; l’app legge solo il numero e il nome scelti esplicitamente nel selettore della rubrica.</string>
     <string name="role_granted">Filtro chiamate: pronto</string>
     <string name="role_missing">Filtro chiamate: non selezionato</string>
     <string name="role_unavailable">Il filtro chiamate non è disponibile su questo dispositivo.</string>
@@ -76,4 +76,9 @@
     <string name="allowed_until">Consentito ora, fino a %1$s</string>
     <string name="next_continuous">Sempre consentito a partire da %1$s</string>
     <string name="next_interval">Prossima fascia consentita: %1$s → %2$s</string>
+    <string name="choose_contact">Scegli dalla rubrica</string>
+    <string name="contact_pick_help">Scegli un solo numero, controlla o modifica i campi, poi tocca Salva. Nessun numero viene salvato senza conferma.</string>
+    <string name="contact_loading">Lettura del numero selezionato…</string>
+    <string name="contact_pick_failed">Impossibile leggere il numero selezionato. Riprova oppure inseriscilo manualmente.</string>
+    <string name="contact_picker_unavailable">Il selettore della rubrica non è disponibile oppure l’accesso è stato negato. Puoi comunque inserire il numero manualmente.</string>
 </resources>

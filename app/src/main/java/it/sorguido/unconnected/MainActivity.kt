@@ -1,6 +1,7 @@
 package it.sorguido.unconnected
 
 import android.Manifest
+import android.app.Activity
 import android.app.TimePickerDialog
 import android.app.role.RoleManager
 import android.content.Intent
@@ -36,7 +37,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import it.sorguido.unconnected.domain.NumberRule
-import it.sorguido.unconnected.domain.Numbers
 import it.sorguido.unconnected.domain.Rules
 import it.sorguido.unconnected.domain.Settings
 import it.sorguido.unconnected.domain.TimeWindow
@@ -111,8 +111,8 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
     val sessionPaused by SettingsStore.sessionPauseFlow.collectAsState()
     var message by remember { mutableStateOf<Int?>(null) }
     var permissionVersion by remember { mutableIntStateOf(0) }
-    var numberEditor by remember { mutableStateOf<NumberRule?>(null) }
-    var showNumberEditor by remember { mutableStateOf(false) }
+    var numberEditorId by rememberSaveable { mutableStateOf<String?>(null) }
+    var showNumberEditor by rememberSaveable { mutableStateOf(false) }
     var windowEditor by remember { mutableStateOf<TimeWindow?>(null) }
     var showWindowEditor by remember { mutableStateOf(false) }
     var deleteNumber by remember { mutableStateOf<NumberRule?>(null) }
@@ -227,11 +227,11 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
                                 }, enabled = !busy, modifier = Modifier.semantics { contentDescription = toggleDescription })
                             }
                             FlowRow {
-                                TextButton(onClick = { numberEditor = number; showNumberEditor = true }, enabled = !busy) { Text(stringResource(R.string.edit)) }
+                                TextButton(onClick = { numberEditorId = number.id; showNumberEditor = true }, enabled = !busy) { Text(stringResource(R.string.edit)) }
                                 TextButton(onClick = { deleteNumber = number }, enabled = !busy) { Text(stringResource(R.string.delete)) }
                             }
                         }
-                        OutlinedButton(onClick = { numberEditor = null; showNumberEditor = true }, enabled = !busy && current.numbers.size < 200) { Text(stringResource(R.string.add_number)) }
+                        OutlinedButton(onClick = { numberEditorId = null; showNumberEditor = true }, enabled = !busy && current.numbers.size < 200) { Text(stringResource(R.string.add_number)) }
                         if (current.numbers.size >= 200) Text(stringResource(R.string.entry_limit, 200))
                     }
                     Section(stringResource(R.string.schedule_title)) {
@@ -273,9 +273,10 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
         }
     }
     if (showNumberEditor && settings != null) {
-        NumberEditor(numberEditor, settings!!, onDismiss = { showNumberEditor = false }) { number, region ->
+        val originalNumber = settings!!.numbers.find { it.id == numberEditorId }
+        if (numberEditorId == null || originalNumber != null) NumberEditor(originalNumber, settings!!, onDismiss = { showNumberEditor = false }) { number, region ->
             val current = settings!!
-            val numbers = if (numberEditor == null) current.numbers + number else current.numbers.map { if (it.id == number.id) number else it }
+            val numbers = if (numberEditorId == null) current.numbers + number else current.numbers.map { if (it.id == number.id) number else it }
             requestSave(current.copy(numbers = numbers, region = region))
             showNumberEditor = false
         }
@@ -335,26 +336,56 @@ private fun NumberEditor(original: NumberRule?, settings: Settings, onDismiss: (
     var raw by rememberSaveable { mutableStateOf(original?.e164 ?: "") }
     var region by rememberSaveable { mutableStateOf(settings.region) }
     var error by remember { mutableStateOf<Int?>(null) }
+    val context = LocalContext.current
+    var pendingContactUri by rememberSaveable { mutableStateOf<String?>(null) }
+    val loadingContact = pendingContactUri != null
+    val contactPicker = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) pendingContactUri = result.data?.data?.toString() ?: ""
+        // Cancel (including an empty native picker) leaves the existing draft untouched.
+    }
+    LaunchedEffect(pendingContactUri) {
+        val uri = pendingContactUri ?: return@LaunchedEffect
+        val result = withContext(Dispatchers.IO) {
+            readContactPick(Activity.RESULT_OK, uri) { selectedUri, projection ->
+                context.contentResolver.query(selectedUri.toUri(), projection, null, null, null)
+            }
+        }
+        if (result is ContactPickResult.Selected) {
+            val draft = applyContactPick(NumberDraft(label, raw), result)
+            label = draft.label
+            raw = draft.number
+            error = validateNumberEntry(raw, region, settings.numbers, original?.id).error
+        } else if (result == ContactPickResult.Failed) error = R.string.contact_pick_failed
+        pendingContactUri = null
+    }
     val locale = displayLocale()
     AlertDialog(onDismissRequest = onDismiss,
         title = { Text(stringResource(if (original == null) R.string.add_number else R.string.edit_number)) },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedTextField(label, { label = it.take(80) }, label = { Text(stringResource(R.string.number_label)) }, singleLine = true, modifier = Modifier.fillMaxWidth())
-                OutlinedTextField(raw, { raw = it.take(80); error = null }, label = { Text(stringResource(R.string.phone_number)) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone), singleLine = true, modifier = Modifier.fillMaxWidth(), isError = error != null)
-                OutlinedTextField(region, { region = it.filter(Char::isLetter).take(2).uppercase(Locale.ROOT); error = null }, label = { Text(stringResource(R.string.region)) }, keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters), singleLine = true, modifier = Modifier.fillMaxWidth())
+                if (original == null) {
+                    OutlinedButton(onClick = {
+                        try { contactPicker.launch(contactPickerIntent()) }
+                        catch (_: RuntimeException) { error = R.string.contact_picker_unavailable }
+                    }, enabled = !loadingContact, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.choose_contact)) }
+                    Text(stringResource(R.string.contact_pick_help), style = MaterialTheme.typography.bodySmall)
+                }
+                if (loadingContact) {
+                    LinearProgressIndicator(Modifier.fillMaxWidth())
+                    Text(stringResource(R.string.contact_loading))
+                }
+                OutlinedTextField(label, { label = it.take(80) }, enabled = !loadingContact, label = { Text(stringResource(R.string.number_label)) }, singleLine = true, modifier = Modifier.fillMaxWidth())
+                OutlinedTextField(raw, { raw = it.take(80); error = null }, enabled = !loadingContact, label = { Text(stringResource(R.string.phone_number)) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone), singleLine = true, modifier = Modifier.fillMaxWidth(), isError = error != null)
+                OutlinedTextField(region, { region = it.filter(Char::isLetter).take(2).uppercase(Locale.ROOT); error = null }, enabled = !loadingContact, label = { Text(stringResource(R.string.region)) }, keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters), singleLine = true, modifier = Modifier.fillMaxWidth())
                 if (region in Locale.getISOCountries()) Text(stringResource(R.string.region_selected, Locale.Builder().setRegion(region).build().getDisplayCountry(locale), region), style = MaterialTheme.typography.bodyMedium)
                 Text(stringResource(R.string.region_help), style = MaterialTheme.typography.bodySmall)
                 error?.let { Text(stringResource(it), color = MaterialTheme.colorScheme.error) }
             }
         },
-        confirmButton = { TextButton(onClick = {
-            val e164 = if (region in Locale.getISOCountries()) Numbers.normalize(raw, region) else null
-            when {
-                e164 == null -> error = R.string.number_invalid
-                settings.numbers.any { it.e164 == e164 && it.id != original?.id } -> error = R.string.number_duplicate
-                else -> onSave(NumberRule(original?.id ?: UUID.randomUUID().toString(), label.trim(), e164, original?.enabled ?: true), region)
-            }
+        confirmButton = { TextButton(enabled = !loadingContact, onClick = {
+            val validation = validateNumberEntry(raw, region, settings.numbers, original?.id)
+            if (validation.error != null) error = validation.error
+            else onSave(NumberRule(original?.id ?: UUID.randomUUID().toString(), label.trim(), validation.e164!!, original?.enabled ?: true), region)
         }) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }

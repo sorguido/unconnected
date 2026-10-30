@@ -13,6 +13,8 @@ parser.add_argument('--candidate', type=pathlib.Path, required=True)
 parser.add_argument('--original', type=pathlib.Path, required=True)
 parser.add_argument('--debug', type=pathlib.Path, required=True)
 parser.add_argument('--output', type=pathlib.Path, required=True)
+parser.add_argument('--expected-version-name')
+parser.add_argument('--expected-version-code', type=int)
 args = parser.parse_args()
 # Digest retrieved from the published GitHub v1.1.0 asset metadata on 2026-10-30.
 original_digest = '4e1583fc7421ba2ed508966ec8c567a336c0f0be5d6fa775a3a001885bf13e43'
@@ -28,6 +30,10 @@ for label, apk in [('unconnected candidate', args.candidate), ('Chromecast publi
                         sdk=[line for line in package.splitlines() if line.startswith(('minSdkVersion:', 'targetSdkVersion:'))], signature_verified=True))
 assert records[0]['signer_sha256'] == records[1]['signer_sha256'], 'Signing identity differs'
 assert "name='it.sorguido.unconnected'" in records[0]['package']
+if args.expected_version_name is not None:
+    assert re.search(r"versionName='([^']+)'", records[0]['package']).group(1) == args.expected_version_name, 'Unexpected versionName'
+if args.expected_version_code is not None:
+    assert int(re.search(r"versionCode='([0-9]+)'", records[0]['package']).group(1)) == args.expected_version_code, 'Unexpected versionCode'
 assert "name='it.sorguido.chromecastkillswitch'" in records[1]['package']
 assert "name='it.sorguido.unconnected.debug'" in records[2]['package']
 assert records[0]['signer_sha256'] != records[2]['signer_sha256'], 'Release must not be debug signed'

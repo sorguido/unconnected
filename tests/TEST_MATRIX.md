@@ -25,3 +25,7 @@ Current measured results for every row: [verification receipt](../evidence/curre
 | T17 | Official signed APK vs Chromecast signed APK | Signer SHA-256 exactly matches; application IDs distinct; checksum recorded |
 
 Never attach actual personal call numbers or private signing keys as evidence.
+
+## Contact-picking candidate extension (1.0.0 / code 3)
+
+Current picker checks and limits: [verification](../evidence/runs/contacts-1.0.0-vc3/verification.md). Automated adapter, cancellation, error and shared duplicate/number-validation cases pass; native multi-number choice, no-save-until-confirmation, personal-profile update and rendered/lifecycle checks still require the documented phone retest. Earlier candidate results remain in their historical receipts.

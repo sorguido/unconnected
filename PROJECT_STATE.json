@@ -6,39 +6,44 @@
   "phase_status": "HUMAN_REQUIRED",
   "completed_gates": [
     "P0 API feasibility and test plan",
-    "P1 implementation, JVM tests, lint and APK builds"
+    "P1 implementation, JVM tests, lint and APK builds",
+    "Native contact picker: 44 JVM tests, build/lint and original-key APK verification"
   ],
   "pending_gates": [
+    "Native contact picker and personal-profile update physical acceptance",
     "Issue #1 physical UI retest before closure",
-    "P2 remaining physical-phone acceptance",
-    "P3 public release approval"
+    "Remaining P2 real-phone acceptance",
+    "Explicit approval for first public Release"
   ],
   "host_modified": true,
   "relevant_artifacts": [
-    "evidence/runs/issue-1-1.0.1/verification.md",
-    "evidence/runs/issue-1-1.0.1/review.md",
-    "evidence/runs/issue-1-1.0.1/signature.json",
-    "docs/BUILD.md",
-    "docs/DEVICE_TEST_GATE.md"
+    "evidence/runs/contacts-1.0.0-vc3/verification.md",
+    "evidence/runs/contacts-1.0.0-vc3/review.md",
+    "evidence/runs/contacts-1.0.0-vc3/signature.json",
+    "docs/BUILD.md"
   ],
   "relevant_corroborations": [
     "C1",
     "C2",
     "C3"
   ],
-  "next_action": "User performs issue #1 physical UI retest on signed 1.0.1 candidate. Keep issue open until confirmed; filtering itself continues to work per user report. Broader P2 acceptance/public-release gates remain.",
-  "last_verified_head": "60828f98f8dee324c0dc50212ca7d11a0d5b730f",
+  "next_action": "User tests native single-number contact picking and update to versionName 1.0.0/versionCode 3 in the personal profile only. Confirm issue #1 remains fixed. No official GitHub Release until physical acceptance and explicit approval.",
+  "last_verified_head": "3cc8daea4735f8b6341cdfb8a1bccaf3f3475092",
   "host_changes": [
     "Used Gradle dependency/build caches",
     "Started host ADB server for read-only device enumeration"
   ],
   "device_changes": [],
-  "source_state": "Issue #1 patch and measured receipts are recorded by the enclosing Git commit on main; see source-inputs.sha256 in the run.",
-  "signed_candidate": "development/deliverables/issue-1-1.0.1/unconnected-1.0.1-candidate.apk",
+  "source_state": "Native contact picker and measured receipts are recorded by the enclosing main commit; see the run source-inputs.sha256.",
+  "signed_candidate": "development/deliverables/contacts-1.0.0-vc3/unconnected-1.0.0-vc3-candidate.apk",
   "verification_date": "2026-10-30",
   "active_issue": {
     "number": 1,
     "url": "https://github.com/sorguido/unconnected/issues/1",
     "status": "open; patch candidate awaits phone verification"
+  },
+  "candidate_version": {
+    "versionName": "1.0.0",
+    "versionCode": 3
   }
 }

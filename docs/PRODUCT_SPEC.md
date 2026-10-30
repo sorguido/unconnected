@@ -6,6 +6,8 @@
 
 **R1 — Multiple numbers.** Add, edit, remove and individually enable/disable multiple numbers; optional labels. Support international E.164 normalization and regional numbers with clearly selected/default region; reject invalid or duplicate entries. Match normalized full numbers only (not guessed suffixes). No hard-coded business number.
 
+New-number entry also offers the native Android `ACTION_PICK` selector with `CommonDataKinds.Phone.CONTENT_TYPE`. The user selects one specific phone number; only that row's number and optional display name are read. Selection prefills the existing editable fields and requires explicit Save, using the same normalization/duplicate validation as manual entry. Cancellation, empty results, denied access and unavailable providers must leave the draft/rules unchanged; invalid selected values cannot be saved until corrected. No internal address book, synchronization, bulk import or additional contact permission is introduced.
+
 **R2 — Flexible recurring schedule.** Select weekdays and custom start/end times, with multiple time windows for variable/split shifts, including windows crossing midnight. First-use example may be Monday–Friday 08:30–17:30; everything is editable. Start inclusive, end exclusive. Evaluate in current device local timezone at call arrival, respecting DST, with no alarms or persistent background daemon.
 
 **R3 — Master button.** Default filtering OFF at installation. Large green **ACTIVATE** enables schedule enforcement and becomes a large red **DEACTIVATE**. Deactivation bypasses all app filtering immediately, without erasing settings. Show a truthful enabled/role/permission status.

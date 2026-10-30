@@ -13,7 +13,7 @@
     <string name="on_detail">Enabled numbers are allowed during your windows and filtered outside them.</string>
     <string name="paused_detail">Complete setup below. All calls are allowed while a required permission is missing.</string>
     <string name="setup">Phone setup</string>
-    <string name="setup_detail">Android needs to choose unconnected as its call screening app. Contacts permission lets Android include saved callers; the app never reads your address book.</string>
+    <string name="setup_detail">Android needs to choose unconnected as its call screening app. Contacts permission lets Android include saved callers; the app reads only the number and name you explicitly choose in the contacts picker.</string>
     <string name="role_granted">Call screening: ready</string>
     <string name="role_missing">Call screening: not selected</string>
     <string name="role_unavailable">Call screening is unavailable on this device.</string>
@@ -76,4 +76,9 @@
     <string name="allowed_until">Allowed now, until %1$s</string>
     <string name="next_continuous">Allowed continuously from %1$s</string>
     <string name="next_interval">Next allowed: %1$s → %2$s</string>
+    <string name="choose_contact">Choose from contacts</string>
+    <string name="contact_pick_help">Choose one phone number, review or edit the fields, then tap Save. Nothing is saved until you confirm.</string>
+    <string name="contact_loading">Reading the selected number…</string>
+    <string name="contact_pick_failed">Could not read the selected phone number. Try again or enter it manually.</string>
+    <string name="contact_picker_unavailable">The contacts picker is unavailable or access was denied. You can still enter the number manually.</string>
 </resources>
