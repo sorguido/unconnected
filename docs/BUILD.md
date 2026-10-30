@@ -31,8 +31,12 @@ See [SIGNING.md](SIGNING.md). The original private PKCS#12 and properties remain
 Installation, changing Android roles/permissions, and real calls require the device owner's targeted approval. No such device actions have been performed by the agent. First verify the SHA-256 receipt and signer.
 
 ```bash
-adb -s DEVICE_SERIAL install -r development/deliverables/unconnected-1.0.0-candidate.apk
+adb -s DEVICE_SERIAL shell pm list users
+# After confirming that 0 is the personal user:
+adb -s DEVICE_SERIAL install --user 0 -r development/deliverables/unconnected-1.0.0-candidate.apk
 ```
+
+**Important for work-profile phones:** Plain `adb install` may provision the APK in both the personal and managed profiles. Never omit `--user` for test installs on these devices. If the APK was already installed in a work profile, first find the actual work ID using `adb shell pm list users`, verify installation with `adb shell pm list packages --user WORK_USER_ID it.sorguido.unconnected`, and—only after owner approval—remove that profile's installation with `adb uninstall --user WORK_USER_ID it.sorguido.unconnected`. This retains the personal installation. Do not bypass company device restrictions. Never run profile-unspecified `adb uninstall` on a multi-profile phone.
 
 Alternatively, copy that APK to the phone and open it with Android's package installer. Grant install permission only to the chosen installer if needed. Open **unconnected**. Filtering starts OFF. Explicitly choose unconnected as the call screening app, then grant Contacts permission from its setup card. The app does not read the address book; Android requires this permission to deliver saved-contact calls to the screening service. This app conservatively allows all calls when either role or Contacts permission is missing.
 
@@ -51,12 +55,12 @@ Times follow the current device timezone and 12/24-hour preference. On the repea
 
 ## Update, disable and rollback
 
-For an approved update with the same package/signing identity and a nondecreasing version code, use `adb -s DEVICE_SERIAL install -r APPROVED_APK`; rules are kept. Retain the previous verified APK and checksum. Android may reject version downgrades; do not uninstall or clear data merely to force a downgrade without accepting rule loss.
+For an approved update with the same package/signing identity and a nondecreasing version code, use `adb -s DEVICE_SERIAL install --user 0 -r APPROVED_APK`; rules are kept. Retain the previous verified APK and checksum. Android may reject version downgrades; do not uninstall or clear data merely to force a downgrade without accepting rule loss.
 
 For immediate rollback of behavior, touch **DEACTIVATE**, or remove unconnected's screening role in Android settings. Uninstall through Android settings, or after explicit approval:
 
 ```bash
-adb -s DEVICE_SERIAL uninstall it.sorguido.unconnected
+adb -s DEVICE_SERIAL uninstall --user 0 it.sorguido.unconnected
 ```
 
 Uninstall removes app-owned rules. System-owned call logs are not erased. Restore a previously selected screening app manually if desired. unconnected never changes forwarding, Do Not Disturb, the default dialer or any phone settings on its own.
