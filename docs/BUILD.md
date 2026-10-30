@@ -2,7 +2,7 @@
 
 ## Status and prerequisites
 
-The current first-public-release candidate is **1.0.0 / versionCode 4**. It addresses issue #2 with native aggregated-contact selection followed by a choice among distinct normalized numbers, and retains the issue #1 status fix. See [candidate evidence and physical retest](../evidence/runs/issue-2-1.0.0-vc4/verification.md). Codes 1–3 and their historical evidence remain available; code 4 supports an update without uninstalling or clearing existing rules. No official Release has been approved.
+The current first-public-release candidate is **1.0.0 / versionCode 5**. It stabilizes the main screen during saving and filter toggling, retaining the issue #1 status fix and issue #2 contact picker. The owner reports code 4 works correctly apart from the visual save/toggle flicker. See [new candidate evidence and physical retest](../evidence/runs/stable-ui-1.0.0-vc5/verification.md). Codes 1–4 and their historical evidence remain available; code 5 updates without uninstalling or clearing rules. No official Release has been approved.
 
 unconnected 1.0.0 is an implemented **release candidate**, pending physical-phone acceptance and release approval. Android 10 (API 29) or newer is required. Automated checks do not establish real call, notification, carrier or OEM behavior.
 
@@ -26,7 +26,7 @@ The unsigned artifact cannot be installed or distributed as the official release
 UNCONNECTED_SIGNING_ROOT=../chromecast-killswitch-app ./gradlew :app:assembleRelease :app:testDebugUnitTest :app:lint
 ```
 
-See [SIGNING.md](SIGNING.md). The original private PKCS#12 and properties remain in the existing Chromecast checkout; they are read, never copied or changed. Compare the APK signer with the independently published Chromecast APK before distributing. Candidate APKs, build logs and source archives live under ignored `development/`; public verification receipts live in `evidence/runs/issue-2-1.0.0-vc4/`, alongside preserved earlier runs.
+See [SIGNING.md](SIGNING.md). The original private PKCS#12 and properties remain in the existing Chromecast checkout; they are read, never copied or changed. Compare the APK signer with the independently published Chromecast APK before distributing. Candidate APKs, build logs and source archives live under ignored `development/`; public verification receipts live in `evidence/runs/stable-ui-1.0.0-vc5/`, alongside preserved earlier runs.
 
 ## Install on a test phone — human action required
 
@@ -35,7 +35,7 @@ Installation, changing Android roles/permissions, and real calls require the dev
 ```bash
 adb -s DEVICE_SERIAL shell pm list users
 # After confirming that 0 is the personal user:
-adb -s DEVICE_SERIAL install --user 0 -r development/deliverables/issue-2-1.0.0-vc4/unconnected-1.0.0-vc4-candidate.apk
+adb -s DEVICE_SERIAL install --user 0 -r development/deliverables/stable-ui-1.0.0-vc5/unconnected-1.0.0-vc5-candidate.apk
 ```
 
 **Important for work-profile phones:** Plain `adb install` may provision the APK in both the personal and managed profiles. Never omit `--user` for test installs on these devices. If the APK was already installed in a work profile, first find the actual work ID using `adb shell pm list users`, verify installation with `adb shell pm list packages --user WORK_USER_ID it.sorguido.unconnected`, and—only after owner approval—remove that profile's installation with `adb uninstall --user WORK_USER_ID it.sorguido.unconnected`. This retains the personal installation. Do not bypass company device restrictions. Never run profile-unspecified `adb uninstall` on a multi-profile phone.

@@ -31,9 +31,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -162,14 +167,12 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Box(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing), contentAlignment = Alignment.TopCenter) {
             Column(
-                Modifier.widthIn(max = 720.dp).fillMaxWidth().verticalScroll(rememberScrollState()).padding(20.dp),
+                Modifier.widthIn(max = 720.dp).fillMaxWidth().padding(top = 4.dp).verticalScroll(rememberScrollState()).padding(20.dp),
                 verticalArrangement = Arrangement.spacedBy(18.dp)
             ) {
                 Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Text(stringResource(R.string.tagline), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
                 Text(stringResource(R.string.intro), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                message?.let { Text(stringResource(it), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyLarge) }
-                if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
                 val current = settings
                 if (!loaded) {
                     Text(stringResource(R.string.loading))
@@ -184,15 +187,20 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
                     // One observable sample supplies both heading and explanation, including
                     // when this composition starts while another save is still finishing.
                     val status = filterStatus(enabled, permissionsReady, busy, sessionPaused)
-                    Section(stringResource(status.title)) {
-                        Text(stringResource(status.detail))
+                    val buttonColors = ButtonDefaults.buttonColors(
+                        containerColor = if (enabled) Color(0xFFB3261E) else Color(0xFF17613D), contentColor = Color.White,
+                    )
+                    Section(title = { StableFilterStatus(status) }) {
                         Button(
                             onClick = { if (enabled) persist(current.copy(enabled = false)) else requestSave(current.copy(enabled = true)) },
                             enabled = !busy && (enabled || permissionsReady),
-                            colors = ButtonDefaults.buttonColors(containerColor = if (enabled) Color(0xFFB3261E) else Color(0xFF17613D), contentColor = Color.White),
+                            colors = if (busy && (enabled || permissionsReady)) buttonColors.copy(
+                                disabledContainerColor = buttonColors.containerColor,
+                                disabledContentColor = buttonColors.contentColor,
+                            ) else buttonColors,
                             modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
                             contentPadding = PaddingValues(18.dp)
-                        ) { Text(stringResource(if (enabled) R.string.deactivate else R.string.activate), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold) }
+                        ) { StableMasterButtonLabel(enabled) }
                     }
                     Section(stringResource(R.string.setup)) {
                         Text(stringResource(R.string.setup_detail), style = MaterialTheme.typography.bodyMedium)
@@ -271,7 +279,25 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
                 Section(stringResource(R.string.limits_title)) { Text(stringResource(R.string.limits_detail), style = MaterialTheme.typography.bodyMedium) }
                 Spacer(Modifier.height(12.dp))
             }
+            // Permanent viewport strip outside the scroll area; never changes the column geometry.
+            Box(Modifier.widthIn(max = 720.dp).fillMaxWidth().padding(horizontal = 20.dp).height(4.dp)) {
+                if (busy) {
+                    val saving = stringResource(R.string.state_saving)
+                    LinearProgressIndicator(Modifier.fillMaxWidth().semantics {
+                        contentDescription = saving
+                        liveRegion = LiveRegionMode.Polite
+                    })
+                }
+            }
         }
+    }
+    message?.let { error ->
+        AlertDialog(
+            onDismissRequest = { message = null },
+            title = { Text(stringResource(R.string.operation_failed)) },
+            text = { Text(stringResource(error), modifier = Modifier.verticalScroll(rememberScrollState())) },
+            confirmButton = { TextButton(onClick = { message = null }) { Text(stringResource(R.string.close)) } },
+        )
     }
     if (showNumberEditor && settings != null) {
         val originalNumber = settings!!.numbers.find { it.id == numberEditorId }
@@ -315,13 +341,58 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
 }
 
 @Composable
-private fun Section(title: String, content: @Composable ColumnScope.() -> Unit) {
+private fun Section(title: String, content: @Composable ColumnScope.() -> Unit) = Section(
+    title = { Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold) },
+    content = content,
+)
+
+@Composable
+private fun Section(title: @Composable () -> Unit, content: @Composable ColumnScope.() -> Unit) {
     Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+            title()
             content()
         }
     }
+}
+
+/** Natural maximum size follows the actual locale, width and font scale without truncation. */
+@Composable
+private fun StableFilterStatus(status: FilterStatus) {
+    Layout(
+        modifier = Modifier.fillMaxWidth().semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
+        content = {
+            FilterStatus.entries.forEach { candidate ->
+                Column(
+                    if (candidate == status) Modifier else Modifier.clearAndSetSemantics {},
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    Text(stringResource(candidate.title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(candidate.detail))
+                }
+            }
+        },
+        measurePolicy = stableContentMeasurePolicy(status.ordinal),
+    )
+}
+
+@Composable
+private fun StableMasterButtonLabel(enabled: Boolean) {
+    val selected = if (enabled) 1 else 0
+    Layout(
+        content = {
+            listOf(R.string.activate, R.string.deactivate).forEachIndexed { index, label ->
+                Text(
+                    stringResource(label),
+                    modifier = Modifier.fillMaxWidth().then(if (index == selected) Modifier else Modifier.clearAndSetSemantics {}),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+        },
+        measurePolicy = stableContentMeasurePolicy(selected),
+    )
 }
 
 @Composable

@@ -8,19 +8,19 @@
     "P0 API feasibility and test plan",
     "P1 implementation, JVM tests, lint and APK builds",
     "Native contact picker: 44 JVM tests, build/lint and original-key APK verification",
-    "Issue #2 aggregated-contact picker: 62 JVM tests, debug/release build and lint, independent review and original-key APK verification"
+    "Issue #2 aggregated-contact picker: 62 JVM tests, debug/release build and lint, independent review and original-key APK verification",
+    "Stable save/toggle presentation: 66 JVM tests, debug/release build and lint, independent review and original-key code5 APK verification"
   ],
   "pending_gates": [
-    "Issue #2 personal-profile update and real-contact grouping acceptance",
-    "Issue #1 physical status regression confirmation",
-    "Remaining P2 real-phone acceptance",
+    "Code5 physical save/toggle stability, scrolling and accessibility acceptance",
+    "Remaining P2 real-phone acceptance with device metadata",
     "Explicit approval for first public Release"
   ],
   "host_modified": true,
   "relevant_artifacts": [
-    "evidence/runs/issue-2-1.0.0-vc4/verification.md",
-    "evidence/runs/issue-2-1.0.0-vc4/review.md",
-    "evidence/runs/issue-2-1.0.0-vc4/signature.json",
+    "evidence/runs/stable-ui-1.0.0-vc5/verification.md",
+    "evidence/runs/stable-ui-1.0.0-vc5/review.md",
+    "evidence/runs/stable-ui-1.0.0-vc5/signature.json",
     "docs/BUILD.md"
   ],
   "relevant_corroborations": [
@@ -28,24 +28,20 @@
     "C2",
     "C3"
   ],
-  "next_action": "Owner verifies user 0 is personal, updates to candidate 1.0.0/code 4, and tests four equivalent representations plus one distinct number. Keep issue #2 open until physical confirmation; no official GitHub Release without explicit approval.",
-  "last_verified_head": "65856c2eeef87e5c44c715ff1243a17acb71bfe0",
+  "next_action": "Owner confirms the personal profile before updating to 1.0.0/code5 with --user 0 -r, then tests repeated saves, toggles, scroll, large fonts and accessibility. No official Release before physical acceptance and explicit approval.",
+  "last_verified_head": "4fdfcad2200474f8b29f1eecd1393ff83806d39d",
   "host_changes": [
     "Used Gradle dependency/build caches",
     "Started host ADB server for read-only device enumeration"
   ],
   "device_changes": [],
-  "source_state": "Issue #2 source and measured receipts are recorded by the enclosing main commit; see the new run source-inputs.sha256. Historical code-1/2/3 evidence is preserved.",
-  "signed_candidate": "development/deliverables/issue-2-1.0.0-vc4/unconnected-1.0.0-vc4-candidate.apk",
+  "source_state": "Code5 presentation changes and receipts are recorded by the enclosing main commit; source-inputs.sha256 identifies compiled inputs. Earlier evidence remains unchanged.",
+  "signed_candidate": "development/deliverables/stable-ui-1.0.0-vc5/unconnected-1.0.0-vc5-candidate.apk",
   "verification_date": "2026-10-30",
-  "active_issue": {
-    "number": 2,
-    "url": "https://github.com/sorguido/unconnected/issues/2",
-    "status": "open; code4 signed candidate awaits owner physical verification"
-  },
   "candidate_version": {
     "versionName": "1.0.0",
-    "versionCode": 4
+    "versionCode": 5
   },
-  "owner_report": "Code3 picker tests passed except duplicated phone rows in native selection; device/OEM/OS metadata was not supplied. This is not code4 device acceptance."
+  "owner_report": "Owner confirms code4 functions correctly; remaining defect is visual save/toggle flicker. No OEM/OS metadata supplied. This does not verify code5 or every P2 telephone scenario.",
+  "active_task": "Eliminate transient save/toggle layout movement without changing filter behavior"
 }

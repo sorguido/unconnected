@@ -88,4 +88,6 @@
     <string name="contact_choose_number">Scegli un numero</string>
     <string name="contact_number_help">I formati equivalenti compaiono una sola volta. Scegli un numero per precompilare i campi; nulla viene salvato finché non tocchi Salva.</string>
     <string name="contact_some_invalid">Alcune voci non sono interpretabili senza ambiguità per il paese selezionato. Sono mostrati solo i numeri verificati. Annulla per controllare il paese o inserire manualmente un altro numero.</string>
+    <string name="operation_failed">Operazione non riuscita</string>
+    <string name="close">Chiudi</string>
 </resources>

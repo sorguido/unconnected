@@ -33,3 +33,7 @@ Current picker checks and limits: [verification](../evidence/runs/contacts-1.0.0
 ## Issue #2 extension (1.0.0 / code 4)
 
 The owner reports that the code-3 picker tests passed except duplicated phone rows in the native selector (issue #2); device/OEM details were not supplied. This does not establish code-4 physical acceptance. See [new verification and owner retest](../evidence/runs/issue-2-1.0.0-vc4/verification.md) for scoped aggregate queries, unique-number/label grouping, ambiguous alternatives, cancelled drafts, explicit Save, and the retained filter/status regression suites. Historical receipts above remain unchanged.
+
+## Stable-save presentation extension (1.0.0 / code 5)
+
+The owner reports code 4 functions correctly, with a remaining visual flicker during saves/toggles. [Code-5 evidence and physical checklist](../evidence/runs/stable-ui-1.0.0-vc5/verification.md) distinguish automated natural-size/placement tests from unverified native rendering. Repeat time/day edits, number additions/deletions, master toggles, failure/retry where safely available, and scrolled/light/dark/large-font/TalkBack checks. All earlier test receipts remain unchanged.
