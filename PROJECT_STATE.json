@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "authoritative": false,
+  "execution_path": "PRIMARY",
+  "phase": "P0",
+  "phase_status": "NOT_STARTED",
+  "completed_gates": [],
+  "pending_gates": [
+    "P0 API feasibility",
+    "P1 functional APK",
+    "P2 physical-phone verification",
+    "P3 original-key signed release"
+  ],
+  "host_modified": false,
+  "relevant_artifacts": [
+    "docs/phase-specific/P0.md",
+    "docs/PRODUCT_SPEC.md",
+    "docs/SIGNING.md"
+  ],
+  "relevant_corroborations": [
+    "C1",
+    "C2",
+    "C3"
+  ],
+  "next_action": "AI PM Goal: confirm screening response semantics, then implement and test a real Android app; preserve existing Chromecast signing identity.",
+  "last_verified_head": null
+}

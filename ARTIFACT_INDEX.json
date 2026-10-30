@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "authoritative": false,
+  "canonical": {
+    "bootstrap": "START.md",
+    "governance": "AGENTS.md",
+    "state_machine": "ROADMAP.md",
+    "corroboration_index": "CORROBORATIONS.md"
+  },
+  "state_cache": "PROJECT_STATE.json",
+  "product_spec": "docs/PRODUCT_SPEC.md",
+  "delegation_goal": "docs/AI_PM_GOAL.md",
+  "signing": "docs/SIGNING.md",
+  "phase_artifacts": {
+    "P0": "docs/phase-specific/P0.md"
+  },
+  "corroboration_dossiers": {
+    "C1": "research/corroborations/C1.md",
+    "C2": "research/corroborations/C2.md",
+    "C3": "research/corroborations/C3.md"
+  },
+  "verification_matrix": "tests/TEST_MATRIX.md",
+  "evidence_current": "evidence/current/verification.md (only after actual evidence)",
+  "evidence_runs": "evidence/runs/ (create as needed)"
+}

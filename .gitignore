@@ -1,0 +1,27 @@
+# Private development material, build output, secrets and Android IDE caches
+/development/
+.gradle/
+**/build/
+.idea/
+*.iml
+local.properties
+.cxx/
+.externalNativeBuild/
+*.apk
+*.aab
+*.apks
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+signing.properties
+keystore.properties
+.env
+.env.*
+!.env.example
+**/*call-log*.csv
+**/*contacts*.csv
+**/secrets.*
+.DS_Store
