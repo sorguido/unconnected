@@ -13,6 +13,8 @@ The owner states that the application was tested on a physical phone and explici
 
 The published APK is a byte-identical copy of the verified candidate `development/deliverables/dynamic-layout-1.0.0-vc6/unconnected-1.0.0-vc6-candidate.apk`. It was **not rebuilt**: the application code did not change, so versionCode was deliberately left at 6. Release page: https://github.com/sorguido/unconnected/releases/tag/v1.0.0
 
+**Round-trip check on the published assets.** Both assets were downloaded back from the Release and re-verified: `unconnected-1.0.0-vc6.apk` came down at 18716483 bytes with SHA-256 `2e400b5ea089f5702925301bc7afedcd2159478c4bbb9b38befb630360462a88`, `sha256sum -c unconnected-1.0.0-vc6.apk.sha256` returned **OK**, and `cmp` against the local verified candidate reported **byte-identical**. The downloaded artifact re-verified under `apksigner` as `CN=Chromecast Kill Switch` / `2936676a…` and re-badged as `it.sorguido.unconnected`, versionCode 6, versionName 1.0.0. GitHub's own recorded asset digest for the APK matches the same SHA-256. The Release is `draft: false`, `prerelease: false`, targets `main`, and is served by the `releases/latest` endpoint as `v1.0.0`.
+
 ## Release verification — independently re-measured
 
 - **Signature.** `apksigner verify --verbose --print-certs` (build-tools 36.0.0) reports **Verifies**, one signer, DN `CN=Chromecast Kill Switch`, certificate SHA-256 `2936676a220e4a9682171fbf0c9b91552acd8fc4f120318c6a0aebe6e6722ecc`, SHA-1 `7450ef711dcfcaf713449c34caa02e88a3226fa1`, RSA 3072. Signing scheme v2 only (v1/v3/v3.1/v4 false), which is sufficient for minSdk 29.
@@ -66,7 +68,19 @@ Referrers updated so that no link dangles: `tests/TEST_MATRIX.md:31,35,39` (thre
 
 A reviewer with no part in the cleanup re-checked the working tree before publication and returned **APPROVE WITH SHOULD-FIX, no blocker**. It independently confirmed: all four canonical files unmodified; zero application code changed; versionCode 6 and versionName 1.0.0 intact; 32/32 source-input hashes matching; the `state_saving`/`saving_detail` discriminator; APK digest, signer DN and certificate digest; badging and the absence of INTERNET permission; no tracked binary or private artifact; zero remaining references to the four archived paths anywhere in the tracked tree; 37 of 38 relative markdown links resolving. It also fact-checked every README claim against the manifest, resources, `data_extraction_rules.xml`, `SettingsStore.kt`, `ContactPicking.kt`, `Rules.kt` and `ScreeningService.kt` — including that `setSkipCallLog` is never called, so the README's call-log disclaimer is accurate.
 
-Its three should-fix items are all closed by this report and its enclosing commit: the missing publication report now exists; the `PROJECT_STATE.json` publication statements became true because the sequence was commit → tag → Release → verify assets → make public, so nothing was publicly readable before it was factually correct; and the object-count wording was corrected to "171 unique blobs". One optional softening of an absolute-sounding README sentence was also applied.
+Its three should-fix items are all closed by this report and its enclosing commit: the missing publication report now exists; the `PROJECT_STATE.json` publication statements became true before anything was readable outside the owner's own access, because the sequence was commit → tag → Release → verify assets; and the object-count wording was corrected to "171 unique blobs". One optional softening of an absolute-sounding README sentence was also applied.
+
+## Repository visibility — owner decision
+
+**The repository remains PRIVATE.** Asked to authorize both the Release and the visibility change, the owner authorized the Release and explicitly chose "Release only, repository private". The public security audit passed and is recorded above, so nothing blocks a later visibility change; it was simply not taken.
+
+Consequences that stay open until the owner changes visibility:
+
+- The Release, its two assets and the `v1.0.0` tag exist and are complete, but are reachable only by the owner and collaborators, not by end users.
+- `README.md:18` links to `https://github.com/sorguido/unconnected/releases` and the installation instructions tell the user to download the APK from there. That link does not resolve for anyone without repository access, so the README is not yet actionable for a real end user. It is correct as written and needs no edit once the repository is public.
+- The Release body links to this report at tag `v1.0.0`.
+
+No history rewrite, force push or tag replacement was performed. Note that the tag `v1.0.0` was cut on `0a814be6213b808c038851536c15e63b47504335` **before** the owner's visibility decision, so the copy of this report inside the tag still describes the intended sequence as ending with "make public". That sentence is superseded by this section; the published tag was deliberately left untouched rather than replaced.
 
 ## Known limitations published with v1.0.0
 
@@ -83,5 +97,5 @@ Also published as standing product limitations, and stated in plain language in 
 
 - **Real-device telephone behaviour.** No phone was attached during release preparation. Whether filtered calls stay silent, whether missed-call notifications are suppressed, whether blocked calls appear in the handset call log, whether the code-5 empty block is gone and whether flicker is absent are owner-only checks recorded in `../dynamic-layout-1.0.0-vc6/verification.md`. The owner's acceptance is asserted, not agent-measured, and carries no OEM, model or Android-version metadata.
 - **JVM tests are synthetic.** 67 tests pass, but they do not shape Android text, compose the `Home` screen, run TalkBack, scroll a real surface or inject a real IO error. The natural height of the visible status text has no JVM proof at all.
-- **Network targets.** External URLs were inventoried but not fetched. `https://github.com/sorguido/unconnected/releases` returned nothing useful while the repository was private and resolves only after the visibility change and the Release exist.
+- **Network targets.** External URLs were inventoried but not fetched. The Release and asset URLs were exercised by downloading the assets back, but because the repository is private they resolve only for the owner and collaborators; public reachability of `https://github.com/sorguido/unconnected/releases` has **not** been verified and cannot be until the visibility change happens.
 - **Archived bytes.** The 30 files moved to `development/archive/` were confirmed present and count-matched against the index deletions, but their bytes were not diffed against their HEAD versions.

@@ -11,13 +11,14 @@
     "Issue #2 aggregated-contact picker: 62 JVM tests, debug/release build and lint, independent review and original-key APK verification",
     "Stable save/toggle presentation: 66 JVM tests, debug/release build and lint, independent review and original-key code5 APK verification",
     "Dynamic status-card layout: 67 JVM tests, debug/release build and lint, independent review and original-key code6 APK verification",
-    "Owner physical acceptance of 1.0.0/code6 and explicit approval of the first public release",
+    "Owner physical acceptance of 1.0.0/code6 and explicit approval to publish the first official release",
     "Public security audit of every tracked file and of all 171 unique blobs in Git history: no key, keystore, credential, token, real phone number or private screenshot found",
     "Repository cleanup: code-3, code-4 and code-5 receipts and the AI PM delegation prompt relocated to ignored development/archive/",
     "End-user README rewrite",
-    "P3 release: tag v1.0.0 and official GitHub Release with the original signed APK and its SHA-256 checksum"
+    "P3 release: tag v1.0.0 and official non-draft GitHub Release with the original signed APK and its SHA-256 checksum, both assets downloaded back and verified byte-identical"
   ],
   "pending_gates": [
+    "Repository visibility change to public. The owner authorized the Release but explicitly chose to keep the repository PRIVATE, so the Release, its assets and the v1.0.0 tag are reachable only by the owner and collaborators. The public security audit passed and nothing blocks the change; until it happens, README.md's Releases link and its download instruction are not actionable for an end user.",
     "Owner decision on the two recorded code6 accessibility limitations, published as known limitations of v1.0.0: no audible save completion, and the temporary-pause sentence is announced but not displayed. No functional change was made for the release."
   ],
   "host_modified": true,
@@ -35,7 +36,7 @@
     "C2",
     "C3"
   ],
-  "next_action": "None required for v1.0.0. Any follow-up starts from the published tag and must decide explicitly whether to close the two recorded accessibility limitations, which were published as known limitations rather than fixed.",
+  "next_action": "Owner decides whether to make the repository public; that is the only step between the current state and an end-user-accessible v1.0.0. Any functional follow-up starts from the published tag and must decide explicitly whether to close the two recorded accessibility limitations.",
   "last_verified_head": "85782418d122338ab4a188494b9284cd1311794b",
   "host_changes": [
     "Used Gradle dependency/build caches",
@@ -43,7 +44,7 @@
     "Read the release candidate APK with build-tools 36.0.0 apksigner and aapt2 for verification only"
   ],
   "device_changes": [],
-  "source_state": "The released APK was re-verified against HEAD 8578241: all 32 hashed build inputs in evidence/runs/dynamic-layout-1.0.0-vc6/source-inputs.sha256 are byte-identical to the working tree, all 90 English string resource names are present in the APK, and state_saving is absent from it, which is the code-6 discriminator. The release commit changes documentation, indexes and the repository layout only; no application source, manifest, resource or Gradle file was modified, so versionCode stays at 6.",
+  "source_state": "The released APK was re-verified against 8578241: all 32 hashed build inputs in evidence/runs/dynamic-layout-1.0.0-vc6/source-inputs.sha256 are byte-identical to the working tree, all 90 English string resource names are present in the APK, and state_saving is absent from it, which is the code-6 discriminator. The tagged release commit 0a814be and the follow-up commit recording the owner's visibility decision both change documentation, indexes and repository layout only; no application source, manifest, resource or Gradle file was modified, so versionCode stays at 6.",
   "signed_candidate": "development/deliverables/dynamic-layout-1.0.0-vc6/unconnected-1.0.0-vc6-candidate.apk",
   "published_apk_sha256": "2e400b5ea089f5702925301bc7afedcd2159478c4bbb9b38befb630360462a88",
   "verification_date": "2026-10-30",
@@ -55,11 +56,24 @@
     "tag": "v1.0.0",
     "title": "unconnected v1.0.0",
     "url": "https://github.com/sorguido/unconnected/releases/tag/v1.0.0",
+    "tagged_commit": "0a814be6213b808c038851536c15e63b47504335",
+    "draft": false,
+    "prerelease": false,
+    "repository_visibility": "PRIVATE by owner decision. The tag was cut before that decision, so the tagged copy of the publication report still describes a sequence ending in 'make public'; its own 'Repository visibility — owner decision' section, added on main, supersedes that sentence and the published tag was deliberately not replaced.",
     "assets": [
-      "unconnected-1.0.0-vc6.apk",
-      "unconnected-1.0.0-vc6.apk.sha256"
+      {
+        "name": "unconnected-1.0.0-vc6.apk",
+        "sha256": "2e400b5ea089f5702925301bc7afedcd2159478c4bbb9b38befb630360462a88",
+        "size": 18716483,
+        "downloaded_back_and_byte_identical_to_candidate": true
+      },
+      {
+        "name": "unconnected-1.0.0-vc6.apk.sha256",
+        "size": 92,
+        "sha256sum_c_result": "OK"
+      }
     ]
   },
-  "owner_report": "Owner states that the application has been tested on a physical phone and explicitly authorizes preparing and publishing the first official release. No OEM/model, Android version or per-step acceptance record was supplied with that authorization, so the release report documents the acceptance as owner-asserted rather than agent-measured.",
-  "active_task": "None; v1.0.0 is published"
+  "owner_report": "Owner states that the application has been tested on a physical phone and explicitly authorized publishing the first official release. Asked separately about repository visibility, the owner authorized the Release but chose to keep the repository private. No OEM/model, Android version or per-step acceptance record was supplied with the acceptance, so the release report documents it as owner-asserted rather than agent-measured.",
+  "active_task": "None; v1.0.0 is tagged and released on a private repository, awaiting the owner's visibility decision"
 }
