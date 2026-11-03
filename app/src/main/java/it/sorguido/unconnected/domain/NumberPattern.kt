@@ -85,7 +85,7 @@ object NumberMasks {
         // country code from the canonical prefix itself and validate it against libphonenumber.
         val ccLength = countryCodeLength(prefix) ?: return null
         val totalDigits = prefix.length - 1
-        if (ccLength < 1 || ccLength > 3 || totalDigits <= ccLength) return null
+        if (totalDigits <= ccLength) return null
         // Prudent amplitude: deterministic stem (after '+CC') within bounded, plausible sizes.
         val stemDigits = totalDigits - ccLength
         if (stemDigits < MIN_STEM_DIGITS) return null
@@ -115,17 +115,21 @@ object NumberMasks {
     }
 
     /** True when some caller number would satisfy both targets (exact inside a range or nested ranges). */
-    fun overlaps(first: NumberTarget, second: NumberTarget): Boolean = when {
-        first is ExactTarget && second is ExactTarget -> first.canonical == second.canonical
-        first is MaskTarget && second is MaskTarget -> {
-            // Total interval length matters: two masks of different overall length never match
-            // the same caller because matching is strictly fixed-length.
-            val shorter = if (first.prefix.length <= second.prefix.length) first else second
-            val longer = if (shorter === first) second else first
-            shorter.prefix.length + shorter.wildcardCount == longer.prefix.length + longer.wildcardCount &&
-                longer.prefix.startsWith(shorter.prefix)
+    fun overlaps(first: NumberTarget, second: NumberTarget): Boolean = when (first) {
+        is ExactTarget -> when (second) {
+            is ExactTarget -> first.canonical == second.canonical
+            is MaskTarget -> matches(second, first.canonical)
         }
-        first is MaskTarget && second is ExactTarget -> matches(first, second.canonical)
-        else -> second is MaskTarget && first is ExactTarget && matches(second, first.canonical)
+        is MaskTarget -> when (second) {
+            is ExactTarget -> matches(first, second.canonical)
+            is MaskTarget -> {
+                // Total interval length matters: two masks of different overall length never match
+                // the same caller because matching is strictly fixed-length.
+                val shorter = if (first.prefix.length <= second.prefix.length) first else second
+                val longer = if (shorter === first) second else first
+                shorter.prefix.length + shorter.wildcardCount == longer.prefix.length + longer.wildcardCount &&
+                    longer.prefix.startsWith(shorter.prefix)
+            }
+        }
     }
 }

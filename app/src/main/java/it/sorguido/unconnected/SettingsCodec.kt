@@ -42,7 +42,7 @@ object SettingsCodec {
             MaskTarget(raw.take(star), raw.length - star)
         }
         // Fail closed per rule: an uncanonicalizable or out-of-region target rejects the document.
-        canonicalize(target)
+        canonicalize(target) ?: error("Target is not canonical for the selected region")
         return NumberRule(id, label, target, enabled)
     }
 
@@ -54,10 +54,10 @@ object SettingsCodec {
         val numbers = json.getJSONArray("numbers")
         val windows = json.getJSONArray("windows")
         require(numbers.length() <= 200 && windows.length() <= 100)
-        var region = ""
+        val region = json.getString("region")
         val result = Settings(
             enabled = json.strictBoolean("enabled"),
-            region = json.getString("region").also { region = it },
+            region = region,
             emptyScheduleConfirmed = json.strictBoolean("emptyScheduleConfirmed"),
             // schema=1 documents carry only "e164" and migrate losslessly to exact targets.
             numbers = (0 until numbers.length()).map { i -> parseNumber(numbers.getJSONObject(i)) { Numbers.canonicalTarget(it, region) } },

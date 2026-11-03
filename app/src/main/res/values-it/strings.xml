@@ -76,8 +76,7 @@
     <string name="next_continuous">Sempre consentito a partire da %1$s</string>
     <string name="next_interval">Prossima fascia consentita: %1$s → %2$s</string>
     <string name="choose_contact">Scegli dalla rubrica</string>
-    <string name="contact_pick_help">Scegli un contatto e, se necessario, uno dei suoi numeri distinti. Controlla o modifica i campi e tocca Salva per confermare.
-        Per un intervallo, sostituisci le cifre finali con * (es. 02 12345***).</string>
+    <string name="contact_pick_help">Scegli un contatto e, se necessario, uno dei suoi numeri distinti. Controlla o modifica i campi e tocca Salva per confermare.</string>
     <string name="contact_loading">Lettura dei numeri del contatto selezionato…</string>
     <string name="contact_pick_failed">Impossibile leggere questo contatto. Riprova oppure inserisci il numero manualmente.</string>
     <string name="contact_picker_unavailable">Il selettore della rubrica non è disponibile oppure l’accesso è stato negato. Puoi comunque inserire il numero manualmente.</string>
@@ -90,6 +89,7 @@
     <string name="contact_some_invalid">Alcune voci non sono interpretabili senza ambiguità per il paese selezionato. Sono mostrati solo i numeri verificati. Annulla per controllare il paese o inserire manualmente un altro numero.</string>
     <string name="operation_failed">Operazione non riuscita</string>
     <string name="close">Chiudi</string>
+    <string name="range_help">Inserisci un numero completo oppure sostituisci le cifre finali con * per filtrare un intervallo (es. 02 12345***).</string>
     <string name="range_possible_numbers">Intervallo: %1$s numeri possibili</string>
     <string name="range_confirm_title">Conferma intervallo ampio</string>
     <string name="range_confirm_body">Questa maschera copre %1$s numeri possibili. Vuoi salvarla?</string>

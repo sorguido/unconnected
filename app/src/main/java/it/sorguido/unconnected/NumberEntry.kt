@@ -10,10 +10,7 @@ import java.util.Locale
 import java.util.UUID
 
 /** What the Home list and the editor show for a rule: the exact number or the full mask. */
-internal fun NumberRule.displayValue(): String = when (val value = target) {
-    is ExactTarget -> value.canonical
-    is MaskTarget -> value.canonical // "+390212345***": never stripped of its asterisks.
-}
+internal fun NumberRule.displayValue(): String = target.canonical
 
 /** Live, discreet feedback under the field; null while the input is incomplete or invalid. */
 internal fun rangeFeedback(raw: String, region: String): Long? {
@@ -58,8 +55,9 @@ internal fun saveNumberEntry(
     onSave: (NumberRule, String) -> Unit,
 ): Int? {
     val validation = validateNumberEntry(draft.number, region, existing, original?.id)
-    if (validation.error != null) return validation.error
+    val target = validation.target
+    if (target == null) return validation.error ?: R.string.number_invalid
     if (validation.needsConfirmation && !confirmed) return R.string.range_confirm
-    onSave(NumberRule(original?.id ?: UUID.randomUUID().toString(), draft.label.trim(), validation.target!!, original?.enabled ?: true), region)
+    onSave(NumberRule(original?.id ?: UUID.randomUUID().toString(), draft.label.trim(), target, original?.enabled ?: true), region)
     return null
 }

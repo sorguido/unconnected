@@ -76,8 +76,7 @@
     <string name="next_continuous">Allowed continuously from %1$s</string>
     <string name="next_interval">Next allowed: %1$s → %2$s</string>
     <string name="choose_contact">Choose from contacts</string>
-    <string name="contact_pick_help">Choose a contact, then one of its distinct numbers if needed. Review or edit the fields and tap Save to confirm.
-        For a range, replace the final digits with * (e.g. 02 12345***).</string>
+    <string name="contact_pick_help">Choose a contact, then one of its distinct numbers if needed. Review or edit the fields and tap Save to confirm.</string>
     <string name="contact_loading">Reading numbers for the selected contact…</string>
     <string name="contact_pick_failed">Could not read this contact. Try again or enter the number manually.</string>
     <string name="contact_picker_unavailable">The contacts picker is unavailable or access was denied. You can still enter the number manually.</string>
@@ -90,6 +89,7 @@
     <string name="contact_some_invalid">Some entries could not be read unambiguously for the selected country. Only verified numbers are shown. Cancel to check the country or enter another number manually.</string>
     <string name="operation_failed">Operation failed</string>
     <string name="close">Close</string>
+    <string name="range_help">Enter a full number, or replace its final digits with * to filter a range (e.g. 02 12345***).</string>
     <string name="range_possible_numbers">Range: %1$s possible numbers</string>
     <string name="range_confirm_title">Confirm wide range</string>
     <string name="range_confirm_body">This mask covers %1$s possible numbers. Save it anyway?</string>
