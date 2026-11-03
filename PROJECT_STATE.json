@@ -3,7 +3,7 @@
   "authoritative": false,
   "execution_path": "PRIMARY",
   "phase": "P3",
-  "phase_status": "MILESTONE_COMPLETE",
+  "phase_status": "IN_PROGRESS",
   "completed_gates": [
     "P0 API feasibility and test plan",
     "P1 implementation, JVM tests, lint and APK builds",
@@ -16,10 +16,14 @@
     "Repository cleanup: code-3, code-4 and code-5 receipts and the AI PM delegation prompt relocated to ignored development/archive/",
     "End-user README rewrite",
     "P3 release: tag v1.0.0 and official non-draft GitHub Release with the original signed APK and its SHA-256 checksum, both assets downloaded back and verified byte-identical",
-    "Owner-authorized GPL-3.0-or-later correction: official GNU license, global or-later declaration, unchanged signed code-6 APK, reviewed third-party source inventory and source companion; replace only private v1.0.0 tag/Release, then targeted local cleanup"
+    "Owner-authorized GPL-3.0-or-later correction: official GNU license, global or-later declaration, unchanged signed code-6 APK, reviewed third-party source inventory and source companion; replace only private v1.0.0 tag/Release, then targeted local cleanup",
+    "PR #3 numeric-range implementation merged into main (2026-11-03); source maintains fail-open screening and v1.0.0 setting compatibility",
+    "88 JVM unit tests reported PASS on PR #3 head d7556ef; debug compile/lint/assemble reported PASS by AI PM, and manual GitHub Actions debug APK was downloaded and installed by owner",
+    "Owner-reported physical Android tests of numeric ranges and counterchecks: all PASS on 2026-11-03 (not an agent-measured per-call/OEM receipt)"
   ],
   "pending_gates": [
-    "Owner decision on the two recorded code6 accessibility limitations, published as known limitations of v1.0.0: no audible save completion, and the temporary-pause sentence is announced but not displayed. No functional change was made for the release."
+    "v1.1.0 release: bump versionName to 1.1.0/versionCode to 7, complete local tests/lint/release APK build with existing external signing identity and minimal required artifact metadata/integrity checks",
+    "v1.1.0 publication: update only stale essential English docs, tag and publish GitHub Release with concise changelog, official APK/checksum and corresponding source distribution consistent with v1.0.0"
   ],
   "host_modified": true,
   "relevant_artifacts": [
@@ -31,21 +35,23 @@
     "evidence/runs/dynamic-layout-1.0.0-vc6/signature.json",
     "README.md",
     "docs/PRODUCT_SPEC.md",
-    "docs/BUILD.md"
+    "docs/BUILD.md",
+    ".github/workflows/build-debug-apk.yml",
+    "tests/TEST_MATRIX.md"
   ],
   "relevant_corroborations": [
     "C1",
     "C2",
     "C3"
   ],
-  "next_action": "Repository visibility is PRIVATE by explicit owner instruction, with no pending publication/visibility gate for this task. Consult development/archive/gpl-v1.0.0/postflight.json for the measured remote replacement and cleanup results. Any functional follow-up must address the existing accessibility limitations explicitly.",
+  "next_action": "Resume on local Fedora from latest main. Prepare 1.1.0/versionCode 7; reuse the existing external Chromecast signing setup (no key recovery, transfer or regeneration); run release build/tests/lint and mandated non-secret APK metadata, signer-identity and checksum checks; make only essential public-doc corrections; publish official v1.1.0 tag/Release and corresponding GPL source as for v1.0.0. No phone modifications requested.",
   "host_changes": [
     "Used Gradle dependency/build caches",
     "Started host ADB server for read-only device enumeration; no device attached",
     "Read the release candidate APK with build-tools 36.0.0 apksigner and aapt2 for verification only"
   ],
   "device_changes": [],
-  "source_state": "All 32 input hashes from the code-6 manifest remain byte-identical. The GPL correction changes licensing/documentation/caches only; versionName 1.0.0 and versionCode 6 are retained and the original signed APK is reused. The corrected annotated v1.0.0 tag resolves to its enclosing license commit on main; earlier BSD grants and Git history remain intact.",
+  "source_state": "The published v1.0.0 signed APK remains versionName 1.0.0/versionCode 6. As of 2026-11-03, main contains merged PR #3 fixed-length numeric ranges and the manual debug APK workflow; app/build.gradle.kts has NOT yet been bumped from 1.0.0/6. The original GPL/license and release history remain intact.",
   "signed_candidate": "development/deliverables/dynamic-layout-1.0.0-vc6/unconnected-1.0.0-vc6-candidate.apk",
   "published_apk_sha256": "2e400b5ea089f5702925301bc7afedcd2159478c4bbb9b38befb630360462a88",
   "verification_date": "2026-10-30",
@@ -59,7 +65,7 @@
     "url": "https://github.com/sorguido/unconnected/releases/tag/v1.0.0",
     "draft": false,
     "prerelease": false,
-    "repository_visibility": "PRIVATE by explicit owner instruction; no visibility change is authorized or pending.",
+    "repository_visibility": "PRIVATE when v1.0.0 was first published (historical); repository currently PUBLIC as verified on 2026-11-03; no visibility change requested here",
     "assets": [
       {
         "name": "unconnected-1.0.0-vc6.apk",
@@ -83,6 +89,20 @@
     ]
   },
   "owner_report": "Owner states that the application has been tested on a physical phone and explicitly authorized publishing the first official release. Asked separately about repository visibility, the owner authorized the Release but chose to keep the repository private. No OEM/model, Android version or per-step acceptance record was supplied with the acceptance, so the release report documents it as owner-asserted rather than agent-measured.",
-  "active_task": "None after successful postflight; GPL-3.0-or-later private Release correction and cleanup results are in development/archive/gpl-v1.0.0/postflight.json",
-  "verified_source_baseline": "85782418d122338ab4a188494b9284cd1311794b"
+  "active_task": "v1.1.0 official release preparation: local signed build, tests, minimal public documentation, tag and GitHub Release",
+  "verified_source_baseline": "85782418d122338ab4a188494b9284cd1311794b",
+  "known_v1_0_limitations": [
+    "Owner decision on the two recorded code6 accessibility limitations, published as known limitations of v1.0.0: no audible save completion, and the temporary-pause sentence is announced but not displayed. No functional change was made for the release."
+  ],
+  "repository_visibility_current": "PUBLIC (observed via GitHub API on 2026-11-03; no visibility change performed in this update)",
+  "main_head_at_handoff": "af262c2e61cad4e114d62b0d94ab2f75b9563fea",
+  "planned_release": {
+    "versionName": "1.1.0",
+    "versionCode": 7,
+    "tag": "v1.1.0",
+    "status": "NOT_BUILT_OR_PUBLISHED",
+    "source_branch": "main",
+    "signer": "existing external Chromecast Kill Switch signing identity only",
+    "device_acceptance": "All numeric-range checks PASS, owner reported 2026-11-03; no OEM/version or raw call evidence supplied"
+  }
 }
