@@ -23,6 +23,7 @@ Current measured results for every row: [verification receipt](../evidence/curre
 | T15 | App backgrounded/stopped, device reboot | Service evaluates correctly when invoked |
 | T16 | Clean install, update, uninstall | Reliable setup/reversal and no hidden residue |
 | T17 | Official signed APK vs Chromecast signed APK | Signer SHA-256 exactly matches; application IDs distinct; checksum recorded |
+| T18 | Add/edit/delete/disable numeric ranges (`02 12345***`) | Persist the canonical mask; only exact-prefix and exact-length callers match; wide ranges require confirmation |
 
 Never attach actual personal call numbers or private signing keys as evidence.
 

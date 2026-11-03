@@ -1,6 +1,8 @@
 package it.sorguido.unconnected
 
 import android.provider.ContactsContract.CommonDataKinds.Phone
+import it.sorguido.unconnected.domain.MaskTarget
+import it.sorguido.unconnected.domain.NumberMasks
 import it.sorguido.unconnected.domain.NumberRule
 import org.junit.Assert.*
 import org.junit.Test
@@ -32,12 +34,74 @@ class NumberEntryTest {
         assertEquals(0, saves)
         // The same explicit Save action used by the UI commits the edited draft, not the original pick.
         draft = draft.copy(label = "  Edited label  ", number = "202-555-0113")
-        assertNull(saveNumberEntry(draft, "US", persisted, null, save))
+        assertNull(saveNumberEntry(draft, "US", persisted, null, onSave = save))
         assertEquals(1, saves)
         assertEquals(1, persisted.size)
         assertEquals("+12025550113", persisted.single().e164)
         assertEquals("Edited label", persisted.single().label)
         assertTrue(persisted.single().enabled)
+    }
+
+    // ---- Range masks in the shared editor ----
+
+    @Test fun maskSavesWithoutConfirmationAtThreeStarsAndBelow() {
+        var saved: NumberRule? = null
+        val expected = listOf("02 1234567*" to "+39021234567*", "02123456**" to "+3902123456**",
+            "02 12345***" to "+390212345***", "0212345***" to "+390212345***",
+            "+39 02 12345***" to "+390212345***")
+        for ((raw, canonical) in expected) {
+            assertNull(saveNumberEntry(NumberDraft("Range", raw), "IT", emptyList(), null) { rule, _ -> saved = rule })
+            assertEquals(canonical, saved!!.target.canonical)
+            assertEquals(canonical, saved!!.displayValue())
+        }
+        // The widest unconfirmed mask is exactly the confirmation threshold: 10^3 combinations.
+        assertEquals(1_000L, (saved!!.target as MaskTarget).possibleNumbers)
+    }
+
+    @Test fun wideMaskRequiresExplicitConfirmationBeforeSaving() {
+        val draft = NumberDraft("Wide", "021234****")
+        var saves = 0
+        val error = saveNumberEntry(draft, "IT", emptyList(), null) { _, _ -> saves++ }
+        assertEquals(R.string.range_confirm, error)
+        assertEquals(0, saves)
+        // The confirmed path (the UI dialog's Save button) persists exactly once.
+        assertNull(saveNumberEntry(draft, "IT", emptyList(), null, confirmed = true) { _, _ -> saves++ })
+        assertEquals(1, saves)
+        // Cancelling the dialog leaves settings untouched: no save call at all above.
+    }
+
+    @Test fun malformedOrTooWideMasksAreRefusedInEditor() {
+        for (raw in listOf("02*12345", "*0212345", "0212345*****", "0212345**x", "02***")) {
+            assertEquals(R.string.number_invalid,
+                saveNumberEntry(NumberDraft("Bad", raw), "IT", emptyList(), null) { _, _ -> fail("Invalid mask must not save: $raw") })
+        }
+    }
+
+    @Test fun canonicalMaskDuplicateIsRefusedButSingleInsideRangeStaysSavable() {
+        val range = NumberRule("range", "", NumberMasks.parse("02 12345***", "IT")!!)
+        assertEquals(R.string.number_duplicate,
+            validateNumberEntry("+39 02 12345***", "IT", listOf(range), null).error)
+        val inside = validateNumberEntry("02 12345777", "IT", listOf(range), null)
+        assertNull(inside.error) // OR semantics on one shared calendar: legitimate overlap allowed
+    }
+
+    @Test fun editingAMaskPreservesIdentityAndDisabledState() {
+        val original = NumberRule("existing", "Old label",
+            NumberMasks.parse("02 12345***", "IT")!!, enabled = false)
+        var saved: NumberRule? = null
+        assertNull(saveNumberEntry(NumberDraft("Renamed", "02 12345***"), "IT", listOf(original), original) { rule, _ -> saved = rule })
+        assertEquals("existing", saved!!.id)
+        assertFalse(saved!!.enabled)
+        assertEquals("+390212345***", saved!!.target.canonical)
+    }
+
+    @Test fun rangeFeedbackOnlyForValidMasks() {
+        assertEquals(1_000L, rangeFeedback("02 12345***", "IT"))
+        assertEquals(100L, rangeFeedback("+3902123456**", "IT"))
+        assertNull(rangeFeedback("02 123", "IT"))       // plain number: no range feedback
+        assertNull(rangeFeedback("02 12*", "IT"))       // too short a stem
+        assertNull(rangeFeedback("02*12***", "IT"))     // internal wildcard
+        assertNull(rangeFeedback("02 12345", "IT"))     // incomplete non-mask
     }
 
     @Test fun manualAndPickedDuplicatesIncludingDisabledRulesCannotInvokeSave() {
@@ -71,6 +135,6 @@ class NumberEntryTest {
         assertNull(saveNumberEntry(NumberDraft("Updated", "+1 (202) 555-0111"), "US", listOf(original, other), original) { rule, _ -> saved = rule })
         assertEquals(NumberRule("existing", "Updated", "+12025550111", false), saved)
         assertEquals(R.string.number_duplicate,
-            saveNumberEntry(NumberDraft("Duplicate", other.e164), "US", listOf(original, other), original) { _, _ -> fail("Other rule must not be overwritten") })
+            saveNumberEntry(NumberDraft("Duplicate", other.displayValue()), "US", listOf(original, other), original) { _, _ -> fail("Other rule must not be overwritten") })
     }
 }

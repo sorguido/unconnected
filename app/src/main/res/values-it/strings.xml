@@ -28,11 +28,11 @@
     <string name="add_number">Aggiungi numero</string>
     <string name="edit_number">Modifica numero</string>
     <string name="number_label">Etichetta (facoltativa)</string>
-    <string name="phone_number">Numero di telefono</string>
+    <string name="number_or_range">Numero o intervallo</string>
     <string name="region">Paese del numero (codice di due lettere)</string>
     <string name="region_help">Per i numeri nazionali, scegli il relativo paese (IT, GB, US…). I numeri internazionali iniziano con + e il prefisso del paese.</string>
     <string name="region_selected">Paese del numero: %1$s (%2$s)</string>
-    <string name="number_invalid">Inserisci un numero completo valido e un paese supportato di due lettere. Interni e numeri brevi non sono supportati.</string>
+    <string name="number_invalid">Inserisci un numero completo o un intervallo numerico valido e un paese supportato di due lettere. Interni e numeri brevi non sono supportati.</string>
     <string name="number_duplicate">Questo numero è già presente nell’elenco.</string>
     <string name="number_enabled">Abilitato per %1$s</string>
     <string name="edit">Modifica</string>
@@ -89,4 +89,9 @@
     <string name="contact_some_invalid">Alcune voci non sono interpretabili senza ambiguità per il paese selezionato. Sono mostrati solo i numeri verificati. Annulla per controllare il paese o inserire manualmente un altro numero.</string>
     <string name="operation_failed">Operazione non riuscita</string>
     <string name="close">Chiudi</string>
+    <string name="range_help">Inserisci un numero completo oppure sostituisci le cifre finali con * per filtrare un intervallo (es. 02 12345***).</string>
+    <string name="range_possible_numbers">Intervallo: %1$s numeri possibili</string>
+    <string name="range_confirm_title">Conferma intervallo ampio</string>
+    <string name="range_confirm_body">Questa maschera copre %1$s numeri possibili. Vuoi salvarla?</string>
+    <string name="range_confirm">Salva intervallo</string>
 </resources>

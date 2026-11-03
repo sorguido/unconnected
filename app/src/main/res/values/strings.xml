@@ -28,11 +28,11 @@
     <string name="add_number">Add number</string>
     <string name="edit_number">Edit number</string>
     <string name="number_label">Label (optional)</string>
-    <string name="phone_number">Phone number</string>
+    <string name="number_or_range">Phone number or range</string>
     <string name="region">Number region (two-letter code)</string>
     <string name="region_help">For national numbers, choose their country (IT, GB, US…). International numbers begin with + and a country code.</string>
     <string name="region_selected">Number region: %1$s (%2$s)</string>
-    <string name="number_invalid">Enter a valid full phone number and a supported two-letter region. Extensions and short codes are not supported.</string>
+    <string name="number_invalid">Enter a valid complete phone number or numeric range and a supported two-letter region. Extensions and short codes are not supported.</string>
     <string name="number_duplicate">This number is already in your list.</string>
     <string name="number_enabled">Enabled for %1$s</string>
     <string name="edit">Edit</string>
@@ -89,4 +89,9 @@
     <string name="contact_some_invalid">Some entries could not be read unambiguously for the selected country. Only verified numbers are shown. Cancel to check the country or enter another number manually.</string>
     <string name="operation_failed">Operation failed</string>
     <string name="close">Close</string>
+    <string name="range_help">Enter a full number, or replace its final digits with * to filter a range (e.g. 02 12345***).</string>
+    <string name="range_possible_numbers">Range: %1$s possible numbers</string>
+    <string name="range_confirm_title">Confirm wide range</string>
+    <string name="range_confirm_body">This mask covers %1$s possible numbers. Save it anyway?</string>
+    <string name="range_confirm">Save range</string>
 </resources>

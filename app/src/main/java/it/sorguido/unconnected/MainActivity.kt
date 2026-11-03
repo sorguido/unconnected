@@ -50,6 +50,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import java.text.NumberFormat
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.ZonedDateTime
@@ -230,9 +231,9 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
                             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                                 Column(Modifier.weight(1f)) {
                                     if (number.label.isNotBlank()) Text(number.label, style = MaterialTheme.typography.titleMedium)
-                                    Text(number.e164, style = MaterialTheme.typography.bodyLarge)
+                                    Text(number.displayValue(), style = MaterialTheme.typography.bodyLarge)
                                 }
-                                val toggleDescription = stringResource(R.string.number_enabled, number.label.ifBlank { number.e164 })
+                                val toggleDescription = stringResource(R.string.number_enabled, number.label.ifBlank { number.displayValue() })
                                 Switch(checked = number.enabled, onCheckedChange = { checked ->
                                     requestSave(current.copy(numbers = current.numbers.map { if (it.id == number.id) it.copy(enabled = checked) else it }))
                                 }, enabled = !busy, modifier = Modifier.semantics { contentDescription = toggleDescription })
@@ -400,9 +401,12 @@ private fun Confirmation(title: Int, body: Int, confirm: Int, dismiss: () -> Uni
 @Composable
 private fun NumberEditor(original: NumberRule?, settings: Settings, onDismiss: () -> Unit, onSave: (NumberRule, String) -> Unit) {
     var label by rememberSaveable { mutableStateOf(original?.label ?: "") }
-    var raw by rememberSaveable { mutableStateOf(original?.e164 ?: "") }
+    var raw by rememberSaveable { mutableStateOf(original?.displayValue() ?: "") }
     var region by rememberSaveable { mutableStateOf(settings.region) }
     var error by remember { mutableStateOf<Int?>(null) }
+    // Real confirmation interaction for wide ranges: an explicit dialog, never a plain error.
+    // Non-null only between Save and the dialog's explicit accept/dismiss.
+    var pendingWideSave by remember { mutableStateOf<Long?>(null) }
     val context = LocalContext.current
     var pendingContactUri by rememberSaveable { mutableStateOf<String?>(null) }
     var contactChoices by remember { mutableStateOf<ContactPickResult.Choices?>(null) }
@@ -468,6 +472,10 @@ private fun NumberEditor(original: NumberRule?, settings: Settings, onDismiss: (
         return
     }
     val locale = displayLocale()
+    val draft = NumberDraft(label, raw)
+    // Discreet live feedback only for a recognized, valid mask; the short hint stays otherwise.
+    val combinations = rangeFeedback(raw, region)
+
     AlertDialog(onDismissRequest = onDismiss,
         title = { Text(stringResource(if (original == null) R.string.add_number else R.string.edit_number)) },
         text = {
@@ -485,7 +493,14 @@ private fun NumberEditor(original: NumberRule?, settings: Settings, onDismiss: (
                     Text(stringResource(R.string.contact_loading))
                 }
                 OutlinedTextField(label, { label = it.take(80) }, enabled = !loadingContact, label = { Text(stringResource(R.string.number_label)) }, singleLine = true, modifier = Modifier.fillMaxWidth())
-                OutlinedTextField(raw, { raw = it.take(80); error = null }, enabled = !loadingContact, label = { Text(stringResource(R.string.phone_number)) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone), singleLine = true, modifier = Modifier.fillMaxWidth(), isError = error != null)
+                // The phone keypad exposes '*' directly, so both a full number and a mask are one field.
+                OutlinedTextField(raw, { raw = it.take(80); error = null }, enabled = !loadingContact, label = { Text(stringResource(R.string.number_or_range)) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone), singleLine = true, modifier = Modifier.fillMaxWidth(), isError = error != null)
+                Text(
+                    if (combinations == null) stringResource(R.string.range_help)
+                    else stringResource(R.string.range_possible_numbers, NumberFormat.getInstance(locale).format(combinations)),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (combinations == null) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.primary,
+                )
                 OutlinedTextField(region, { region = it.filter(Char::isLetter).take(2).uppercase(Locale.ROOT); error = null }, enabled = !loadingContact, label = { Text(stringResource(R.string.region)) }, keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters), singleLine = true, modifier = Modifier.fillMaxWidth())
                 if (region in Locale.getISOCountries()) Text(stringResource(R.string.region_selected, Locale.Builder().setRegion(region).build().getDisplayCountry(locale), region), style = MaterialTheme.typography.bodyMedium)
                 Text(stringResource(R.string.region_help), style = MaterialTheme.typography.bodySmall)
@@ -493,9 +508,27 @@ private fun NumberEditor(original: NumberRule?, settings: Settings, onDismiss: (
             }
         },
         confirmButton = { TextButton(enabled = !loadingContact, onClick = {
-            error = saveNumberEntry(NumberDraft(label, raw), region, settings.numbers, original, onSave)
+            val validation = validateNumberEntry(raw, region, settings.numbers, original?.id)
+            error = validation.error
+            if (validation.error != null) return@TextButton
+            // Ordinary three-star (or narrower) masks save without extra friction.
+            if (validation.needsConfirmation) pendingWideSave = combinations
+            else error = saveNumberEntry(draft, region, settings.numbers, original, onSave = onSave)
         }) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
+    pendingWideSave?.let { wideCount ->
+        AlertDialog(
+            onDismissRequest = { pendingWideSave = null },
+            title = { Text(stringResource(R.string.range_confirm_title)) },
+            text = { Text(stringResource(R.string.range_confirm_body, NumberFormat.getInstance(locale).format(wideCount))) },
+            // Only the explicit accept persists; dismissing leaves the rules untouched.
+            confirmButton = { TextButton(onClick = {
+                pendingWideSave = null
+                error = saveNumberEntry(draft, region, settings.numbers, original, confirmed = true, onSave = onSave)
+            }) { Text(stringResource(R.string.range_confirm)) } },
+            dismissButton = { TextButton(onClick = { pendingWideSave = null }) { Text(stringResource(R.string.cancel)) } },
+        )
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
