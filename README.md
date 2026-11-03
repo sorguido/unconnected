@@ -7,6 +7,7 @@ unconnected lets you pick specific phone numbers and decide the days and hours t
 ## What it does
 
 - **Several numbers.** Keep as many numbers as you need in one list.
+- **Whole number ranges.** Type the final digits of a number as `*` — for example `02 12345***` — and the app filters that whole range. It tells you how many numbers the range covers and asks you to confirm the wide ones.
 - **From your contacts, or typed in.** Choose a number straight from your Android contacts, or enter it manually with its country code.
 - **A weekly schedule that fits your routine.** Set the days and hours when listed callers may reach you, including windows that cross midnight.
 - **On and off in one tap.** One button turns the filter on. The same button turns it off straight away and keeps every setting you made.
