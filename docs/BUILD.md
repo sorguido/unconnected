@@ -2,9 +2,9 @@
 
 ## Status and prerequisites
 
-The published release is **1.0.0 / versionCode 6**, tagged `v1.0.0`. It sizes the status card to the text actually visible and keeps the committed copy on screen while a save runs, removing the empty block the owner saw above **DEACTIVATE** in code 5 without reintroducing save/toggle flicker. The issue #1 status fix and the issue #2 contact picker are retained. See [release evidence and the owner's physical checklist](../evidence/runs/dynamic-layout-1.0.0-vc6/verification.md) and the [publication report](../evidence/runs/release-v1.0.0/publication.md). Codes 1–5 update in place without uninstalling or clearing rules; the code-3, code-4 and code-5 receipts are archived locally under ignored `development/archive/`, and the code-1 and issue #1 receipts remain in the public tree because preserved records link to them.
+Release **1.1.0 / versionCode 7**, tagged `v1.1.0`, adds fixed-length numeric ranges with trailing `*`, exact prefix/length matching, and confirmation for ranges covering more than 1,000 numbers. Existing rules remain compatible. It updates versionCode 6 in place with the same package and signing identity, without uninstalling or clearing rules. Historical [code-6 verification](../evidence/runs/dynamic-layout-1.0.0-vc6/verification.md) and the [v1.0.0 publication report](../evidence/runs/release-v1.0.0/publication.md) remain available.
 
-unconnected 1.0.0 is the released build. The owner tested it on a physical phone and approved publication. Android 10 (API 29) or newer is required. Automated checks do not establish real call, notification, carrier or OEM behavior.
+The owner reports that all numeric-range phone tests and counterchecks passed on 2026-11-03 and authorized publication. This is owner testimony, without OEM/model, Android-version or per-call measurements supplied to the agent. Android 10 (API 29) or newer is required. Automated checks do not establish real call, notification, carrier or OEM behavior.
 
 The pinned toolchain is Gradle 9.6.0, Android Gradle Plugin 9.4.0, Kotlin Compose compiler 2.2.10, Android SDK platform 36 and build-tools 36.0.0. Use a Gradle-compatible JDK (the recorded build uses OpenJDK 25). Set `ANDROID_HOME` to your installed Android SDK or set `sdk.dir` in an ignored `local.properties`. Dependencies download from Google Maven and Maven Central; the installed application has no Internet permission. The Gradle distribution checksum is pinned in the wrapper.
 
@@ -26,7 +26,7 @@ The unsigned artifact cannot be installed or distributed as the official release
 UNCONNECTED_SIGNING_ROOT=../chromecast-killswitch-app ./gradlew :app:assembleRelease :app:testDebugUnitTest :app:lint
 ```
 
-See [SIGNING.md](SIGNING.md). The original private PKCS#12 and properties remain in the existing Chromecast checkout; they are read, never copied or changed. Compare the APK signer with the independently published Chromecast APK before distributing. Candidate APKs, build logs, source archives and the superseded code-3/4/5 receipts live under ignored `development/`; the public verification receipts for the released build live in `evidence/runs/dynamic-layout-1.0.0-vc6/`, and the publication record for `v1.0.0` in `evidence/runs/release-v1.0.0/`.
+See [SIGNING.md](SIGNING.md). The original private PKCS#12 and properties remain in the existing Chromecast checkout; they are read, never copied or changed. Compare the APK signer with the recorded original release certificate before distributing. APKs, build logs and source archives live under ignored `development/`; current release receipts are indexed in `PROJECT_STATE.json`. Historical code-6 verification and v1.0.0 publication records remain in `evidence/runs/dynamic-layout-1.0.0-vc6/` and `evidence/runs/release-v1.0.0/`.
 
 ## Install on a test phone — human action required
 
@@ -35,7 +35,7 @@ Installation, changing Android roles/permissions, and real calls require the dev
 ```bash
 adb -s DEVICE_SERIAL shell pm list users
 # After confirming that 0 is the personal user:
-adb -s DEVICE_SERIAL install --user 0 -r development/deliverables/dynamic-layout-1.0.0-vc6/unconnected-1.0.0-vc6-candidate.apk
+adb -s DEVICE_SERIAL install --user 0 -r development/deliverables/release-v1.1.0/unconnected-1.1.0-vc7.apk
 ```
 
 **Important for work-profile phones:** Plain `adb install` may provision the APK in both the personal and managed profiles. Never omit `--user` for test installs on these devices. If the APK was already installed in a work profile, first find the actual work ID using `adb shell pm list users`, verify installation with `adb shell pm list packages --user WORK_USER_ID it.sorguido.unconnected`, and—only after owner approval—remove that profile's installation with `adb uninstall --user WORK_USER_ID it.sorguido.unconnected`. This retains the personal installation. Do not bypass company device restrictions. Never run profile-unspecified `adb uninstall` on a multi-profile phone.

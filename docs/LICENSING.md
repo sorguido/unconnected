@@ -31,9 +31,9 @@ original release certificate. The correction changes documentation only.
 
 ## Obtaining and building the source
 
-The [private Release](https://github.com/sorguido/unconnected/releases/tag/v1.0.0)
+The [v1.1.0 Release](https://github.com/sorguido/unconnected/releases/tag/v1.1.0)
 offers the APK, its SHA-256 checksum, `LICENSE`, and
-`unconnected-1.0.0-source.tar.gz` with its own checksum. The source companion
+`unconnected-1.1.0-source.tar.gz` with its own checksum. The source companion
 contains the tagged project, build scripts, wrapper, lockfile, tests, these
 license documents, and `third-party-sources/`: the 57 exact runtime Maven source
 JARs and POMs, plus 27 upstream module/source trees containing AndroidX resources,
@@ -53,9 +53,9 @@ sources alongside them. The Release body supplies these source directions next
 to the APK, following [GPLv3 section 6(d)](https://www.gnu.org/licenses/gpl-3.0.html#section6).
 Source access costs nothing extra and uses the same repository permissions as
 binary access. The maintainer must keep corresponding sources available while
-distributing the binary. Anyone redistributing the APK outside this private
-repository must also supply these licenses and equivalent source access to
-their recipients; a private GitHub link alone does not give outsiders access.
+distributing the binary. Anyone redistributing the APK must also supply these
+licenses and equivalent source access to their recipients; a private link alone
+does not give outsiders access.
 
 Follow [BUILD.md](BUILD.md) for the pinned toolchain, debug and unsigned builds,
 and installation instructions. Dependencies are resolved at the locked versions
