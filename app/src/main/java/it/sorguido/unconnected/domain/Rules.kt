@@ -6,7 +6,20 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 /** All values are immutable snapshots; weekdays use ISO Monday=1 through Sunday=7. */
-data class NumberRule(val id: String, val label: String, val e164: String, val enabled: Boolean = true)
+data class NumberRule(
+    val id: String,
+    val label: String,
+    /** Canonical target: exact E.164 or a trailing-asterisk mask ("+390212345***"). */
+    val target: NumberTarget,
+    val enabled: Boolean = true,
+) {
+    /** v1.0.0-compatible secondary constructor: an exact E.164 string wrapped as a target. */
+    constructor(id: String, label: String, e164: String, enabled: Boolean = true) :
+        this(id, label, ExactTarget(e164), enabled)
+
+    /** v1.0.0-compatible read accessor: the E.164 of an exact rule, null for masks. */
+    val e164: String? get() = (target as? ExactTarget)?.canonical
+}
 data class TimeWindow(
     val id: String,
     val label: String,
@@ -26,8 +39,10 @@ data class Settings(
 
 object Numbers {
     private val phoneUtil by lazy { PhoneNumberUtil.getInstance() }
-    private val lexical = Regex("\\+?[0-9(][0-9 ()\\-.]*")
-    private val canonical = Regex("\\+[1-9][0-9]{6,14}")
+    internal val lexicalInput = Regex("\\+?[0-9(][0-9 ()\\-.]*")
+    internal val canonicalForm = Regex("\\+[1-9][0-9]{6,14}")
+    /** Total E.164 digits after '+': the same upper bound as a complete canonical number. */
+    internal const val MAX_CANONICAL_DIGITS = 15
 
     fun isSupportedRegion(region: String): Boolean = region in phoneUtil.supportedRegions
 
@@ -35,18 +50,18 @@ object Numbers {
     fun normalize(raw: String, region: String): String? {
         if (raw.length > 80 || !isSupportedRegion(region)) return null
         val input = raw.trim()
-        if (!lexical.matches(input) || !validGrouping(input)) return null
+        if (!lexicalInput.matches(input) || !validGrouping(input)) return null
         return try {
             val parsed = phoneUtil.parse(input, region)
             if (parsed.hasExtension() || !phoneUtil.isValidNumber(parsed)) null
             else phoneUtil.format(parsed, PhoneNumberUtil.PhoneNumberFormat.E164)
-                .takeIf(canonical::matches)
+                .takeIf(canonicalForm::matches)
         } catch (_: NumberParseException) {
             null
         }
     }
 
-    private fun validGrouping(input: String): Boolean {
+    internal fun validGrouping(input: String): Boolean {
         var inside = false
         var groupDigits = 0
         for (character in input) {
@@ -68,7 +83,13 @@ object Numbers {
     }
 
     fun isCanonical(raw: String, region: String): Boolean =
-        canonical.matches(raw) && normalize(raw, region) == raw
+        canonicalForm.matches(raw) && normalize(raw, region) == raw
+
+    /** Canonical form of any target under the selected region; masks keep their trailing '*'. */
+    fun canonicalTarget(target: NumberTarget, region: String): String? = when (target) {
+        is ExactTarget -> if (isCanonical(target.canonical, region)) target.canonical else null
+        is MaskTarget -> NumberMasks.parse(target.canonical, region)?.canonical
+    }
 }
 
 object Rules {
@@ -88,10 +109,10 @@ object Rules {
             Numbers.isSupportedRegion(settings.region) &&
             settings.numbers.all {
                 validId(it.id) && it.label.length <= MAX_LABEL_LENGTH &&
-                    Numbers.isCanonical(it.e164, settings.region)
+                    Numbers.canonicalTarget(it.target, settings.region) != null
             } &&
             settings.numbers.map { it.id }.distinct().size == settings.numbers.size &&
-            settings.numbers.map { it.e164 }.distinct().size == settings.numbers.size &&
+            settings.numbers.map { it.target.canonical }.distinct().size == settings.numbers.size &&
             validWindows(settings.windows)
 
     private fun validWindows(windows: List<TimeWindow>): Boolean =
@@ -125,8 +146,23 @@ object Rules {
         // Parsers may silently repair a redundant national trunk prefix; that is ambiguous.
         val presentedDigits = caller.filter { it == '+' || it in '0'..'9' }
         if (presentedDigits != normalized) return false
-        if (settings.numbers.none { it.enabled && it.e164 == normalized }) return false
+        // OR over the enabled rules only: exact numbers match fully, masks match at fixed length.
+        val listed = settings.numbers.any { rule ->
+            rule.enabled && when (val target = rule.target) {
+                is ExactTarget -> target.canonical == normalized
+                is MaskTarget -> NumberMasks.matches(target, normalized)
+            }
+        }
+        if (!listed) return false
         return !isAllowed(settings.windows, now)
+    }
+
+    /** True when any enabled rule (exact or mask) covers the given canonical E.164 number. */
+    fun matchesEnabled(settings: Settings, e164: String): Boolean = settings.numbers.any { rule ->
+        rule.enabled && when (val target = rule.target) {
+            is ExactTarget -> target.canonical == e164
+            is MaskTarget -> NumberMasks.matches(target, e164)
+        }
     }
 
     /** Next opening at an actual instant, including DST gaps and repeated hours. No scheduler. */
