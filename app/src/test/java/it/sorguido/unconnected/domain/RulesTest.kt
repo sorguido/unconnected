@@ -17,8 +17,8 @@ class RulesTest {
 
     @Test fun defaultInstallAllowsEveryCall() {
         assertFalse(Settings().enabled)
-        assertFalse(Rules.shouldBlock(Settings(numbers = listOf(first)), first.e164, monday("01:00"), true))
-        assertFalse(Rules.shouldBlock(base.copy(numbers = emptyList()), first.e164, monday("01:00"), true))
+        assertFalse(Rules.shouldBlock(Settings(numbers = listOf(first)), (first.e164!!), monday("01:00"), true))
+        assertFalse(Rules.shouldBlock(base.copy(numbers = emptyList()), (first.e164!!), monday("01:00"), true))
     }
 
     @Test fun workingDayBoundariesAreStartInclusiveEndExclusive() {
@@ -61,13 +61,101 @@ class RulesTest {
     }
 
     @Test fun strictFullNumberMatchAndIndividualEnableState() {
-        assertTrue(Rules.shouldBlock(base, first.e164, monday("01:00"), true))
+        assertTrue(Rules.shouldBlock(base, (first.e164!!), monday("01:00"), true))
         assertTrue(Rules.shouldBlock(base, "+1 (202) 555-0101", monday("01:00"), true))
-        assertFalse(Rules.shouldBlock(base, second.e164, monday("01:00"), true))
-        assertFalse(Rules.shouldBlock(base, first.e164, monday("12:00"), true))
+        assertFalse(Rules.shouldBlock(base, (second.e164!!), monday("01:00"), true))
+        assertFalse(Rules.shouldBlock(base, (first.e164!!), monday("12:00"), true))
         val multiple = base.copy(numbers = listOf(first.copy(enabled = false), second))
-        assertFalse(Rules.shouldBlock(multiple, first.e164, monday("01:00"), true))
-        assertTrue(Rules.shouldBlock(multiple, second.e164, monday("01:00"), true))
+        assertFalse(Rules.shouldBlock(multiple, (first.e164!!), monday("01:00"), true))
+        assertTrue(Rules.shouldBlock(multiple, (second.e164!!), monday("01:00"), true))
+    }
+
+    // ---- Numeric ranges (trailing-asterisk masks) ----
+
+    /** Fictional Milan mask; its national and international spellings must be one canonical range. */
+    private fun milanMask(region: String) = NumberMasks.parse("02 12345***", region)
+
+    @Test fun maskCanonicalizesNationalAndInternationalSpellingsEqually() {
+        val national = milanMask("IT")
+        val international = NumberMasks.parse("+39 02 12345***", "IT")
+        val bare = NumberMasks.parse("+390212345***", "US") // other editor region, same country number
+        assertNotNull(national); assertNotNull(international); assertNotNull(bare)
+        assertEquals("+390212345***", national!!.canonical)
+        assertEquals(national.canonical, international!!.canonical)
+        assertEquals(national.canonical, bare!!.canonical)
+        assertEquals(1_000L, national.possibleNumbers)
+    }
+
+    @Test fun maskMatchesFixedLengthBoundariesOnly() {
+        val mask = milanMask("IT")!!
+        assertTrue(NumberMasks.matches(mask, "+390212345000"))   // low bound
+        assertTrue(NumberMasks.matches(mask, "+390212345999"))   // high bound
+        assertTrue(NumberMasks.matches(mask, "+390212345099"))
+        assertFalse(NumberMasks.matches(mask, "+39021234500"))   // shorter: never a startsWith match
+        assertFalse(NumberMasks.matches(mask, "+3902123450000")) // longer
+        assertFalse(NumberMasks.matches(mask, "+390212346000"))  // similar prefix, outside range
+        assertFalse(NumberMasks.matches(mask, "+390212345a00"))  // non-digit
+    }
+
+    @Test fun maskBlocksInsideRangeAndOutsideScheduleOnly() {
+        val rule = NumberRule("milan", "Fictional office", milanMask("IT")!!)
+        val settings = Settings(enabled = true, numbers = listOf(rule))
+        assertTrue(Rules.isValid(settings))
+        assertTrue(Rules.shouldBlock(settings, "+390212345777", monday("01:00"), true))
+        assertFalse(Rules.shouldBlock(settings, "+390212345777", monday("12:00"), true)) // inside hours
+        assertFalse(Rules.shouldBlock(settings, "+390212346777", monday("01:00"), true)) // outside range
+        assertFalse(Rules.shouldBlock(settings, "+39021234500", monday("01:00"), true))  // wrong length
+        assertFalse(Rules.shouldBlock(settings.copy(enabled = false), "+390212345777", monday("01:00"), true))
+        assertFalse(Rules.shouldBlock(settings.copy(numbers = listOf(rule.copy(enabled = false))), "+390212345777", monday("01:00"), true))
+    }
+
+    @Test fun malformedMasksAreRejectedStrictly() {
+        val invalid = listOf(
+            "*0212345", "02*12345", "02123?5", "0212345??", "0212345**.*", "0212345*****", // >4 stars
+            "(02)12345***", "0212345*** ext 3", "0２12345***", "tel:0212345***", "+0212345***",
+            "02***", "0***", "02 3***", "+392***", "", "***", "0212345***x", "0-2-1-2-3-4-5-***-",
+        )
+        invalid.forEach { assertNull("Should reject: $it", NumberMasks.parse(it, "IT")) }
+        // Too short a stem for US too: no whole-country or trunk-only masks.
+        assertNull(NumberMasks.parse("+12***", "US"))
+    }
+
+    @Test fun maskBoundsMustAlignWithRebuiltExtremes() {
+        // A foreign mask under another editor region still canonicalizes by the real country code.
+        val nanp = NumberMasks.parse("+120255501**", "GB")
+        assertNotNull(nanp)
+        assertEquals("+120255501**", nanp!!.canonical)
+        assertEquals(100L, nanp.possibleNumbers)
+        assertTrue(NumberMasks.matches(nanp, "+12025550100"))
+        assertFalse(NumberMasks.matches(nanp, "+120255501000"))
+    }
+
+    @Test fun singleInsideRangeAndOverlappingRangesKeepOrSemantics() {
+        val mask = milanMask("IT")!!
+        val exact = ExactTarget("+390212345777")
+        val wide = MaskTarget("+3902123", 4) // overlaps the first two wildcard digits
+        val narrow = MaskTarget("+390212345", 2) // nested inside mask, same total length
+        val otherLength = MaskTarget("+3902123450", 1) // same stem +1 digit, total length differs
+        assertTrue(NumberMasks.overlaps(mask, exact))
+        assertTrue(NumberMasks.overlaps(exact, mask))
+        assertTrue(NumberMasks.overlaps(mask, wide))
+        assertTrue(NumberMasks.overlaps(mask, narrow))
+        // Fixed-length matching means different total lengths can never share a caller.
+        assertFalse(NumberMasks.overlaps(mask, otherLength))
+        val settings = Settings(enabled = true, numbers = listOf(
+            NumberRule("m", "", mask), NumberRule("e", "", exact), NumberRule("w", "", wide)))
+        assertTrue(Rules.isValid(settings)) // legitimate overlaps stay savable
+        assertTrue(Rules.matchesEnabled(settings, "+390212345777"))
+        assertTrue(Rules.matchesEnabled(settings, "+390212300000"))
+        assertFalse(Rules.matchesEnabled(settings.copy(numbers = listOf(
+            NumberRule("m", "", mask, enabled = false), NumberRule("e", "", exact, enabled = false),
+            NumberRule("w", "", wide, enabled = false))), "+390212345777"))
+    }
+
+    @Test fun duplicateCanonicalTargetsOfSameKindAreInvalid() {
+        val again = NumberRule("other-id", "", NumberMasks.parse("+39 02 12345***", "IT")!!)
+        val original = NumberRule("one", "", milanMask("IT")!!)
+        assertFalse(Rules.isValid(Settings(numbers = listOf(original, again))))
     }
 
     @Test fun incomingInternationalTrunkPrefixIsNotSilentlyRepaired() {
@@ -78,14 +166,14 @@ class RulesTest {
     }
 
     @Test fun masterAndPermissionsAlwaysOverrideBlocking() {
-        assertFalse(Rules.shouldBlock(base.copy(enabled = false), first.e164, monday("01:00"), true))
-        assertFalse(Rules.shouldBlock(base, first.e164, monday("01:00"), false))
+        assertFalse(Rules.shouldBlock(base.copy(enabled = false), (first.e164!!), monday("01:00"), true))
+        assertFalse(Rules.shouldBlock(base, (first.e164!!), monday("01:00"), false))
     }
 
     @Test fun emptyScheduleRequiresExplicitConfirmation() {
         val empty = base.copy(windows = emptyList())
-        assertFalse(Rules.shouldBlock(empty, first.e164, monday("01:00"), true))
-        assertTrue(Rules.shouldBlock(empty.copy(emptyScheduleConfirmed = true), first.e164, monday("01:00"), true))
+        assertFalse(Rules.shouldBlock(empty, (first.e164!!), monday("01:00"), true))
+        assertTrue(Rules.shouldBlock(empty.copy(emptyScheduleConfirmed = true), (first.e164!!), monday("01:00"), true))
         assertNull(Rules.nextAllowed(emptyList(), monday("01:00")))
     }
 
@@ -94,7 +182,11 @@ class RulesTest {
             base.copy(region = "ZZ"),
             base.copy(numbers = listOf(first, first.copy(id = "duplicate-number"))),
             base.copy(numbers = listOf(first, second.copy(id = first.id))),
-            base.copy(numbers = listOf(first.copy(e164 = "2025550101"))),
+            base.copy(numbers = listOf(NumberRule("one", "Example", "+1202555"))), // non-canonical e164 length
+            // A mask whose canonical form is not reconstructible under the settings region.
+            base.copy(numbers = listOf(NumberRule("m", "", MaskTarget("+390212345", 3)))),
+            // Two rules with identical canonical masks but different ids are true duplicates.
+            base.copy(numbers = listOf(first, NumberRule("other", "", MaskTarget("+120255501", 2)))),
             base.copy(numbers = listOf(first.copy(label = "x".repeat(81)))),
             base.copy(windows = listOf(window(emptySet(), 400, 500))),
             base.copy(windows = listOf(window(setOf(0), 400, 500))),
@@ -107,7 +199,7 @@ class RulesTest {
         )
         corrupt.forEach {
             assertFalse(Rules.isValid(it))
-            assertFalse(Rules.shouldBlock(it, first.e164, monday("01:00"), true))
+            assertFalse(Rules.shouldBlock(it, (first.e164!!), monday("01:00"), true))
         }
     }
 

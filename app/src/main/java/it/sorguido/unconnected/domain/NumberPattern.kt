@@ -81,17 +81,31 @@ object NumberMasks {
         if (low.take(shared) != high.take(shared)) return null
         if (low.drop(shared).any { it != '0' } || high.drop(shared).any { it != '9' }) return null
         val prefix = low.take(shared)
+        // Never assume the parsed number's country equals the editor region: derive the real
+        // country code from the canonical prefix itself and validate it against libphonenumber.
+        val ccLength = countryCodeLength(prefix) ?: return null
+        val totalDigits = prefix.length - 1
+        if (ccLength < 1 || ccLength > 3 || totalDigits <= ccLength) return null
         // Prudent amplitude: deterministic stem (after '+CC') within bounded, plausible sizes.
-        val stemDigits = prefix.length - 1 - countryCodeDigits(region)
+        val stemDigits = totalDigits - ccLength
         if (stemDigits < MIN_STEM_DIGITS) return null
-        if (prefix.length - 1 + wildcardCount > Numbers.MAX_CANONICAL_DIGITS) return null
+        if (totalDigits + wildcardCount > Numbers.MAX_CANONICAL_DIGITS) return null
         // The '+' may only introduce a real international prefix; stray or misplaced '+' fails here
         // because normalize() rejects lexical input whose '+' is not the first character.
         return MaskTarget(prefix, wildcardCount)
     }
 
-    private fun countryCodeDigits(region: String): Int =
-        phoneUtil.getCountryCodeForRegion(region).let { if (it <= 0) 0 else it.toString().length }
+    /** Length of the leading country code inside a canonical '+…' prefix, or null when unknown. */
+    private fun countryCodeLength(prefix: String): Int? {
+        for (length in 1..3) {
+            val digits = prefix.substring(1, minOf(1 + length, prefix.length))
+            val code = digits.toIntOrNull() ?: continue
+            if (code > 0 && phoneUtil.getCountryCodeForRegion(phoneUtil.getRegionCodeForCountryCode(code)) == code) {
+                return digits.length
+            }
+        }
+        return null
+    }
 
     /** Deterministic fixed-length matching on canonical characters; enumerates nothing. */
     fun matches(mask: MaskTarget, e164: String): Boolean {
@@ -103,8 +117,14 @@ object NumberMasks {
     /** True when some caller number would satisfy both targets (exact inside a range or nested ranges). */
     fun overlaps(first: NumberTarget, second: NumberTarget): Boolean = when {
         first is ExactTarget && second is ExactTarget -> first.canonical == second.canonical
-        first is MaskTarget && second is MaskTarget ->
-            first.prefix.startsWith(second.prefix) || second.prefix.startsWith(first.prefix)
+        first is MaskTarget && second is MaskTarget -> {
+            // Total interval length matters: two masks of different overall length never match
+            // the same caller because matching is strictly fixed-length.
+            val shorter = if (first.prefix.length <= second.prefix.length) first else second
+            val longer = if (shorter === first) second else first
+            shorter.prefix.length + shorter.wildcardCount == longer.prefix.length + longer.wildcardCount &&
+                longer.prefix.startsWith(shorter.prefix)
+        }
         first is MaskTarget && second is ExactTarget -> matches(first, second.canonical)
         else -> second is MaskTarget && first is ExactTarget && matches(second, first.canonical)
     }

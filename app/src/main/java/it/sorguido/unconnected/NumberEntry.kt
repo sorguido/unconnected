@@ -9,6 +9,18 @@ import it.sorguido.unconnected.domain.Numbers
 import java.util.Locale
 import java.util.UUID
 
+/** What the Home list and the editor show for a rule: the exact number or the full mask. */
+internal fun NumberRule.displayValue(): String = when (val value = target) {
+    is ExactTarget -> value.canonical
+    is MaskTarget -> value.canonical // "+390212345***": never stripped of its asterisks.
+}
+
+/** Live, discreet feedback under the field; null while the input is incomplete or invalid. */
+internal fun rangeFeedback(raw: String, region: String): Long? {
+    if (!raw.contains('*')) return null
+    return NumberMasks.parse(raw, region)?.possibleNumbers
+}
+
 internal data class NumberEntryValidation(
     val target: NumberTarget? = null,
     val error: Int? = null,
