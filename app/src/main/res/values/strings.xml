@@ -32,7 +32,7 @@
     <string name="region">Number region (two-letter code)</string>
     <string name="region_help">For national numbers, choose their country (IT, GB, US…). International numbers begin with + and a country code.</string>
     <string name="region_selected">Number region: %1$s (%2$s)</string>
-    <string name="number_invalid">Enter a valid full phone number and a supported two-letter region. Extensions and short codes are not supported.</string>
+    <string name="number_invalid">Enter a valid complete phone number or numeric range and a supported two-letter region. Extensions and short codes are not supported.</string>
     <string name="number_duplicate">This number is already in your list.</string>
     <string name="number_enabled">Enabled for %1$s</string>
     <string name="edit">Edit</string>

@@ -41,8 +41,10 @@ object SettingsCodec {
             ) error("Malformed mask")
             MaskTarget(raw.take(star), raw.length - star)
         }
-        // Fail closed per rule: an uncanonicalizable or out-of-region target rejects the document.
-        canonicalize(target) ?: error("Target is not canonical for the selected region")
+        // Reject persisted targets that normalize to a different value: never silently repair storage.
+        require(canonicalize(target) == target.canonical) {
+            "Stored target is not canonical for the selected region"
+        }
         return NumberRule(id, label, target, enabled)
     }
 

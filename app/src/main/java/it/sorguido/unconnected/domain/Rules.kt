@@ -109,7 +109,7 @@ object Rules {
             Numbers.isSupportedRegion(settings.region) &&
             settings.numbers.all {
                 validId(it.id) && it.label.length <= MAX_LABEL_LENGTH &&
-                    Numbers.canonicalTarget(it.target, settings.region) != null
+                    Numbers.canonicalTarget(it.target, settings.region) == it.target.canonical
             } &&
             settings.numbers.map { it.id }.distinct().size == settings.numbers.size &&
             settings.numbers.map { it.target.canonical }.distinct().size == settings.numbers.size &&

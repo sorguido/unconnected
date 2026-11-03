@@ -32,7 +32,7 @@
     <string name="region">Paese del numero (codice di due lettere)</string>
     <string name="region_help">Per i numeri nazionali, scegli il relativo paese (IT, GB, US…). I numeri internazionali iniziano con + e il prefisso del paese.</string>
     <string name="region_selected">Paese del numero: %1$s (%2$s)</string>
-    <string name="number_invalid">Inserisci un numero completo valido e un paese supportato di due lettere. Interni e numeri brevi non sono supportati.</string>
+    <string name="number_invalid">Inserisci un numero completo o un intervallo numerico valido e un paese supportato di due lettere. Interni e numeri brevi non sono supportati.</string>
     <string name="number_duplicate">Questo numero è già presente nell’elenco.</string>
     <string name="number_enabled">Abilitato per %1$s</string>
     <string name="edit">Modifica</string>

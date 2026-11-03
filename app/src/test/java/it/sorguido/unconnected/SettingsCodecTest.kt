@@ -169,4 +169,23 @@ class SettingsCodecTest {
         // The untouched document still decodes: the variants above are copies, not mutations of it.
         assertEquals(1, SettingsCodec.decode(base)!!.numbers.size)
     }
+
+    @Test fun storedMaskWithSilentlyRepairedTrunkPrefixIsRejected() {
+        // Fictitious Ofcom London range. libphonenumber removes the redundant 0 after +44,
+        // but stored canonical targets must never be accepted with a different meaning.
+        val nonCanonical = MaskTarget("+4402079460", 3)
+        assertEquals("+442079460***", Numbers.canonicalTarget(nonCanonical, "GB"))
+        val settings = Settings(region = "GB",
+            numbers = listOf(NumberRule("invalid-prefix", "Example", nonCanonical)))
+        assertFalse(Rules.isValid(settings))
+        assertNull(SettingsCodec.decode(SettingsCodec.encode(settings)))
+
+        // The properly canonicalized form remains valid and round-trips without loss.
+        val canonical = NumberMasks.parse("02079460***", "GB")!!
+        assertEquals("+442079460***", canonical.canonical)
+        val validSettings = settings.copy(numbers = listOf(NumberRule("valid-prefix", "Example", canonical)))
+        assertTrue(Rules.isValid(validSettings))
+        assertEquals(validSettings, SettingsCodec.decode(SettingsCodec.encode(validSettings)))
+    }
+
 }
