@@ -1,0 +1,247 @@
+{
+  "status": "PROVEN_PUBLISHED_AND_VERIFIED",
+  "date": "2026-11-03",
+  "commit": "599d622655f6e3275867dea147f460cb040d26e0",
+  "versionName": "1.1.0",
+  "versionCode": 7,
+  "package": "it.sorguido.unconnected",
+  "minSdk": 29,
+  "targetSdk": 36,
+  "compileSdk": 36,
+  "apk_sha256": "68e043336cfb206cbe83a48a7e0393301f3b11ebb20986233f1555777845f556",
+  "apk_size": 18735467,
+  "signer_sha256": "2936676a220e4a9682171fbf0c9b91552acd8fc4f120318c6a0aebe6e6722ecc",
+  "signature_verified": true,
+  "vcs_metadata": "repositories {\n  system: GIT\n  local_root_path: \"$PROJECT_DIR\"\n  revision: \"599d622655f6e3275867dea147f460cb040d26e0\"\n}\n",
+  "permissions": [
+    "uses-permission: name='android.permission.READ_CONTACTS'",
+    "uses-permission: name='it.sorguido.unconnected.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'"
+  ],
+  "tests": {
+    "tests": 88,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "debug": {
+      "Fatal": 0,
+      "Error": 0,
+      "Warning": 2,
+      "warning_ids": [
+        "OldTargetApi",
+        "GradleDependency"
+      ]
+    },
+    "release": {
+      "Fatal": 0,
+      "Error": 0,
+      "Warning": 2,
+      "warning_ids": [
+        "OldTargetApi",
+        "GradleDependency"
+      ]
+    }
+  },
+  "assets": {
+    "LICENSE": {
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "size": 35149
+    },
+    "unconnected-1.1.0-source.tar.gz": {
+      "sha256": "4581124bc7d99becc9e63c8910976ac61559f6961158379515a856fdfefaf6e8",
+      "size": 62679716
+    },
+    "unconnected-1.1.0-source.tar.gz.sha256": {
+      "sha256": "87813e4ef29c181324a47b857ed9c0409ca9f3fde780162f35a94c4040d75a04",
+      "size": 98
+    },
+    "unconnected-1.1.0-vc7.apk": {
+      "sha256": "68e043336cfb206cbe83a48a7e0393301f3b11ebb20986233f1555777845f556",
+      "size": 18735467
+    },
+    "unconnected-1.1.0-vc7.apk.sha256": {
+      "sha256": "50849375b3259dc80527a078cacd11f39e6b5e3b3b53a418b91f0d8101876a21",
+      "size": 92
+    }
+  },
+  "tag": "v1.1.0",
+  "tag_object": "017bc4358ee93dd9f81fa0c33af960f1d7990d63",
+  "release": {
+    "url": "https://github.com/sorguido/unconnected/releases/tag/v1.1.0",
+    "name": "unconnected v1.1.0",
+    "isDraft": false,
+    "isPrerelease": false,
+    "assets": [
+      {
+        "name": "LICENSE",
+        "size": 35149,
+        "digest": "sha256:3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "url": "https://github.com/sorguido/unconnected/releases/download/v1.1.0/LICENSE",
+        "state": "uploaded"
+      },
+      {
+        "name": "unconnected-1.1.0-source.tar.gz",
+        "size": 62679716,
+        "digest": "sha256:4581124bc7d99becc9e63c8910976ac61559f6961158379515a856fdfefaf6e8",
+        "url": "https://github.com/sorguido/unconnected/releases/download/v1.1.0/unconnected-1.1.0-source.tar.gz",
+        "state": "uploaded"
+      },
+      {
+        "name": "unconnected-1.1.0-source.tar.gz.sha256",
+        "size": 98,
+        "digest": "sha256:87813e4ef29c181324a47b857ed9c0409ca9f3fde780162f35a94c4040d75a04",
+        "url": "https://github.com/sorguido/unconnected/releases/download/v1.1.0/unconnected-1.1.0-source.tar.gz.sha256",
+        "state": "uploaded"
+      },
+      {
+        "name": "unconnected-1.1.0-vc7.apk",
+        "size": 18735467,
+        "digest": "sha256:68e043336cfb206cbe83a48a7e0393301f3b11ebb20986233f1555777845f556",
+        "url": "https://github.com/sorguido/unconnected/releases/download/v1.1.0/unconnected-1.1.0-vc7.apk",
+        "state": "uploaded"
+      },
+      {
+        "name": "unconnected-1.1.0-vc7.apk.sha256",
+        "size": 92,
+        "digest": "sha256:50849375b3259dc80527a078cacd11f39e6b5e3b3b53a418b91f0d8101876a21",
+        "url": "https://github.com/sorguido/unconnected/releases/download/v1.1.0/unconnected-1.1.0-vc7.apk.sha256",
+        "state": "uploaded"
+      }
+    ]
+  },
+  "postflight": {
+    "status": "PROVEN",
+    "release_url": "https://github.com/sorguido/unconnected/releases/tag/v1.1.0",
+    "release_page_http": 200,
+    "five_assets_byte_identical": true,
+    "two_checksum_files_verified": true,
+    "downloaded_signature_and_metadata_verified": true,
+    "v1_0_0_preserved": true,
+    "v1_0_0_tag_object": "36afca2255c788f66cddbc0a5ae1938e3643cb27",
+    "tag_object": "017bc4358ee93dd9f81fa0c33af960f1d7990d63",
+    "tagged_commit": "599d622655f6e3275867dea147f460cb040d26e0",
+    "github_automatic_source_matches_all_tagged_files": true
+  },
+  "commands": [
+    {
+      "command": "UNCONNECTED_SIGNING_ROOT=../chromecast-killswitch-app ./gradlew --offline :app:assembleDebug :app:testDebugUnitTest :app:lint :app:assembleRelease --console=plain",
+      "exit_code": 0,
+      "local_log": "development/release-v1.1.0/build.log",
+      "log_sha256": "80057d519664a20672db48d150749f8d34970c1e12ccb72b5adc976fe1219f16"
+    },
+    {
+      "command": "UNCONNECTED_SIGNING_ROOT=../chromecast-killswitch-app ./gradlew --offline :app:lintRelease --console=plain",
+      "exit_code": 0,
+      "local_log": "development/release-v1.1.0/lint-release.log",
+      "log_sha256": "191a7b518c8f8413da8913b03112dc8c4a323752779a895c84e7127f5185e0a4"
+    },
+    {
+      "command": "UNCONNECTED_SIGNING_ROOT=../chromecast-killswitch-app ./gradlew --offline :app:assembleRelease --console=plain",
+      "exit_code": 0,
+      "local_log": "development/release-v1.1.0/final-build.log",
+      "log_sha256": "d206b99e8372b3e08e53dad0fd338d33e90cd2deba6a0e5ad6b05ad08b40a661"
+    }
+  ],
+  "initial_attempt": {
+    "exit_code": 1,
+    "local_log": "development/release-v1.1.0/build-attempt-1.log",
+    "EVIDENCE_FOR": "Gradle reports testReleaseUnitTest is not a task in this project.",
+    "EVIDENCE_AGAINST": "The supported testDebugUnitTest subsequently executed all 88 tests successfully.",
+    "ALTERNATIVE_EXPLANATIONS": "The extra task requested by the agent assumed a Release unit-test variant that is not configured.",
+    "CONFIDENCE": "HIGH",
+    "MINIMAL_DISCRIMINATING_EXPERIMENT": "Rerun the documented testDebugUnitTest with the required builds and lint; completed with exit 0.",
+    "source_changes_for_failure": "none"
+  },
+  "toolchain": {
+    "host": "Fedora Linux 44",
+    "jdk": "OpenJDK 25.0.4.1 (existing)",
+    "gradle": "9.6.0 (existing wrapper/cache)",
+    "android_sdk_platform": 36,
+    "build_tools": "36.0.0",
+    "offline_gradle": true,
+    "toolchain_installations_or_updates": false,
+    "global_environment_changes": false
+  },
+  "signature_commands": [
+    "/home/guido/Android/Sdk/build-tools/36.0.0/apksigner verify --verbose --print-certs APK",
+    "/home/guido/Android/Sdk/build-tools/36.0.0/aapt2 dump badging APK"
+  ],
+  "signature_reference": "evidence/runs/dynamic-layout-1.0.0-vc6/signature.json: recorded original release certificate; no key inspection, copy, generation or rotation",
+  "tested_and_committed_build_inputs_sha256": {
+    "app/build.gradle.kts": "ce5bd53e0fd3bba3e2194686c7f7028f264a43d89490220f995a93806ed47a57",
+    "app/gradle.lockfile": "e36c1bc78dca2bdb3b3240897fadac09839d44e569523f0df9f1699aadb87b2f",
+    "app/src/main/AndroidManifest.xml": "0036e4e225a793a5b1c7c9c8895c00aaea532a8fa3f3ebb24c1f364772a62d6f",
+    "app/src/main/java/it/sorguido/unconnected/ContactPicking.kt": "dae2899ace68a77283bad99e1b1387ca45ab94659bfb2d5cd5ae99d2b7019418",
+    "app/src/main/java/it/sorguido/unconnected/FilterStatus.kt": "dc68e285830debbb97340aeaae6dabbd69ac8062ba3964616de0aff1f9113c3b",
+    "app/src/main/java/it/sorguido/unconnected/MainActivity.kt": "b5cf2d3e22ec3c4e7d2ba9cd718c09117619e83cd1640383455c5ef3ee9a461f",
+    "app/src/main/java/it/sorguido/unconnected/NumberEntry.kt": "a259777c479f34e78e68eb2e945d0a8b59f246be9b366bda45358e19a0ef93fa",
+    "app/src/main/java/it/sorguido/unconnected/ScreeningAccess.kt": "bf0888c40dac77493ac7f0896a39e54b6e9fdf64fca13597d37b0014caf220de",
+    "app/src/main/java/it/sorguido/unconnected/ScreeningService.kt": "58fb043c307206db8c26630d2f35d211a497a2e3cc1c4a53cde28978b7e468b9",
+    "app/src/main/java/it/sorguido/unconnected/SettingsCodec.kt": "4e7a247e196a1f399162ffc4f1a4b5ada3e141e02db71c9c98bdbc9c19f5405e",
+    "app/src/main/java/it/sorguido/unconnected/SettingsStore.kt": "8d9d2aac90175c54878ffbc1a525a306ccb15dea92ffe6eedee37eda36b8a7ed",
+    "app/src/main/java/it/sorguido/unconnected/StableContentLayout.kt": "b6615c67be6602e4e3402d3dff36d6a691b1de25ab7691ca9f5e499ad3ae78e8",
+    "app/src/main/java/it/sorguido/unconnected/domain/NumberPattern.kt": "4e151b1a5442a81dcc08078b51937d0b7f86fea151d992f718fd1dd71622797d",
+    "app/src/main/java/it/sorguido/unconnected/domain/Rules.kt": "0efb5473e3dcf4127fa9d35ab9537119005b9e45d65e1633da19854d03d75185",
+    "app/src/main/res/drawable/ic_unconnected.xml": "b6e9aaee2d05bed821df901f0d7c0fdbe299c47ed217ee9477fbfb05f4a0afa1",
+    "app/src/main/res/values-it/strings.xml": "037b3301dcb84886aefd781ab2fc3e7df00f003d86921e6ac05165fd8e0c7762",
+    "app/src/main/res/values/strings.xml": "153ff65b9e9c50fb6319e8f88c2fa84d123b200b47ebbc523db08440a1f1f245",
+    "app/src/main/res/values/themes.xml": "ee502e3e23240c4534bc78f85f84141dbd5ec8af56e5a5388482c5b784659454",
+    "app/src/main/res/xml/data_extraction_rules.xml": "eda9dddce1e895de1efd716fe75e244187bf8f91a3bb7444c6ea1731e51c74a8",
+    "app/src/test/java/it/sorguido/unconnected/ContactPickingTest.kt": "33734524552cda2a63b32c0e35b9e01113e7a61a56c836f468c95b5e52a08667",
+    "app/src/test/java/it/sorguido/unconnected/FilterStatusTest.kt": "ee0c7f38d82e5ba9799f7a4320e1cdc7942e6daee30ff9f9491f7b5d1e4a7b8d",
+    "app/src/test/java/it/sorguido/unconnected/NumberEntryTest.kt": "8669c044679392c7a288ea6589a010f3e38f93fda553062510515acf9839f251",
+    "app/src/test/java/it/sorguido/unconnected/SettingsCodecTest.kt": "5c8a9d6f3be1afaf267bebb492d2f5521caa443b4c9cdb74a8d3fd2d87287b24",
+    "app/src/test/java/it/sorguido/unconnected/StableContentLayoutTest.kt": "2a230370275797b727282507ec44dc8e8f91fb0c5b768454669a07d8f873eb15",
+    "app/src/test/java/it/sorguido/unconnected/domain/NumbersTest.kt": "952e1fac92bcd6cc123b769b6c0e4a5115378e0c988d490edad5eb428c3ac8b1",
+    "app/src/test/java/it/sorguido/unconnected/domain/RulesTest.kt": "3c4db751291da8027be3419f5645a73b57715c68f6b83e2d0955d11675289dc9",
+    "build.gradle.kts": "c6e823e62d3f7903e288d2d7f459f547cb41ec82b0d676d60592f58896f6bbd9",
+    "gradle.properties": "d5f372c6d46ad7c8d33f714bfae564eb5e1d73a159c495df9bc782b33e3567c2",
+    "gradle/wrapper/gradle-wrapper.jar": "497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a9c7",
+    "gradle/wrapper/gradle-wrapper.properties": "f34e21a981617b8ab59ecbb41b541b35dcf724e01c246e1c0fc8c5420cb66ec0",
+    "gradlew": "e01b5c97892572c82405c02b96a3382379100e7d825ce7c48883d95c26928750",
+    "gradlew.bat": "4e193538b4ddccbee0c05d6383731b647945c146d16d8fe243b4ff716867896f",
+    "settings.gradle.kts": "422dcd5b2f4739ace0ae27b821ba796b1e7e3e7d934823bd3aeff4110f35a01b"
+  },
+  "source_companion": {
+    "all_tagged_files_byte_identical": true,
+    "reused_dependency_files": 144,
+    "inventoried_dependency_hashes_verified": 142,
+    "runtime_maven_components": 57,
+    "upstream_trees": 27,
+    "additional_native_source_archive": true,
+    "dependency_lock_unchanged_from_v1_0_0": true,
+    "inventories": [
+      "evidence/runs/gpl-v1.0.0/dependency-sources.json",
+      "evidence/runs/gpl-v1.0.0/upstream-trees.json",
+      "evidence/runs/gpl-v1.0.0/native-source.json"
+    ]
+  },
+  "scope_audit": {
+    "release_commit_changed_only": [
+      "app/build.gradle.kts",
+      "docs/BUILD.md",
+      "docs/LICENSING.md"
+    ],
+    "canonical_files_unchanged": true,
+    "README_unchanged": true,
+    "tracked_binary_or_private_data_added": false,
+    "file_modes_unchanged": true,
+    "device_actions": [],
+    "repository_visibility_changes": false
+  },
+  "physical_acceptance": {
+    "label": "OWNER_REPORTED",
+    "date": "2026-11-03",
+    "result": "All numeric-range tests and counterchecks PASS, according to owner testimony in the release mandate.",
+    "agent_measured": false,
+    "oem_model_android_version": "not supplied",
+    "official_vc7_installation_test": "not performed; explicitly out of scope"
+  },
+  "limitations": [
+    "Debug and Release lint each report two warnings, zero errors.",
+    "Physical-phone behavior is owner-reported; OEM, Android-version and raw per-call evidence were not supplied.",
+    "No official vc7 installation or telephone tests were performed by the agent.",
+    "Byte-identical rebuilding is not claimed."
+  ]
+}

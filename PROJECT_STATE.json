@@ -3,7 +3,7 @@
   "authoritative": false,
   "execution_path": "PRIMARY",
   "phase": "P3",
-  "phase_status": "IN_PROGRESS",
+  "phase_status": "COMPLETE",
   "completed_gates": [
     "P0 API feasibility and test plan",
     "P1 implementation, JVM tests, lint and APK builds",
@@ -19,23 +19,24 @@
     "Owner-authorized GPL-3.0-or-later correction: official GNU license, global or-later declaration, unchanged signed code-6 APK, reviewed third-party source inventory and source companion; replace only private v1.0.0 tag/Release, then targeted local cleanup",
     "PR #3 numeric-range implementation merged into main (2026-11-03); source maintains fail-open screening and v1.0.0 setting compatibility",
     "88 JVM unit tests reported PASS on PR #3 head d7556ef; debug compile/lint/assemble reported PASS by AI PM, and manual GitHub Actions debug APK was downloaded and installed by owner",
-    "Owner-reported physical Android tests of numeric ranges and counterchecks: all PASS on 2026-11-03 (not an agent-measured per-call/OEM receipt)"
+    "Owner-reported physical Android tests of numeric ranges and counterchecks: all PASS on 2026-11-03 (not an agent-measured per-call/OEM receipt)",
+    "v1.1.0 local Fedora official build with existing external signer; 88 JVM tests, zero failures/errors/skips; Debug and Release lint zero errors; package/version/SDK/signature checks PASS",
+    "v1.1.0 annotated tag at 599d622655f6e3275867dea147f460cb040d26e0 and non-draft/non-prerelease GitHub Release published; five assets downloaded back byte-identical; both checksums PASS; automatic tagged source verified; v1.0.0 tag/Release preserved"
   ],
-  "pending_gates": [
-    "v1.1.0 release: bump versionName to 1.1.0/versionCode to 7, complete local tests/lint/release APK build with existing external signing identity and minimal required artifact metadata/integrity checks",
-    "v1.1.0 publication: update only stale essential English docs, tag and publish GitHub Release with concise changelog, official APK/checksum and corresponding source distribution consistent with v1.0.0"
-  ],
+  "pending_gates": [],
   "host_modified": true,
   "relevant_artifacts": [
-    "evidence/runs/gpl-v1.0.0/verification.md",
+    "evidence/runs/release-v1.1.0/verification.json",
+    "docs/BUILD.md",
+    "docs/SIGNING.md",
     "docs/LICENSING.md",
+    "evidence/runs/gpl-v1.0.0/verification.md",
     "evidence/runs/release-v1.0.0/publication.md",
     "evidence/runs/dynamic-layout-1.0.0-vc6/verification.md",
     "evidence/runs/dynamic-layout-1.0.0-vc6/review.md",
     "evidence/runs/dynamic-layout-1.0.0-vc6/signature.json",
     "README.md",
     "docs/PRODUCT_SPEC.md",
-    "docs/BUILD.md",
     ".github/workflows/build-debug-apk.yml",
     "tests/TEST_MATRIX.md"
   ],
@@ -44,22 +45,95 @@
     "C2",
     "C3"
   ],
-  "next_action": "Resume on local Fedora from latest main. Prepare 1.1.0/versionCode 7; reuse the existing external Chromecast signing setup (no key recovery, transfer or regeneration); run release build/tests/lint and mandated non-secret APK metadata, signer-identity and checksum checks; make only essential public-doc corrections; publish official v1.1.0 tag/Release and corresponding GPL source as for v1.0.0. No phone modifications requested.",
+  "next_action": "v1.1.0 release complete and postflight verified. No phone installation or settings changes authorized. Await owner direction for subsequent work; ROADMAP.md remains unchanged by explicit instruction.",
   "host_changes": [
     "Used Gradle dependency/build caches",
     "Started host ADB server for read-only device enumeration; no device attached",
-    "Read the release candidate APK with build-tools 36.0.0 apksigner and aapt2 for verification only"
+    "Read the release candidate APK with build-tools 36.0.0 apksigner and aapt2 for verification only",
+    "Reused installed Fedora JDK/Android SDK and existing Gradle caches for offline builds; no toolchain installation/update or global configuration change",
+    "Read existing external signing properties/keystore only through the authorized Gradle signing mechanism; no private material copied or logged",
+    "Published and round-trip verified v1.1.0 assets and corresponding GPL source companion; preserved v1.0.0"
   ],
   "device_changes": [],
-  "source_state": "The published v1.0.0 signed APK remains versionName 1.0.0/versionCode 6. As of 2026-11-03, main contains merged PR #3 fixed-length numeric ranges and the manual debug APK workflow; app/build.gradle.kts has NOT yet been bumped from 1.0.0/6. The original GPL/license and release history remain intact.",
-  "signed_candidate": "development/deliverables/dynamic-layout-1.0.0-vc6/unconnected-1.0.0-vc6-candidate.apk",
-  "published_apk_sha256": "2e400b5ea089f5702925301bc7afedcd2159478c4bbb9b38befb630360462a88",
-  "verification_date": "2026-10-30",
+  "source_state": "Release v1.1.0 sources are tagged at 599d622655f6e3275867dea147f460cb040d26e0; versionName 1.1.0/versionCode 7. Only version metadata and stale BUILD/LICENSING references changed for release. Post-publication evidence/cache commit is separate; protected canonical files and README remain unchanged.",
+  "signed_candidate": "development/deliverables/release-v1.1.0/unconnected-1.1.0-vc7.apk",
+  "published_apk_sha256": "68e043336cfb206cbe83a48a7e0393301f3b11ebb20986233f1555777845f556",
+  "verification_date": "2026-11-03",
   "candidate_version": {
-    "versionName": "1.0.0",
-    "versionCode": 6
+    "versionName": "1.1.0",
+    "versionCode": 7
   },
   "release": {
+    "tag": "v1.1.0",
+    "title": "unconnected v1.1.0",
+    "url": "https://github.com/sorguido/unconnected/releases/tag/v1.1.0",
+    "draft": false,
+    "prerelease": false,
+    "tagged_commit": "599d622655f6e3275867dea147f460cb040d26e0",
+    "tag_object": "017bc4358ee93dd9f81fa0c33af960f1d7990d63",
+    "assets": [
+      {
+        "name": "LICENSE",
+        "size": 35149,
+        "digest": "sha256:3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "url": "https://github.com/sorguido/unconnected/releases/download/v1.1.0/LICENSE",
+        "state": "uploaded"
+      },
+      {
+        "name": "unconnected-1.1.0-source.tar.gz",
+        "size": 62679716,
+        "digest": "sha256:4581124bc7d99becc9e63c8910976ac61559f6961158379515a856fdfefaf6e8",
+        "url": "https://github.com/sorguido/unconnected/releases/download/v1.1.0/unconnected-1.1.0-source.tar.gz",
+        "state": "uploaded"
+      },
+      {
+        "name": "unconnected-1.1.0-source.tar.gz.sha256",
+        "size": 98,
+        "digest": "sha256:87813e4ef29c181324a47b857ed9c0409ca9f3fde780162f35a94c4040d75a04",
+        "url": "https://github.com/sorguido/unconnected/releases/download/v1.1.0/unconnected-1.1.0-source.tar.gz.sha256",
+        "state": "uploaded"
+      },
+      {
+        "name": "unconnected-1.1.0-vc7.apk",
+        "size": 18735467,
+        "digest": "sha256:68e043336cfb206cbe83a48a7e0393301f3b11ebb20986233f1555777845f556",
+        "url": "https://github.com/sorguido/unconnected/releases/download/v1.1.0/unconnected-1.1.0-vc7.apk",
+        "state": "uploaded"
+      },
+      {
+        "name": "unconnected-1.1.0-vc7.apk.sha256",
+        "size": 92,
+        "digest": "sha256:50849375b3259dc80527a078cacd11f39e6b5e3b3b53a418b91f0d8101876a21",
+        "url": "https://github.com/sorguido/unconnected/releases/download/v1.1.0/unconnected-1.1.0-vc7.apk.sha256",
+        "state": "uploaded"
+      }
+    ],
+    "all_assets_downloaded_back_and_byte_identical": true,
+    "checksum_verification": "both checksum files PASS",
+    "signer_sha256": "2936676a220e4a9682171fbf0c9b91552acd8fc4f120318c6a0aebe6e6722ecc",
+    "license": "GPL-3.0-or-later",
+    "verification_receipt": "evidence/runs/release-v1.1.0/verification.json",
+    "v1_0_0_preserved": true
+  },
+  "owner_report": "Owner-reported PASS for all numeric-range physical-phone tests and counterchecks on 2026-11-03; no OEM/model, Android version or raw per-call receipt supplied. The release mandate explicitly authorized local preparation and GitHub publication. No device operations performed.",
+  "active_task": "v1.1.0 official release COMPLETE after real publication postflight",
+  "verified_source_baseline": "599d622655f6e3275867dea147f460cb040d26e0",
+  "known_v1_0_limitations": [
+    "Owner decision on the two recorded code6 accessibility limitations, published as known limitations of v1.0.0: no audible save completion, and the temporary-pause sentence is announced but not displayed. No functional change was made for the release."
+  ],
+  "repository_visibility_current": "PUBLIC (observed via GitHub API on 2026-11-03; no visibility change performed in this update)",
+  "main_head_at_handoff": "bddae47977f2fd2381cf4742f07a43674233271d",
+  "planned_release": {
+    "versionName": "1.1.0",
+    "versionCode": 7,
+    "tag": "v1.1.0",
+    "status": "PUBLISHED_AND_POSTFLIGHT_VERIFIED",
+    "source_branch": "main",
+    "signer": "existing external Chromecast Kill Switch signing identity only",
+    "device_acceptance": "All numeric-range checks PASS, owner reported 2026-11-03; no OEM/version or raw call evidence supplied",
+    "release_commit": "599d622655f6e3275867dea147f460cb040d26e0"
+  },
+  "previous_release": {
     "tag": "v1.0.0",
     "title": "unconnected v1.0.0",
     "url": "https://github.com/sorguido/unconnected/releases/tag/v1.0.0",
@@ -87,22 +161,5 @@
       "unconnected-1.0.0-source.tar.gz",
       "unconnected-1.0.0-source.tar.gz.sha256"
     ]
-  },
-  "owner_report": "Owner states that the application has been tested on a physical phone and explicitly authorized publishing the first official release. Asked separately about repository visibility, the owner authorized the Release but chose to keep the repository private. No OEM/model, Android version or per-step acceptance record was supplied with the acceptance, so the release report documents it as owner-asserted rather than agent-measured.",
-  "active_task": "v1.1.0 official release preparation: local signed build, tests, minimal public documentation, tag and GitHub Release",
-  "verified_source_baseline": "85782418d122338ab4a188494b9284cd1311794b",
-  "known_v1_0_limitations": [
-    "Owner decision on the two recorded code6 accessibility limitations, published as known limitations of v1.0.0: no audible save completion, and the temporary-pause sentence is announced but not displayed. No functional change was made for the release."
-  ],
-  "repository_visibility_current": "PUBLIC (observed via GitHub API on 2026-11-03; no visibility change performed in this update)",
-  "main_head_at_handoff": "af262c2e61cad4e114d62b0d94ab2f75b9563fea",
-  "planned_release": {
-    "versionName": "1.1.0",
-    "versionCode": 7,
-    "tag": "v1.1.0",
-    "status": "NOT_BUILT_OR_PUBLISHED",
-    "source_branch": "main",
-    "signer": "existing external Chromecast Kill Switch signing identity only",
-    "device_acceptance": "All numeric-range checks PASS, owner reported 2026-11-03; no OEM/version or raw call evidence supplied"
   }
 }
