@@ -27,7 +27,7 @@ data class MaskTarget(val prefix: String, val wildcardCount: Int) : NumberTarget
         require(wildcardCount in 1..NumberMasks.MAX_WILDCARDS) { "Wildcard count out of bounds" }
         require(prefix matches Numbers.canonicalForm) { "Mask prefix must be a canonical E.164 stem" }
     }
-    override val canonical: String get() = "$prefix${'*'.repeat(wildcardCount)}"
+    override val canonical: String get() = prefix + "*".repeat(wildcardCount)
     /** Exactly the combinations on the wildcard positions: 10^wildcardCount, never enumerated. */
     val possibleNumbers: Long get() = POW10[wildcardCount]
 
@@ -44,8 +44,11 @@ data class MaskTarget(val prefix: String, val wildcardCount: Int) : NumberTarget
 object NumberMasks {
     private val phoneUtil by lazy { PhoneNumberUtil.getInstance() }
     const val MAX_WILDCARDS = 4
-    /** Minimum deterministic stem length; keeps whole-country or trunk-only masks impossible. */
-    const val MIN_STEM_DIGITS = 7
+    /**
+     * Minimum deterministic national stem digits (after '+CC'): four local digits are the most
+     * plausible office core, keeping whole-country, trunk-only and very short prefix masks out.
+     */
+    const val MIN_STEM_DIGITS = 4
     /** Masks wider than this many numbers need an explicit proportional confirmation in the UI. */
     const val CONFIRMATION_THRESHOLD = 1_000L
 
@@ -75,7 +78,6 @@ object NumberMasks {
         // leaving the international prefix untouched.
         if (low.length != high.length) return null
         val shared = low.length - wildcardCount
-        if (shared < 8) return null
         if (low.take(shared) != high.take(shared)) return null
         if (low.drop(shared).any { it != '0' } || high.drop(shared).any { it != '9' }) return null
         val prefix = low.take(shared)
@@ -83,6 +85,8 @@ object NumberMasks {
         val stemDigits = prefix.length - 1 - countryCodeDigits(region)
         if (stemDigits < MIN_STEM_DIGITS) return null
         if (prefix.length - 1 + wildcardCount > Numbers.MAX_CANONICAL_DIGITS) return null
+        // The '+' may only introduce a real international prefix; stray or misplaced '+' fails here
+        // because normalize() rejects lexical input whose '+' is not the first character.
         return MaskTarget(prefix, wildcardCount)
     }
 
@@ -96,7 +100,12 @@ object NumberMasks {
         return e164.substring(mask.prefix.length).all { it in '0'..'9' }
     }
 
-    /** True when some caller number would satisfy both masks (nested or crossing ranges). */
-    fun overlaps(first: MaskTarget, second: MaskTarget): Boolean =
-        first.prefix.startsWith(second.prefix) || second.prefix.startsWith(first.prefix)
+    /** True when some caller number would satisfy both targets (exact inside a range or nested ranges). */
+    fun overlaps(first: NumberTarget, second: NumberTarget): Boolean = when {
+        first is ExactTarget && second is ExactTarget -> first.canonical == second.canonical
+        first is MaskTarget && second is MaskTarget ->
+            first.prefix.startsWith(second.prefix) || second.prefix.startsWith(first.prefix)
+        first is MaskTarget && second is ExactTarget -> matches(first, second.canonical)
+        else -> second is MaskTarget && first is ExactTarget && matches(second, first.canonical)
+    }
 }
