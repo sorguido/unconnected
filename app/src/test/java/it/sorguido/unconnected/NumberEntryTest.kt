@@ -1,6 +1,8 @@
 package it.sorguido.unconnected
 
 import android.provider.ContactsContract.CommonDataKinds.Phone
+import it.sorguido.unconnected.domain.MaskTarget
+import it.sorguido.unconnected.domain.NumberMasks
 import it.sorguido.unconnected.domain.NumberRule
 import org.junit.Assert.*
 import org.junit.Test
@@ -44,11 +46,16 @@ class NumberEntryTest {
 
     @Test fun maskSavesWithoutConfirmationAtThreeStarsAndBelow() {
         var saved: NumberRule? = null
-        for (raw in listOf("02 12345***", "0212345***", "+39 02 12345***")) {
+        val expected = listOf("02 1234567*" to "+39021234567*", "02123456**" to "+3902123456**",
+            "02 12345***" to "+390212345***", "0212345***" to "+390212345***",
+            "+39 02 12345***" to "+390212345***")
+        for ((raw, canonical) in expected) {
             assertNull(saveNumberEntry(NumberDraft("Range", raw), "IT", emptyList(), null) { rule, _ -> saved = rule })
-            assertEquals("+390212345***", saved!!.target.canonical)
-            assertEquals("+390212345***", saved!!.displayValue())
+            assertEquals(canonical, saved!!.target.canonical)
+            assertEquals(canonical, saved!!.displayValue())
         }
+        // The widest unconfirmed mask is exactly the confirmation threshold: 10^3 combinations.
+        assertEquals(1_000L, (saved!!.target as MaskTarget).possibleNumbers)
     }
 
     @Test fun wideMaskRequiresExplicitConfirmationBeforeSaving() {
@@ -71,7 +78,7 @@ class NumberEntryTest {
     }
 
     @Test fun canonicalMaskDuplicateIsRefusedButSingleInsideRangeStaysSavable() {
-        val range = NumberRule("range", "", it.sorguido.unconnected.domain.NumberMasks.parse("02 12345***", "IT")!!)
+        val range = NumberRule("range", "", NumberMasks.parse("02 12345***", "IT")!!)
         assertEquals(R.string.number_duplicate,
             validateNumberEntry("+39 02 12345***", "IT", listOf(range), null).error)
         val inside = validateNumberEntry("02 12345777", "IT", listOf(range), null)
@@ -80,7 +87,7 @@ class NumberEntryTest {
 
     @Test fun editingAMaskPreservesIdentityAndDisabledState() {
         val original = NumberRule("existing", "Old label",
-            it.sorguido.unconnected.domain.NumberMasks.parse("02 12345***", "IT")!!, enabled = false)
+            NumberMasks.parse("02 12345***", "IT")!!, enabled = false)
         var saved: NumberRule? = null
         assertNull(saveNumberEntry(NumberDraft("Renamed", "02 12345***"), "IT", listOf(original), original) { rule, _ -> saved = rule })
         assertEquals("existing", saved!!.id)
@@ -128,6 +135,6 @@ class NumberEntryTest {
         assertNull(saveNumberEntry(NumberDraft("Updated", "+1 (202) 555-0111"), "US", listOf(original, other), original) { rule, _ -> saved = rule })
         assertEquals(NumberRule("existing", "Updated", "+12025550111", false), saved)
         assertEquals(R.string.number_duplicate,
-            saveNumberEntry(NumberDraft("Duplicate", other.e164), "US", listOf(original, other), original) { _, _ -> fail("Other rule must not be overwritten") })
+            saveNumberEntry(NumberDraft("Duplicate", other.displayValue()), "US", listOf(original, other), original) { _, _ -> fail("Other rule must not be overwritten") })
     }
 }

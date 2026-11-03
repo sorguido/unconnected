@@ -83,21 +83,46 @@ class SettingsCodecTest {
 
     // ---- schema 1 (v1.0.0) compatibility and schema 2 masks ----
 
-    /** The exact JSON shape written by the released v1.0.0 app, with fictional numbers only. */
-    private val v1Json = """{"schema":1,"enabled":true,"region":"US","emptyScheduleConfirmed":false,\
-"numbers":[{"id":"one","label":"Example","e164":"+12025550101","enabled":true},\
-{"id":"two","label":"Example 2","e164":"+12025550102","enabled":false}],\
-"windows":[{"id":"night","label":"Night shift","days":[1,3,7],"startMinute":1320,"endMinute":360},\
-{"id":"split","label":"Afternoon","days":[2,4],"startMinute":780,"endMinute":1020}]}"""
+    /**
+     * The exact JSON shape written by the released v1.0.0 app, with fictional numbers only.
+     * Built by concatenating raw strings: a Kotlin raw string keeps '\' literal, so line
+     * continuations would corrupt the fixture.
+     */
+    private val v1Json = """{"schema":1,"enabled":true,"region":"US","emptyScheduleConfirmed":false,""" +
+        """"numbers":[{"id":"one","label":"Example","e164":"+12025550101","enabled":true},""" +
+        """{"id":"two","label":"Example 2","e164":"+12025550102","enabled":false}],""" +
+        """"windows":[{"id":"night","label":"Night shift","days":[1,3,7],"startMinute":1320,"endMinute":360},""" +
+        """{"id":"split","label":"Afternoon","days":[2,4],"startMinute":780,"endMinute":1020}]}"""
+
+    /**
+     * Structural JSON comparison: object key order is an implementation detail of JSONObject,
+     * the content is not. Written against the API shared by android.jar and the org.json test jar.
+     */
+    private fun jsonEquals(expected: Any?, actual: Any?): Boolean = when {
+        expected is JSONObject && actual is JSONObject ->
+            expected.length() == actual.length() &&
+                expected.keys().asSequence().all { key ->
+                    actual.has(key) && jsonEquals(expected.opt(key), actual.opt(key))
+                }
+        expected is JSONArray && actual is JSONArray ->
+            expected.length() == actual.length() &&
+                (0 until expected.length()).all { jsonEquals(expected.get(it), actual.get(it)) }
+        else -> expected == actual
+    }
+
+    private fun assertSameJson(expected: String, actual: String) =
+        assertTrue("JSON differs.\nexpected: $expected\nactual:   $actual",
+            jsonEquals(JSONObject(expected), JSONObject(actual)))
 
     @Test fun legacySchemaOneUpgradesLosslesslyToTheSameSnapshot() {
         val decoded = SettingsCodec.decode(v1Json)
         assertEquals(sample, decoded)
-        assertNotNull(decoded)
         decoded!!.numbers.forEach { assertTrue(it.target is ExactTarget) }
-        // Re-encoding an all-exact snapshot stays on schema 1: untouched bytes for old readers.
-        assertEquals(1, JSONObject(SettingsCodec.encode(decoded)).getInt("schema"))
-        assertEquals(v1Json.replace(" ",""), SettingsCodec.encode(decoded).replace(" ",""))
+        // Re-encoding an all-exact snapshot stays on schema 1 with identical content, so a v1.0.0
+        // reader that only understands "e164" keeps working after the upgrade.
+        val reencoded = SettingsCodec.encode(decoded)
+        assertEquals(1, JSONObject(reencoded).getInt("schema"))
+        assertSameJson(v1Json, reencoded)
     }
 
     @Test fun schemaTwoRoundTripsMasksAndPreservesEveryOtherField() {
@@ -112,24 +137,36 @@ class SettingsCodecTest {
         assertEquals(settings, SettingsCodec.decode(encoded))
     }
 
+    @Test fun masksOfDifferentWidthAreStoredAndReadBackUnchanged() {
+        // Narrower and wider variants of the same prefix are distinct valid rules, not damage.
+        listOf("+390212345*" to 1, "+390212345**" to 2, "+390212345***" to 3, "+390212345****" to 4)
+            .forEach { (stored, wildcards) ->
+                val settings = Settings(region = "IT", numbers = listOf(NumberRule("m", "", MaskTarget("+390212345", wildcards))))
+                val encoded = SettingsCodec.encode(settings)
+                assertEquals(stored, JSONObject(encoded).getJSONArray("numbers").getJSONObject(0).getString("mask"))
+                assertEquals(settings, SettingsCodec.decode(encoded))
+            }
+    }
+
     @Test fun corruptMaskFieldsFailOpenInsteadOfBecomingBlockAll() {
-        val base = JSONObject(SettingsCodec.encode(Settings(region = "IT",
-            numbers = listOf(NumberRule("m", "", NumberMasks.parse("02 12345***", "IT")!!)))))
-        val firstNumber = base.getJSONArray("numbers").getJSONObject(0)
+        val base = SettingsCodec.encode(Settings(region = "IT",
+            numbers = listOf(NumberRule("m", "", NumberMasks.parse("02 12345***", "IT")!!))))
+        fun variant(mutate: JSONObject.() -> Unit): String =
+            JSONObject(base).apply { mutate(getJSONArray("numbers").getJSONObject(0)) }.toString()
         val corrupted = listOf(
-            JSONObject(base.toString()).apply { getJSONArray("numbers").getJSONObject(0).put("mask", "+390212345**") }, // different width
-            JSONObject(base.toString()).apply { getJSONArray("numbers").getJSONObject(0).put("mask", "0212345***") },   // national spelling in storage
-            JSONObject(base.toString()).apply { getJSONArray("numbers").getJSONObject(0).put("mask", "+3902*2345***") }, // internal wildcard
-            JSONObject(base.toString()).apply { getJSONArray("numbers").getJSONObject(0).put("mask", "+390212345?") },   // wrong wildcard char
-            JSONObject(base.toString()).apply { getJSONArray("numbers").getJSONObject(0).put("mask", "+390212345****") },// too wide to canonicalize
-            JSONObject(base.toString()).apply { getJSONArray("numbers").getJSONObject(0).put("e164", "+390212345000") }, // e164 + mask together
-            JSONObject(base.toString()).apply { getJSONArray("numbers").getJSONObject(0).remove("mask") },               // no target at all
-            JSONObject(base.toString()).apply { getJSONArray("numbers").getJSONObject(0).put("e164", "+390212345***") }, // asterisks inside e164
+            variant { put("mask", "0212345***") },          // national spelling in storage
+            variant { put("mask", "+3902*2345***") },       // internal wildcard
+            variant { put("mask", "+390212345?") },         // wrong wildcard character
+            variant { put("mask", "+390212345*****") },     // more wildcards than MAX_WILDCARDS
+            variant { put("mask", "+99912345***") },        // unassigned country code
+            variant { put("e164", "+390212345000") },       // e164 and mask together
+            variant { remove("mask") },                     // no target at all
+            variant { put("e164", "+390212345***") },       // asterisks inside e164
         )
         corrupted.forEachIndexed { index, json ->
-            assertNull("Corrupt mask variant $index must decode to null", SettingsCodec.decode(json.toString()))
+            assertNull("Corrupt mask variant $index must decode to null", SettingsCodec.decode(json))
         }
-        firstNumber.remove("mask"); firstNumber.put("mask", "+390212345***")
-        assertEquals(1, SettingsCodec.decode(base.toString())!!.numbers.size)
+        // The untouched document still decodes: the variants above are copies, not mutations of it.
+        assertEquals(1, SettingsCodec.decode(base)!!.numbers.size)
     }
 }
