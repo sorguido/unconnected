@@ -35,10 +35,14 @@ To compile a deliberately unsigned artifact without private material:
 The unsigned artifact cannot be installed or distributed as the official release. A normal release build fails closed unless the existing identity is configured. Never generate a replacement release key.
 
 ```bash
+# With a private copy under unconnected/development/ (ignored by Git):
+UNCONNECTED_SIGNING_ROOT="$PWD" ./gradlew :app:assembleRelease :app:testDebugUnitTest :app:lint
+
+# Or use the original Chromecast project checkout:
 UNCONNECTED_SIGNING_ROOT=../chromecast-killswitch-app ./gradlew :app:assembleRelease :app:testDebugUnitTest :app:lint
 ```
 
-See [SIGNING.md](SIGNING.md). The original private PKCS#12 and properties remain in the existing Chromecast checkout; they are read, never copied or changed. Compare the APK signer with the recorded original release certificate before distributing. APKs, build logs and source archives live under ignored `development/`; current release receipts are indexed in `PROJECT_STATE.json`. Historical code-6 verification and v1.0.0 publication records remain in `evidence/runs/dynamic-layout-1.0.0-vc6/` and `evidence/runs/release-v1.0.0/`.
+See [SIGNING.md](SIGNING.md). The original private PKCS#12 remains unchanged in the Chromecast checkout; an optional private copy of the keystore and signing.properties can be kept under unconnected/development/, excluded from Git. Both configurations reuse the same certificate. Compare the APK signer with the recorded original release certificate before distributing. APKs, build logs and source archives live under ignored `development/`; current release receipts are indexed in `PROJECT_STATE.json`. Historical code-6 verification and v1.0.0 publication records remain in `evidence/runs/dynamic-layout-1.0.0-vc6/` and `evidence/runs/release-v1.0.0/`.
 
 ## Install on a test phone — human action required
 

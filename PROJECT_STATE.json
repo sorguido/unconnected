@@ -26,8 +26,7 @@
     "V1.2-P3 (2026-11-04): owner-authorized official original-key signed 1.2.0/code8 APK; 125 freshly executed JVM tests PASS; Release lint zero errors/two inherited SDK warnings; package, manifest, identity, v1.1.0 certificate match, CRC/alignment and checksum PASS; exact development source commit tagged v1.2.0 and stable public GitHub Release published; all five assets anonymously downloaded back byte-identical; GPL source and GitHub automatic source verified; v1.1.0 all five assets re-downloaded unchanged; v1.0.0 and main preserved."
   ],
   "pending_gates": [
-    "Thorough physical v1.2.0 verification at work remains pending (not a publication blocker under current explicit owner authorization).",
-    "Merge development to main reserved exclusively to owner."
+    "Thorough physical v1.2.0 verification at work remains pending (not a publication blocker under current explicit owner authorization)."
   ],
   "host_modified": true,
   "relevant_artifacts": [
@@ -47,7 +46,7 @@
     "C2",
     "C3"
   ],
-  "next_action": "Owner alone may merge development to main. Complete the more thorough physical verification at work; do not claim it already completed.",
+  "next_action": "Complete the more thorough owner physical-phone verification at work; record anonymized observations. The official v1.2.0 release is published and the development-to-main merge is complete.",
   "host_changes": [
     "Used Gradle dependency/build caches",
     "Started host ADB server for read-only device enumeration; no device attached",
@@ -60,7 +59,7 @@
     "V1.2-P3: public v1.2.0 tag/Release published and all assets anonymously round-trip verified; local caches/logs and GPL source packaging under ignored development/."
   ],
   "device_changes": [],
-  "source_state": "Official source commit d0264196d9afb405e34120a70c5fe2476830d45b tagged v1.2.0 on development; exact commit embedded in signed APK. Publication state/evidence are in a separate subsequent commit. Protected canonical files, main and prior releases remain unchanged.",
+  "source_state": "Official v1.2.0 sources tagged at d0264196d9afb405e34120a70c5fe2476830d45b (originally on development), merged into main by owner at 25cbf826974ed04762b82654cb16f0fa9f9b4abe. Published APK/signature/evidence are unchanged; release evidence was committed after the tag. The historical release-tag source commit remains authoritative.",
   "published_apk_sha256": "0f419199015ebed5a76557ab92b4825c2582615b5f2c7aa822577e015c083e0f",
   "verification_date": "2026-11-04",
   "candidate_version": {
@@ -142,7 +141,7 @@
     "commit": "d0264196d9afb405e34120a70c5fe2476830d45b",
     "url": "https://github.com/sorguido/unconnected/releases/tag/v1.2.0"
   },
-  "active_branch": "development",
+  "active_branch": "main",
   "implementation_commit": "4eb608db33074c2837fcc686e7227bd352ecd157",
   "debug_candidate": {
     "path": "development/deliverables/unconnected-1.2.0-debug-vc8.apk",
@@ -168,7 +167,7 @@
     "internet_permission": false,
     "installation_performed": false
   },
-  "governance_note": "Current attached owner mandate explicitly authorizes official signing and public v1.2.0 publication despite pending thorough physical tests. Protected canonical files remain read-only; merge to main is exclusively owner action.",
+  "governance_note": "The owner authorized official signing and public v1.2.0 publication despite pending thorough physical tests, performed the development-to-main merge, and explicitly authorized this minimal ROADMAP.md maintenance. Other protected canonical files remain unchanged.",
   "limitations": [
     "First observation after reboot estimates offline time from original bounded wall deadline; clock edits before it are inherently ambiguous. Persisted elapsed anchor protects subsequent observations and process recreation.",
     "Expiry tombstones are persisted on a settings read/save, not on visual countdown ticks.",
@@ -319,10 +318,12 @@
     "device_actions": []
   },
   "main_merge": {
-    "performed": false,
-    "reserved_to": "Owner exclusively",
-    "local_head_unchanged": "d5f591a55c0bdba28d1d29a16abe786306aee3c0",
-    "remote_head_unchanged": "34f07a27942d817d5e9a895d2fd8c0023bcdc368"
+    "performed": true,
+    "by": "owner",
+    "branch": "main",
+    "commit": "25cbf826974ed04762b82654cb16f0fa9f9b4abe",
+    "merged_development_head": "dbe9956bf2e30d39b3d643de983b1ef2daf004d7",
+    "status": "VERIFIED — development history integrated; no missing source changes"
   },
   "physical_verification": {
     "label": "OWNER_REPORTED",

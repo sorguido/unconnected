@@ -13,17 +13,19 @@ keyAlias=...      # existing private value; never publish
 keyPassword=...   # existing private value; never publish
 ```
 
-The text above is a **schema/example**, not a request to create that file or reveal secrets. The original keystore must remain unchanged in the Chromecast working directory, outside this repository.
+The text above is a **schema/example**, not a request to create that file or reveal secrets. Keep the original keystore unchanged in the Chromecast working directory. An optional separate private copy may live under this checkout's Git-ignored `development/` directory; neither copy belongs in Git.
 
 ## Minimal reuse mechanism for the unconnected build
 
-Use a single optional environment variable `UNCONNECTED_SIGNING_ROOT` pointing to the **existing Chromecast project checkout** (the directory containing `development/signing.properties`). When this variable is set, the new Gradle build should load the already-existing properties from that root, and resolve a relative `storeFile` against that SAME project root, not against unconnected's root. An absolute path in `storeFile` must work unchanged.
+Set `UNCONNECTED_SIGNING_ROOT` to the directory containing `development/signing.properties`: either this unconnected checkout with an optional private copy, or the original Chromecast checkout. Gradle resolves relative `storeFile` paths against the selected root; absolute paths work too. Both options use the same original signing identity.
 
 A build without access to the private configuration must still allow a normal debug build and test run, but an **official release build must fail closed** instead of silently using a debug certificate or creating a new keystore.
 
-Suggested maintainer invocation from the unconnected working tree:
+Maintainer invocation from the unconnected working tree (use the first option only if the private local copy is present):
 
 ```bash
+UNCONNECTED_SIGNING_ROOT="$PWD" ./gradlew :app:assembleRelease
+# Alternative: use the original checkout directly
 UNCONNECTED_SIGNING_ROOT=../chromecast-killswitch-app ./gradlew :app:assembleRelease
 ```
 
