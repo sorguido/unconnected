@@ -2,8 +2,8 @@
   "schema_version": 1,
   "authoritative": false,
   "execution_path": "PRIMARY",
-  "phase": "P3",
-  "phase_status": "COMPLETE",
+  "phase": "P1",
+  "phase_status": "PLANNED",
   "completed_gates": [
     "P0 API feasibility and test plan",
     "P1 implementation, JVM tests, lint and APK builds",
@@ -23,7 +23,11 @@
     "v1.1.0 local Fedora official build with existing external signer; 88 JVM tests, zero failures/errors/skips; Debug and Release lint zero errors; package/version/SDK/signature checks PASS",
     "v1.1.0 annotated tag at 599d622655f6e3275867dea147f460cb040d26e0 and non-draft/non-prerelease GitHub Release published; five assets downloaded back byte-identical; both checksums PASS; automatic tagged source verified; v1.0.0 tag/Release preserved"
   ],
-  "pending_gates": [],
+  "pending_gates": [
+    "V1.2-P1: complete implementation, regression tests, lint and an actual installable debug-signed APK plus SHA-256 for offline sideload testing; no source-only handoff",
+    "V1.2-P2: owner physical-phone acceptance of timer precedence, expiry, disabled-number and screening behavior; no device action currently authorized",
+    "V1.2-P3: separate explicit owner authorization before original-key signing, GitHub tag/Release or public upload"
+  ],
   "host_modified": true,
   "relevant_artifacts": [
     "evidence/runs/release-v1.1.0/verification.json",
@@ -38,14 +42,16 @@
     "README.md",
     "docs/PRODUCT_SPEC.md",
     ".github/workflows/build-debug-apk.yml",
-    "tests/TEST_MATRIX.md"
+    "tests/TEST_MATRIX.md",
+    "ROADMAP.md",
+    "PROJECT_STATE.json"
   ],
   "relevant_corroborations": [
     "C1",
     "C2",
     "C3"
   ],
-  "next_action": "v1.1.0 release complete and postflight verified. No phone installation or settings changes authorized. Await owner direction for subsequent work; ROADMAP.md remains unchanged by explicit instruction.",
+  "next_action": "Run canonical AI PM startup (START.md -> AGENTS.md -> ROADMAP.md -> CORROBORATIONS.md; then state/index), update docs/PRODUCT_SPEC.md and tests/TEST_MATRIX.md for the owner-approved v1.2.0 timer, implement, test, lint, and produce a real installable debug APK plus SHA-256. Continue autonomously through ordinary coding/build defects; stop only at the verified APK deliverable or an unavoidable documented external blocker. Do not sign or publish production v1.2.0 until new owner approval.",
   "host_changes": [
     "Used Gradle dependency/build caches",
     "Started host ADB server for read-only device enumeration; no device attached",
@@ -116,7 +122,7 @@
     "v1_0_0_preserved": true
   },
   "owner_report": "Owner-reported PASS for all numeric-range physical-phone tests and counterchecks on 2026-11-03; no OEM/model, Android version or raw per-call receipt supplied. The release mandate explicitly authorized local preparation and GitHub publication. No device operations performed.",
-  "active_task": "v1.1.0 official release COMPLETE after real publication postflight",
+  "active_task": "v1.2.0 temporary call-block timer: P1 SPEC/IMPLEMENT/BUILD planned; no implementation or test APK yet",
   "verified_source_baseline": "599d622655f6e3275867dea147f460cb040d26e0",
   "known_v1_0_limitations": [
     "Owner decision on the two recorded code6 accessibility limitations, published as known limitations of v1.0.0: no audible save completion, and the temporary-pause sentence is announced but not displayed. No functional change was made for the release."
@@ -124,14 +130,15 @@
   "repository_visibility_current": "PUBLIC (observed via GitHub API on 2026-11-03; no visibility change performed in this update)",
   "main_head_at_handoff": "bddae47977f2fd2381cf4742f07a43674233271d",
   "planned_release": {
-    "versionName": "1.1.0",
-    "versionCode": 7,
-    "tag": "v1.1.0",
-    "status": "PUBLISHED_AND_POSTFLIGHT_VERIFIED",
-    "source_branch": "main",
-    "signer": "existing external Chromecast Kill Switch signing identity only",
-    "device_acceptance": "All numeric-range checks PASS, owner reported 2026-11-03; no OEM/version or raw call evidence supplied",
-    "release_commit": "599d622655f6e3275867dea147f460cb040d26e0"
+    "versionName": "1.2.0",
+    "versionCode": 8,
+    "tag": "v1.2.0",
+    "status": "TARGET_ONLY__PRODUCTION_SIGNING_AND_PUBLICATION_NOT_AUTHORIZED",
+    "required_first_deliverable": "Installable debug-signed APK + SHA-256 and build/test/lint evidence for offline phone test",
+    "physical_acceptance": "PENDING owner report after test APK delivery; real phone changes are not authorized for the agent",
+    "release_authorization": "SEPARATE EXPLICIT OWNER APPROVAL REQUIRED",
+    "original_signer": "Existing external Chromecast Kill Switch signing identity; do not access/use for test-only milestone",
+    "prior_published_release": "v1.1.0 (see unchanged release field)"
   },
   "previous_release": {
     "tag": "v1.0.0",
@@ -161,5 +168,16 @@
       "unconnected-1.0.0-source.tar.gz",
       "unconnected-1.0.0-source.tar.gz.sha256"
     ]
-  }
+  },
+  "planned_feature": {
+    "title": "Temporary independent call-block timer",
+    "authorized_plan_date": "2026-11-04",
+    "status": "PLANNED_NOT_IMPLEMENTED",
+    "scope": "Timer blocks enabled listed exact and bounded-range callers regardless of weekly schedule master state/windows, for selected duration; manual stop or expiry returns control to unchanged schedule. Same Android role/permission and conservative fail-open behavior.",
+    "ui": "Place timer button beneath schedule button; explicit ATTIVA/DISATTIVA SCHEDULAZIONE and ATTIVA/DISATTIVA TIMER; both controls green for activation and red for deactivation. Dedicated duration-selection screen similar to Android Clock Timer, presets, countdown and stop.",
+    "no_change": "v1.1.0 release/tag/assets, current installed phone configuration, release signing material, public publication state",
+    "roadmap_file": "ROADMAP.md",
+    "planning_commit": "b83f087e17fa63393a14a2c6b00fa4e11de9ae56"
+  },
+  "current_planning_note": "Owner authorized direct edits to ROADMAP.md and PROJECT_STATE.json in chat on 2026-11-04. Only planning metadata changed in GitHub; code, specs, tests, APKs, device and official release were not changed or generated. Historical P3 completion and candidate_version fields remain evidence about published v1.1.0, not claims about v1.2.0."
 }
