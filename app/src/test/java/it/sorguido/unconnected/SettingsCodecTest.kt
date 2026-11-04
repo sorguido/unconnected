@@ -72,11 +72,14 @@ class SettingsCodecTest {
     }
 
     @Test fun rejectsInvalidStateAndUnknownSchema() {
-        assertNull(SettingsCodec.decode(json().put("schema", 3).toString())) // unknown future schema
+        assertNull(SettingsCodec.decode(json().put("schema", SettingsCodec.CURRENT_SCHEMA + 1).toString())) // unknown future schema
         assertNull(SettingsCodec.decode(json().put("schema", 0).toString()))
         assertNull(SettingsCodec.decode(json().put("region", "ZZ").toString()))
         assertNull(SettingsCodec.decode(SettingsCodec.encode(sample.copy(numbers = sample.numbers + sample.numbers[0]))))
-        assertNull(SettingsCodec.decode(SettingsCodec.encode(sample.copy(windows = listOf(sample.windows[0].copy(days = emptySet()))))))
+        val invalidSchedule = sample.copy(windows = listOf(sample.windows[0].copy(days = emptySet())))
+        assertEquals(invalidSchedule, SettingsCodec.decode(SettingsCodec.encode(invalidSchedule)))
+        assertFalse(Rules.isValid(invalidSchedule))
+        assertTrue(Rules.isValidGeneral(invalidSchedule))
         assertNull(SettingsCodec.decode(SettingsCodec.encode(sample.copy(windows = List(101) { sample.windows[0].copy(id = "$it") }))))
         assertNull(SettingsCodec.decode(SettingsCodec.encode(sample.copy(numbers = List(201) { sample.numbers[0].copy(id = "$it") }))))
     }

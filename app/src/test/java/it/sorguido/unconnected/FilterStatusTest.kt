@@ -29,7 +29,7 @@ class FilterStatusTest {
 
     @Test fun theCardOnlyOffersRealCommittedStatesWithDistinguishableCopy() {
         assertEquals(
-            listOf(FilterStatus.OFF, FilterStatus.ACTIVE, FilterStatus.SESSION_PAUSED, FilterStatus.SETUP_REQUIRED),
+            listOf(FilterStatus.OFF, FilterStatus.ACTIVE, FilterStatus.SESSION_PAUSED, FilterStatus.SETUP_REQUIRED, FilterStatus.SCHEDULE_INVALID),
             FilterStatus.entries,
         )
         val copy = FilterStatus.entries.map { it.title to it.detail }

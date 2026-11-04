@@ -1,0 +1,158 @@
+{
+  "date": "2026-11-04",
+  "status": "MILESTONE_COMPLETE \u2014 V1.2-P1; physical V1.2-P2 pending",
+  "classification": "PROVEN for recorded host checks only; no physical phone verification",
+  "branch": "development",
+  "implementation_commit": "4eb608db33074c2837fcc686e7227bd352ecd157",
+  "baseline_commit": "d5f591a55c0bdba28d1d29a16abe786306aee3c0",
+  "command": "./gradlew --offline -Punsigned :app:testDebugUnitTest :app:lintDebug :app:assembleDebug",
+  "build_result": "BUILD SUCCESSFUL in 20s",
+  "unit_tests": {
+    "tests": 125,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "class": "it.sorguido.unconnected.ContactPickingTest",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "it.sorguido.unconnected.FilterStatusTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "it.sorguido.unconnected.NumberEntryTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "it.sorguido.unconnected.SettingsCodecTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "it.sorguido.unconnected.StableContentLayoutTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "it.sorguido.unconnected.TimerPersistenceTest",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "it.sorguido.unconnected.TimerPresentationTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "it.sorguido.unconnected.domain.BlockTimersTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "it.sorguido.unconnected.domain.NumbersTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "it.sorguido.unconnected.domain.RulesTest",
+      "tests": 31,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "lint": {
+    "errors": 0,
+    "warnings": [
+      {
+        "id": "OldTargetApi",
+        "severity": "Warning",
+        "message": "Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the `android.os.Build.VERSION_CODES` javadoc for details."
+      },
+      {
+        "id": "GradleDependency",
+        "severity": "Warning",
+        "message": "A newer version of `compileSdk` than 36 is available: 37"
+      }
+    ]
+  },
+  "apk": {
+    "path": "development/deliverables/unconnected-1.2.0-debug-vc8.apk",
+    "checksum_path": "development/deliverables/unconnected-1.2.0-debug-vc8.apk.sha256",
+    "size": 23425965,
+    "sha256": "686efdefc9c6a88c1a1e772ec93e763343905441ade6ad10c170b2f97caaef5f",
+    "package": "it.sorguido.unconnected.debug",
+    "versionName": "1.2.0-debug",
+    "versionCode": 8,
+    "minSdk": 29,
+    "targetSdk": 36,
+    "signature_verified": true,
+    "signer_sha256": "c89c1294008f3b46c0bbaca0acc0146744730591ac443acc35472a7efa6a2262",
+    "signer_dn": "CN=Android Debug, O=Android, C=US",
+    "official_signer_distinct": true,
+    "zip_crc_verified": true,
+    "source_and_delivered_bytes_identical": true,
+    "checksum_check": "unconnected-1.2.0-debug-vc8.apk: OK",
+    "permissions": [
+      "uses-permission: name='android.permission.READ_CONTACTS'",
+      "uses-permission: name='it.sorguido.unconnected.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'"
+    ],
+    "internet_permission": false,
+    "installation_performed": false
+  },
+  "resource_keys_english_italian_equal": true,
+  "italian_button_labels_verified": true,
+  "protected_canonical_sha256": {
+    "START.md": "2665563dd85fdeda4431000ea193ef81e3f6ca5a3442cc21fff0c2bb61c7d5ab",
+    "AGENTS.md": "e418a5b1de25edc623a83268e931d8f9bd6cedd36d36ac52ac02f6c578c736e5",
+    "ROADMAP.md": "2973e1c44ce7d35c6df18b8685e976fdfac2f6563b93740542a35dcd58f304fe",
+    "CORROBORATIONS.md": "01d6ae7308b081d67dd840f689dcd582cd4185005ad507dbd88682e052b80944"
+  },
+  "protected_files_unchanged": true,
+  "physical_tests": "PENDING \u2014 owner must execute docs/TIMER_DEVICE_TEST_GATE.md; OEM/model/OS/carrier unverified",
+  "limits": [
+    "First observation after reboot estimates offline time from original bounded wall deadline; clock edits before it are inherently ambiguous. Persisted elapsed anchor protects subsequent observations and process recreation.",
+    "Expiry tombstones are persisted on a settings read/save, not on visual countdown ticks.",
+    "Android role/provider deadlines, native rendering, caller/notification behavior, screen-off and reboot dispatch require physical tests.",
+    "Two inherited lint warnings retain SDK 36; SDK migration outside timer scope."
+  ],
+  "iterations": [
+    {
+      "classification": "OBSERVED, corrected",
+      "issue": "First candidate: 118 tests, one outdated enum-set assertion after adding explicit invalid-schedule presentation",
+      "resolution": "Expected state inventory updated; final 125 tests pass"
+    },
+    {
+      "classification": "OBSERVED/INFERRED, corrected",
+      "issue": "Independent review identified post-reboot wall-clock extension, timer save-copy movement and main-thread clock-provider IO",
+      "resolution": "Persisted monotonic anchors/tombstones, held committed timer copy and viewport feedback, provider reads on worker; independent rereview found no blocker"
+    }
+  ],
+  "device_changes": [],
+  "official_signing_used": false,
+  "publication_performed": false
+}
