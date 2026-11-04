@@ -31,9 +31,9 @@ original release certificate. The correction changes documentation only.
 
 ## Obtaining and building the source
 
-The [v1.1.0 Release](https://github.com/sorguido/unconnected/releases/tag/v1.1.0)
+The [v1.2.0 Release](https://github.com/sorguido/unconnected/releases/tag/v1.2.0)
 offers the APK, its SHA-256 checksum, `LICENSE`, and
-`unconnected-1.1.0-source.tar.gz` with its own checksum. The source companion
+`unconnected-1.2.0-source.tar.gz` with its own checksum. The source companion
 contains the tagged project, build scripts, wrapper, lockfile, tests, these
 license documents, and `third-party-sources/`: the 57 exact runtime Maven source
 JARs and POMs, plus 27 upstream module/source trees containing AndroidX resources,

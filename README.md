@@ -10,7 +10,8 @@ unconnected lets you pick specific phone numbers and decide the days and hours t
 - **Whole number ranges.** Type the final digits of a number as `*` — for example `02 12345***` — and the app filters that whole range. It tells you how many numbers the range covers and asks you to confirm the wide ones.
 - **From your contacts, or typed in.** Choose a number straight from your Android contacts, or enter it manually with its country code.
 - **A weekly schedule that fits your routine.** Set the days and hours when listed callers may reach you, including windows that cross midnight.
-- **On and off in one tap.** One button turns the filter on. The same button turns it off straight away and keeps every setting you made.
+- **Temporary call blocking.** Set a timer to block enabled numbers and ranges, even during allowed hours or with the weekly schedule off. When it ends, your usual rules return automatically.
+- **Independent controls.** Start or stop the schedule and timer separately at any time, keeping every setting you made.
 - **Works offline.** The app has no Internet permission at all, so it cannot send anything anywhere.
 - **No account.** Nothing to sign up for and nothing to remember.
 
@@ -37,7 +38,7 @@ There is no account, no advertising, no analytics and no online tracking. Your n
 
 ## Turning it off
 
-Turn the filter off inside the app whenever you like, or remove unconnected as your call-screening app in Android settings. Uninstalling the app through Android settings deletes everything it stored. unconnected never changes your call forwarding, Do Not Disturb, default phone app or any other phone setting on its own.
+Stop both the schedule and timer inside the app whenever you like, or remove unconnected as your call-screening app in Android settings. Uninstalling the app through Android settings deletes everything it stored. unconnected never changes your call forwarding, Do Not Disturb, default phone app or any other phone setting on its own.
 
 ## License
 

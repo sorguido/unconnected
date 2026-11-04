@@ -2,8 +2,8 @@
   "schema_version": 1,
   "authoritative": false,
   "execution_path": "PRIMARY",
-  "phase": "V1.2-P1",
-  "phase_status": "COMPLETE",
+  "phase": "V1.2-P3",
+  "phase_status": "IN_PROGRESS",
   "completed_gates": [
     "P0 API feasibility and test plan",
     "P1 implementation, JVM tests, lint and APK builds",
@@ -25,7 +25,8 @@
     "V1.2-P1 (2026-11-04): complete independent timer; 125 JVM tests with zero failures/errors/skips, Debug lint zero errors/two inherited SDK warnings, actual development-signed offline APK/package/version/CRC/signature/SHA-256 verified; independent review findings corrected and rereview passed; stop at V1.2-P2 physical owner acceptance"
   ],
   "pending_gates": [
-    "V1.2-P2_PHYSICAL_ACCEPTANCE \u2014 owner phone trials; docs/TIMER_DEVICE_TEST_GATE.md"
+    "Thorough physical v1.2.0 verification at work remains pending (not a publication blocker under current explicit owner authorization).",
+    "Merge development to main reserved exclusively to owner."
   ],
   "host_modified": true,
   "relevant_artifacts": [
@@ -44,7 +45,7 @@
     "C2",
     "C3"
   ],
-  "next_action": "STOP at V1.2-P2. Owner verifies the delivered Debug APK/checksum, installs only in the personal profile and manually selects Debug for call screening, completes the phone checklist, then restores the previous screening app. No official signing, tag, release or publication is authorized.",
+  "next_action": "Run required release tests/lint, build with original external key, verify package/signature against v1.1.0, publish v1.2.0 and round-trip verify all assets. Do not merge main.",
   "host_changes": [
     "Used Gradle dependency/build caches",
     "Started host ADB server for read-only device enumeration; no device attached",
@@ -55,11 +56,11 @@
     "V1.2-P1: authorized offline Gradle cache/lock access; Debug-only -Punsigned builds without official signing properties/key; public APK inspection and local deliverable copy; no toolchain update, device command, tag, push or publication"
   ],
   "device_changes": [],
-  "source_state": "Implementation committed at 4eb608db33074c2837fcc686e7227bd352ecd157 on development: v1.2.0/code8, independent timer, schema3 with legacy compatibility and persisted reboot anchors, localized functional keypad/countdown. 125 JVM tests, Debug lint and real Debug APK pass. Published v1.1.0 and protected canonical files remain unchanged. Evidence/cache commit is separate.",
+  "source_state": "Implementation 4eb608db33074c2837fcc686e7227bd352ecd157 and evidence 56626b19d9e681bdf580ade26b647e2efa7774db verified on development. Only essential public release documentation and operational caches are being updated; no feature changes.",
   "published_apk_sha256": "68e043336cfb206cbe83a48a7e0393301f3b11ebb20986233f1555777845f556",
   "verification_date": "2026-11-04",
   "candidate_version": {
-    "versionName": "1.2.0-debug",
+    "versionName": "1.2.0",
     "versionCode": 8
   },
   "release": {
@@ -114,22 +115,22 @@
     "verification_receipt": "evidence/runs/release-v1.1.0/verification.json",
     "v1_0_0_preserved": true
   },
-  "owner_report": "No physical v1.2.0 acceptance yet. Historical v1.1.0 numeric-range acceptance and publication remain recorded under release history; they do not verify the timer.",
-  "active_task": "V1.2-P1 independent temporary call blocking timer COMPLETE; stop at owner physical gate V1.2-P2",
+  "owner_report": "Owner reports positive initial v1.2.0 phone trials with no observed anomalies. Thorough physical verification at work remains pending; OEM/model and Android version not supplied.",
+  "active_task": "Official signed v1.2.0 release from development; owner-authorized signing and publication",
   "verified_source_baseline": "4eb608db33074c2837fcc686e7227bd352ecd157",
   "known_v1_0_limitations": [
     "Owner decision on the two recorded code6 accessibility limitations, published as known limitations of v1.0.0: no audible save completion, and the temporary-pause sentence is announced but not displayed. No functional change was made for the release."
   ],
   "repository_visibility_current": "PUBLIC (observed via GitHub API on 2026-11-03; no visibility change performed in this update)",
-  "main_head_at_handoff": "bddae47977f2fd2381cf4742f07a43674233271d",
+  "main_head_at_handoff": "d5f591a55c0bdba28d1d29a16abe786306aee3c0",
   "planned_release": {
     "versionName": "1.2.0",
     "versionCode": 8,
     "tag": "v1.2.0",
-    "status": "NOT_AUTHORIZED \u2014 physical V1.2-P2 pending; future official signing/publication require new owner approval",
+    "status": "AUTHORIZED_IN_PROGRESS",
     "source_branch": "development",
-    "signer": "existing external Chromecast identity only for a separately approved official release",
-    "device_acceptance": "PENDING for v1.2.0"
+    "signer": "Existing external Chromecast identity only; exact v1.1.0 certificate match required.",
+    "device_acceptance": "Initial owner-reported trials positive; thorough workplace physical verification pending."
   },
   "previous_release": {
     "tag": "v1.0.0",
@@ -186,7 +187,7 @@
     "internet_permission": false,
     "installation_performed": false
   },
-  "governance_note": "The attached owner mandate defines V1.2-P1 scope. Local ROADMAP.md still records v1.1.0; it was read in full and remains protected/unmodified.",
+  "governance_note": "Current attached owner mandate explicitly authorizes official signing and public v1.2.0 publication despite pending thorough physical tests. Protected canonical files remain read-only; merge to main is exclusively owner action.",
   "limitations": [
     "First observation after reboot estimates offline time from original bounded wall deadline; clock edits before it are inherently ambiguous. Persisted elapsed anchor protects subsequent observations and process recreation.",
     "Expiry tombstones are persisted on a settings read/save, not on visual countdown ticks.",
@@ -194,5 +195,14 @@
     "Two inherited lint warnings retain SDK 36; SDK migration outside timer scope."
   ],
   "physical_gate": "docs/TIMER_DEVICE_TEST_GATE.md",
-  "previous_official_signed_candidate": "development/deliverables/release-v1.1.0/unconnected-1.1.0-vc7.apk"
+  "previous_official_signed_candidate": "development/deliverables/release-v1.1.0/unconnected-1.1.0-vc7.apk",
+  "main_remote_head_at_release_start": "34f07a27942d817d5e9a895d2fd8c0023bcdc368",
+  "release_authorization": {
+    "official_signing": true,
+    "public_github_release": true,
+    "source_branch": "development",
+    "main_merge_authorized": false,
+    "device_actions_authorized": false,
+    "source": "Current owner attached official v1.2.0 release mandate (2026-11-04)"
+  }
 }
