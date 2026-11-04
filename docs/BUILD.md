@@ -1,8 +1,20 @@
 # Build and install
 
+## v1.2.0 Debug candidate
+
+The current development sources target `1.2.0-debug` / versionCode 8, package `it.sorguido.unconnected.debug`. The published v1.1.0 release remains unchanged. The timer blocks enabled numbers and masks independently of weekly scheduling, including during allowed hours. Expiry or early Stop restores the current weekly logic. Stop both controls, or remove the screening role, to allow all calls.
+
+Build without accessing official signing material:
+
+```bash
+./gradlew --offline -Punsigned :app:testDebugUnitTest :app:lintDebug :app:assembleDebug
+```
+
+`--offline` assumes the pinned Gradle distribution and dependencies are already cached; omit it for an initial dependency download. The installed app itself requires no Internet. The verified test APK and checksum are under `development/deliverables/unconnected-1.2.0-debug-vc8.apk` and `.apk.sha256`; see the [timer verification receipt](../evidence/runs/timer-v1.2.0/verification.md) for measured results. Follow [V1.2-P2 physical acceptance](TIMER_DEVICE_TEST_GATE.md) to install in the personal profile, select Debug as the screening app, test and restore the prior app. Debug and release coexist with separate settings. No device operations, official signing or publication are part of V1.2-P1.
+
 ## Status and prerequisites
 
-Release **1.1.0 / versionCode 7**, tagged `v1.1.0`, adds fixed-length numeric ranges with trailing `*`, exact prefix/length matching, and confirmation for ranges covering more than 1,000 numbers. Existing rules remain compatible. It updates versionCode 6 in place with the same package and signing identity, without uninstalling or clearing rules. Historical [code-6 verification](../evidence/runs/dynamic-layout-1.0.0-vc6/verification.md) and the [v1.0.0 publication report](../evidence/runs/release-v1.0.0/publication.md) remain available.
+Published release **1.1.0 / versionCode 7**, tagged `v1.1.0`, adds fixed-length numeric ranges with trailing `*`, exact prefix/length matching, and confirmation for ranges covering more than 1,000 numbers. Existing rules remain compatible. It updates versionCode 6 in place with the same package and signing identity, without uninstalling or clearing rules. Historical [code-6 verification](../evidence/runs/dynamic-layout-1.0.0-vc6/verification.md) and the [v1.0.0 publication report](../evidence/runs/release-v1.0.0/publication.md) remain available. Installation and master-button descriptions below refer to that published release; use the timer gate above for the v1.2 Debug trial.
 
 The owner reports that all numeric-range phone tests and counterchecks passed on 2026-11-03 and authorized publication. This is owner testimony, without OEM/model, Android-version or per-call measurements supplied to the agent. Android 10 (API 29) or newer is required. Automated checks do not establish real call, notification, carrier or OEM behavior.
 

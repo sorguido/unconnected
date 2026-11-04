@@ -46,6 +46,7 @@ import it.sorguido.unconnected.domain.NumberRule
 import it.sorguido.unconnected.domain.Rules
 import it.sorguido.unconnected.domain.Settings
 import it.sorguido.unconnected.domain.TimeWindow
+import it.sorguido.unconnected.domain.BlockTimers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
@@ -126,17 +127,25 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
     var deleteWindow by remember { mutableStateOf<TimeWindow?>(null) }
     var emptyCandidate by remember { mutableStateOf<Settings?>(null) }
     var resetConfirmation by remember { mutableStateOf(false) }
+    var showTimer by rememberSaveable { mutableStateOf(false) }
+    val homeScroll = rememberScrollState()
     val scope = rememberCoroutineScope()
     val role = remember(resumeVersion, permissionVersion) { ScreeningAccess.hasRole(context) }
     val contacts = remember(resumeVersion, permissionVersion) { ScreeningAccess.hasContacts(context) }
     val roleAvailable = remember(resumeVersion) { ScreeningAccess.roleAvailable(context) }
     val permissionsReady = role && contacts
     var now by remember { mutableStateOf(ZonedDateTime.now()) }
+    var timerNow by remember { mutableStateOf(TimerClock.sample()) }
     // A foreground-only clock refreshes the summary; screening never depends on it.
-    LaunchedEffect(foreground, resumeVersion) {
-        if (foreground) while (true) {
-            now = ZonedDateTime.now()
-            delay(60_000L - System.currentTimeMillis() % 60_000L)
+    LaunchedEffect(foreground, resumeVersion, settings?.timer) {
+        if (foreground) {
+            timerNow = withContext(Dispatchers.IO) { TimerClock.read(context) }
+            while (true) {
+                now = ZonedDateTime.now().withSecond(0).withNano(0)
+                timerNow = TimerClock.advance(timerNow)
+                val remaining = BlockTimers.remainingMillis(settings?.timer, timerNow)
+                delay(if (remaining > 0) minOf(1000L, remaining) else 60_000L - System.currentTimeMillis() % 60_000L)
+            }
         }
     }
     val locale = displayLocale()
@@ -150,8 +159,9 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
         message = null
         scope.launch {
             val saved = withContext(Dispatchers.IO) { store.save(value) }
-            settings = if (saved) value else withContext(Dispatchers.IO) { store.load() }
-            if (!saved) message = R.string.save_failed
+            // The store can preserve a newer reboot anchor from a screening-service read.
+            settings = withContext(Dispatchers.IO) { store.load() }
+            if (!saved || settings == null) message = R.string.save_failed
             busy = false
         }
     }
@@ -165,132 +175,174 @@ private fun Home(resumeVersion: Int, foreground: Boolean) {
         } catch (_: RuntimeException) { message = R.string.settings_action_failed }
     }
 
+    val remainingMillis = BlockTimers.remainingMillis(settings?.timer, timerNow)
+
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-        Box(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing), contentAlignment = Alignment.TopCenter) {
-            Column(
-                Modifier.widthIn(max = 720.dp).fillMaxWidth().padding(top = 4.dp).verticalScroll(rememberScrollState()).padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(18.dp)
-            ) {
-                Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                Text(stringResource(R.string.tagline), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.intro), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                val current = settings
-                if (!loaded) {
-                    Text(stringResource(R.string.loading))
-                    LinearProgressIndicator(Modifier.fillMaxWidth())
-                } else if (current == null) {
-                    Section(stringResource(R.string.corrupt_title)) {
-                        Text(stringResource(R.string.corrupt_detail))
-                        OutlinedButton(onClick = { resetConfirmation = true }, enabled = !busy) { Text(stringResource(R.string.reset)) }
+        if (showTimer && settings != null) {
+            TimerScreen(remainingMillis, busy, permissionsReady, sessionPaused,
+                onBack = { showTimer = false },
+                onStart = { seconds ->
+                    val current = settings
+                    val reading = TimerClock.advance(timerNow)
+                    val timer = BlockTimers.start(seconds, reading)
+                    if (timer == null) message = R.string.timer_clock_unavailable
+                    else if (current != null) {
+                        timerNow = reading
+                        // Timer activation never confirms, edits or depends on the weekly windows.
+                        persist(current.copy(timer = timer))
                     }
-                } else {
-                    val enabled = current.enabled
-                    // One observable sample supplies both heading and explanation; a save holds that
-                    // copy instead of swapping in transient text of a different length.
-                    val committed = filterStatus(enabled, permissionsReady, sessionPaused)
-                    var held by remember { mutableStateOf(committed) }
-                    SideEffect { if (!busy) held = committed }
-                    val buttonColors = ButtonDefaults.buttonColors(
-                        containerColor = if (enabled) Color(0xFFB3261E) else Color(0xFF17613D), contentColor = Color.White,
-                    )
-                    Section(title = { FilterStatusText(cardStatus(committed, busy, held)) }) {
-                        Button(
-                            onClick = { if (enabled) persist(current.copy(enabled = false)) else requestSave(current.copy(enabled = true)) },
-                            enabled = !busy && (enabled || permissionsReady),
-                            colors = if (busy && (enabled || permissionsReady)) buttonColors.copy(
-                                disabledContainerColor = buttonColors.containerColor,
-                                disabledContentColor = buttonColors.contentColor,
-                            ) else buttonColors,
-                            modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
-                            contentPadding = PaddingValues(18.dp)
-                        ) { StableMasterButtonLabel(enabled) }
-                    }
-                    Section(stringResource(R.string.setup)) {
-                        Text(stringResource(R.string.setup_detail), style = MaterialTheme.typography.bodyMedium)
-                        Text(stringResource(if (role) R.string.role_granted else R.string.role_missing), fontWeight = FontWeight.Medium)
-                        if (!role) {
-                            if (roleAvailable) OutlinedButton(onClick = {
-                                try {
-                                    roleLauncher.launch(context.getSystemService(RoleManager::class.java).createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING))
-                                } catch (_: RuntimeException) { message = R.string.settings_action_failed }
-                            }) { Text(stringResource(R.string.choose_role)) }
-                            else Text(stringResource(R.string.role_unavailable), color = MaterialTheme.colorScheme.error)
+                },
+                onStop = { settings?.let { persist(it.copy(timer = null)) } },
+            )
+        } else {
+            Box(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing), contentAlignment = Alignment.TopCenter) {
+                Column(
+                    Modifier.widthIn(max = 720.dp).fillMaxWidth().padding(top = 4.dp).verticalScroll(homeScroll).padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(18.dp)
+                ) {
+                    Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.tagline), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.intro), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    val current = settings
+                    if (!loaded) {
+                        Text(stringResource(R.string.loading))
+                        LinearProgressIndicator(Modifier.fillMaxWidth())
+                    } else if (current == null) {
+                        Section(stringResource(R.string.corrupt_title)) {
+                            Text(stringResource(R.string.corrupt_detail))
+                            OutlinedButton(onClick = { resetConfirmation = true }, enabled = !busy) { Text(stringResource(R.string.reset)) }
                         }
-                        Text(stringResource(if (contacts) R.string.contacts_granted else R.string.contacts_missing), fontWeight = FontWeight.Medium)
-                        if (!contacts) {
-                            OutlinedButton(onClick = { contactsLauncher.launch(Manifest.permission.READ_CONTACTS) }) { Text(stringResource(R.string.grant_contacts)) }
-                            Text(stringResource(R.string.permission_help), style = MaterialTheme.typography.bodySmall)
-                            TextButton(onClick = { openSettings() }) { Text(stringResource(R.string.permission_settings)) }
-                        }
-                    }
-                    Section(stringResource(R.string.numbers_title)) {
-                        Text(stringResource(R.string.numbers_detail), style = MaterialTheme.typography.bodyMedium)
-                        if (current.numbers.isEmpty()) Text(stringResource(R.string.numbers_empty), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        current.numbers.forEach { number ->
-                            HorizontalDivider()
-                            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                                Column(Modifier.weight(1f)) {
-                                    if (number.label.isNotBlank()) Text(number.label, style = MaterialTheme.typography.titleMedium)
-                                    Text(number.displayValue(), style = MaterialTheme.typography.bodyLarge)
+                    } else {
+                        val enabled = current.enabled
+                        // One observable sample supplies both heading and explanation; a save holds that
+                        // copy instead of swapping in transient text of a different length.
+                        val scheduleValid = Rules.isValid(current) && (current.windows.isNotEmpty() || current.emptyScheduleConfirmed)
+                        val committed = filterStatus(enabled, permissionsReady, sessionPaused, scheduleValid)
+                        var held by remember { mutableStateOf(committed) }
+                        SideEffect { if (!busy) held = committed }
+                        val buttonColors = toggleButtonColors(enabled, busy)
+                        Section(title = { FilterStatusText(cardStatus(committed, busy, held)) }) {
+                            Button(
+                                onClick = { if (enabled) persist(current.copy(enabled = false)) else requestSave(current.copy(enabled = true)) },
+                                enabled = !busy && (enabled || (permissionsReady && Rules.isValid(current))),
+                                colors = if (busy && (enabled || permissionsReady)) buttonColors.copy(
+                                    disabledContainerColor = buttonColors.containerColor,
+                                    disabledContentColor = buttonColors.contentColor,
+                                ) else buttonColors,
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
+                                contentPadding = PaddingValues(18.dp)
+                            ) { StableMasterButtonLabel(enabled) }
+                            val timerActive = remainingMillis > 0
+                            val committedTimer = timerStatus(timerActive, permissionsReady, sessionPaused)
+                            var heldTimer by remember { mutableStateOf(committedTimer) }
+                            SideEffect { if (!busy) heldTimer = committedTimer }
+                            Button(
+                                onClick = { if (timerActive) persist(current.copy(timer = null)) else showTimer = true },
+                                enabled = !busy && (timerActive || permissionsReady),
+                                colors = toggleButtonColors(timerActive, busy),
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
+                                contentPadding = PaddingValues(18.dp),
+                            ) { StableToggleLabel(timerActive, R.string.activate_timer, R.string.deactivate_timer) }
+                            val timerCopy = cardStatus(committedTimer, busy, heldTimer)
+                            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(stringResource(timerCopy.title), style = MaterialTheme.typography.titleMedium)
+                                Text(stringResource(timerCopy.detail))
+                                if (timerActive) {
+                                    CountdownText(remainingMillis)
+                                    TextButton(onClick = { showTimer = true }, enabled = !busy) { Text(stringResource(R.string.timer_open)) }
                                 }
-                                val toggleDescription = stringResource(R.string.number_enabled, number.label.ifBlank { number.displayValue() })
-                                Switch(checked = number.enabled, onCheckedChange = { checked ->
-                                    requestSave(current.copy(numbers = current.numbers.map { if (it.id == number.id) it.copy(enabled = checked) else it }))
-                                }, enabled = !busy, modifier = Modifier.semantics { contentDescription = toggleDescription })
-                            }
-                            FlowRow {
-                                TextButton(onClick = { numberEditorId = number.id; showNumberEditor = true }, enabled = !busy) { Text(stringResource(R.string.edit)) }
-                                TextButton(onClick = { deleteNumber = number }, enabled = !busy) { Text(stringResource(R.string.delete)) }
                             }
                         }
-                        OutlinedButton(onClick = { numberEditorId = null; showNumberEditor = true }, enabled = !busy && current.numbers.size < 200) { Text(stringResource(R.string.add_number)) }
-                        if (current.numbers.size >= 200) Text(stringResource(R.string.entry_limit, 200))
+                        Section(stringResource(R.string.setup)) {
+                            Text(stringResource(R.string.setup_detail), style = MaterialTheme.typography.bodyMedium)
+                            Text(stringResource(if (role) R.string.role_granted else R.string.role_missing), fontWeight = FontWeight.Medium)
+                            if (!role) {
+                                if (roleAvailable) OutlinedButton(onClick = {
+                                    try {
+                                        roleLauncher.launch(context.getSystemService(RoleManager::class.java).createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING))
+                                    } catch (_: RuntimeException) { message = R.string.settings_action_failed }
+                                }) { Text(stringResource(R.string.choose_role)) }
+                                else Text(stringResource(R.string.role_unavailable), color = MaterialTheme.colorScheme.error)
+                            }
+                            Text(stringResource(if (contacts) R.string.contacts_granted else R.string.contacts_missing), fontWeight = FontWeight.Medium)
+                            if (!contacts) {
+                                OutlinedButton(onClick = { contactsLauncher.launch(Manifest.permission.READ_CONTACTS) }) { Text(stringResource(R.string.grant_contacts)) }
+                                Text(stringResource(R.string.permission_help), style = MaterialTheme.typography.bodySmall)
+                                TextButton(onClick = { openSettings() }) { Text(stringResource(R.string.permission_settings)) }
+                            }
+                        }
+                        Section(stringResource(R.string.numbers_title)) {
+                            Text(stringResource(R.string.numbers_detail), style = MaterialTheme.typography.bodyMedium)
+                            if (current.numbers.isEmpty()) Text(stringResource(R.string.numbers_empty), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            current.numbers.forEach { number ->
+                                HorizontalDivider()
+                                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                                    Column(Modifier.weight(1f)) {
+                                        if (number.label.isNotBlank()) Text(number.label, style = MaterialTheme.typography.titleMedium)
+                                        Text(number.displayValue(), style = MaterialTheme.typography.bodyLarge)
+                                    }
+                                    val toggleDescription = stringResource(R.string.number_enabled, number.label.ifBlank { number.displayValue() })
+                                    Switch(checked = number.enabled, onCheckedChange = { checked ->
+                                        requestSave(current.copy(numbers = current.numbers.map { if (it.id == number.id) it.copy(enabled = checked) else it }))
+                                    }, enabled = !busy, modifier = Modifier.semantics { contentDescription = toggleDescription })
+                                }
+                                FlowRow {
+                                    TextButton(onClick = { numberEditorId = number.id; showNumberEditor = true }, enabled = !busy) { Text(stringResource(R.string.edit)) }
+                                    TextButton(onClick = { deleteNumber = number }, enabled = !busy) { Text(stringResource(R.string.delete)) }
+                                }
+                            }
+                            OutlinedButton(onClick = { numberEditorId = null; showNumberEditor = true }, enabled = !busy && current.numbers.size < 200) { Text(stringResource(R.string.add_number)) }
+                            if (current.numbers.size >= 200) Text(stringResource(R.string.entry_limit, 200))
+                        }
+                        Section(stringResource(R.string.schedule_title)) {
+                            Text(stringResource(R.string.schedule_detail, now.zone.id), style = MaterialTheme.typography.bodyMedium)
+                            val next = remember(current.windows, now) { Rules.nextAllowed(current.windows, now) }
+                            if (!Rules.isValid(current)) Text(stringResource(R.string.schedule_invalid), color = MaterialTheme.colorScheme.error)
+                            if (current.windows.isEmpty()) Text(stringResource(R.string.schedule_empty), color = MaterialTheme.colorScheme.error)
+                            else if (next != null) {
+                                val formatter = DateTimeFormatter.ofPattern(if (DateFormat.is24HourFormat(context.applicationContext)) "EEE d MMM, HH:mm" else "EEE d MMM, h:mm a", locale)
+                                val until = remember(current.windows, next) { Rules.allowedUntil(current.windows, next) }
+                                Text(
+                                    if (!next.isAfter(now)) {
+                                        if (until == null) stringResource(R.string.allowed_continuously)
+                                        else stringResource(R.string.allowed_until, until.format(formatter))
+                                    } else {
+                                        if (until == null) stringResource(R.string.next_continuous, next.format(formatter))
+                                        else stringResource(R.string.next_interval, next.format(formatter), until.format(formatter))
+                                    },
+                                    style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                            current.windows.forEach { window ->
+                                HorizontalDivider()
+                                Text(window.label.ifBlank { stringResource(R.string.default_window) }, style = MaterialTheme.typography.titleMedium)
+                                if (Rules.isValidWindow(window)) {
+                                    Text(window.days.sorted().joinToString(" · ") { DayOfWeek.of(it).getDisplayName(TextStyle.SHORT, locale) })
+                                    Text(stringResource(R.string.window_time, timeText(window.startMinute), timeText(window.endMinute)), style = MaterialTheme.typography.headlineSmall)
+                                    if (window.endMinute < window.startMinute) Text(stringResource(R.string.overnight), style = MaterialTheme.typography.bodySmall)
+                                } else Text(stringResource(R.string.schedule_invalid), color = MaterialTheme.colorScheme.error)
+                                FlowRow {
+                                    TextButton(onClick = { windowEditor = window; showWindowEditor = true }, enabled = !busy && Rules.isValidWindow(window)) { Text(stringResource(R.string.edit)) }
+                                    TextButton(onClick = { deleteWindow = window }, enabled = !busy) { Text(stringResource(R.string.delete)) }
+                                }
+                            }
+                            OutlinedButton(onClick = { windowEditor = null; showWindowEditor = true }, enabled = !busy && current.windows.size < 100) { Text(stringResource(R.string.add_window)) }
+                            if (current.windows.size >= 100) Text(stringResource(R.string.entry_limit, 100))
+                        }
                     }
-                    Section(stringResource(R.string.schedule_title)) {
-                        Text(stringResource(R.string.schedule_detail, now.zone.id), style = MaterialTheme.typography.bodyMedium)
-                        val next = Rules.nextAllowed(current.windows, now)
-                        if (current.windows.isEmpty()) Text(stringResource(R.string.schedule_empty), color = MaterialTheme.colorScheme.error)
-                        else if (next != null) {
-                            val formatter = DateTimeFormatter.ofPattern(if (DateFormat.is24HourFormat(context.applicationContext)) "EEE d MMM, HH:mm" else "EEE d MMM, h:mm a", locale)
-                            val until = Rules.allowedUntil(current.windows, next)
-                            Text(
-                                if (!next.isAfter(now)) {
-                                    if (until == null) stringResource(R.string.allowed_continuously)
-                                    else stringResource(R.string.allowed_until, until.format(formatter))
-                                } else {
-                                    if (until == null) stringResource(R.string.next_continuous, next.format(formatter))
-                                    else stringResource(R.string.next_interval, next.format(formatter), until.format(formatter))
-                                },
-                                style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                        current.windows.forEach { window ->
-                            HorizontalDivider()
-                            Text(window.label.ifBlank { stringResource(R.string.default_window) }, style = MaterialTheme.typography.titleMedium)
-                            Text(window.days.sorted().joinToString(" · ") { DayOfWeek.of(it).getDisplayName(TextStyle.SHORT, locale) })
-                            Text(stringResource(R.string.window_time, timeText(window.startMinute), timeText(window.endMinute)), style = MaterialTheme.typography.headlineSmall)
-                            if (window.endMinute < window.startMinute) Text(stringResource(R.string.overnight), style = MaterialTheme.typography.bodySmall)
-                            FlowRow {
-                                TextButton(onClick = { windowEditor = window; showWindowEditor = true }, enabled = !busy) { Text(stringResource(R.string.edit)) }
-                                TextButton(onClick = { deleteWindow = window }, enabled = !busy) { Text(stringResource(R.string.delete)) }
-                            }
-                        }
-                        OutlinedButton(onClick = { windowEditor = null; showWindowEditor = true }, enabled = !busy && current.windows.size < 100) { Text(stringResource(R.string.add_window)) }
-                        if (current.windows.size >= 100) Text(stringResource(R.string.entry_limit, 100))
-                    }
+                    Section(stringResource(R.string.limits_title)) { Text(stringResource(R.string.limits_detail), style = MaterialTheme.typography.bodyMedium) }
+                    Spacer(Modifier.height(12.dp))
                 }
-                Section(stringResource(R.string.limits_title)) { Text(stringResource(R.string.limits_detail), style = MaterialTheme.typography.bodyMedium) }
-                Spacer(Modifier.height(12.dp))
-            }
-            // Permanent viewport strip outside the scroll area; never changes the column geometry.
-            Box(Modifier.widthIn(max = 720.dp).fillMaxWidth().padding(horizontal = 20.dp).height(4.dp)) {
-                if (busy) {
-                    // The card keeps its committed copy, so this strip is the whole save feedback: it states the real pause.
-                    val saving = stringResource(R.string.saving_detail)
-                    LinearProgressIndicator(Modifier.fillMaxWidth().semantics {
-                        contentDescription = saving
-                        liveRegion = LiveRegionMode.Polite
-                    })
+                // Permanent viewport strip outside the scroll area; never changes the column geometry.
+                Box(Modifier.widthIn(max = 720.dp).fillMaxWidth().padding(horizontal = 20.dp).height(4.dp)) {
+                    if (busy) {
+                        // The card keeps its committed copy, so this strip is the whole save feedback: it states the real pause.
+                        val saving = stringResource(R.string.saving_detail)
+                        LinearProgressIndicator(Modifier.fillMaxWidth().semantics {
+                            contentDescription = saving
+                            liveRegion = LiveRegionMode.Polite
+                        })
+                    }
                 }
             }
         }
@@ -374,10 +426,15 @@ private fun FilterStatusText(status: FilterStatus) {
 
 @Composable
 private fun StableMasterButtonLabel(enabled: Boolean) {
+    StableToggleLabel(enabled, R.string.activate, R.string.deactivate)
+}
+
+@Composable
+private fun StableToggleLabel(enabled: Boolean, activate: Int, deactivate: Int) {
     val selected = if (enabled) 1 else 0
     Layout(
         content = {
-            listOf(R.string.activate, R.string.deactivate).forEachIndexed { index, label ->
+            listOf(activate, deactivate).forEachIndexed { index, label ->
                 Text(
                     stringResource(label),
                     modifier = Modifier.fillMaxWidth().then(if (index == selected) Modifier else Modifier.clearAndSetSemantics {}),

@@ -35,6 +35,7 @@ data class Settings(
         TimeWindow("default", "", setOf(1, 2, 3, 4, 5), 8 * 60 + 30, 17 * 60 + 30),
     ),
     val emptyScheduleConfirmed: Boolean = false,
+    val timer: BlockTimer? = null,
 )
 
 object Numbers {
@@ -104,8 +105,10 @@ object Rules {
             window.startMinute in 0..1439 && window.endMinute in 0..1439 &&
             window.startMinute != window.endMinute
 
-    fun isValid(settings: Settings): Boolean =
+    /** General integrity is independent of whether weekly windows are usable. */
+    fun isValidGeneral(settings: Settings): Boolean =
         settings.numbers.size <= MAX_NUMBERS && settings.windows.size <= MAX_WINDOWS &&
+            settings.windows.all { validId(it.id) && it.label.length <= MAX_LABEL_LENGTH } &&
             Numbers.isSupportedRegion(settings.region) &&
             settings.numbers.all {
                 validId(it.id) && it.label.length <= MAX_LABEL_LENGTH &&
@@ -113,7 +116,9 @@ object Rules {
             } &&
             settings.numbers.map { it.id }.distinct().size == settings.numbers.size &&
             settings.numbers.map { it.target.canonical }.distinct().size == settings.numbers.size &&
-            validWindows(settings.windows)
+            (settings.timer == null || BlockTimers.isValid(settings.timer))
+
+    fun isValid(settings: Settings): Boolean = isValidGeneral(settings) && validWindows(settings.windows)
 
     private fun validWindows(windows: List<TimeWindow>): Boolean =
         windows.size <= MAX_WINDOWS && windows.all(::isValidWindow) &&
@@ -137,10 +142,10 @@ object Rules {
     }
 
     /** ready means the required role and permission have both been observed as granted. */
-    fun shouldBlock(settings: Settings, caller: String?, now: ZonedDateTime, ready: Boolean): Boolean {
-        if (!ready || !settings.enabled || caller == null || !caller.startsWith('+')) return false
-        if (!isValid(settings)) return false
-        if (settings.windows.isEmpty() && !settings.emptyScheduleConfirmed) return false
+    fun shouldBlock(settings: Settings, caller: String?, now: ZonedDateTime, ready: Boolean,
+                    timerNow: TimerReading? = null): Boolean {
+        if (!ready || caller == null || !caller.startsWith('+')) return false
+        if (!isValidGeneral(settings)) return false
         val normalized = Numbers.normalize(caller, settings.region) ?: return false
         // Incoming international IDs must already contain the exact E.164 digits.
         // Parsers may silently repair a redundant national trunk prefix; that is ambiguous.
@@ -154,7 +159,10 @@ object Rules {
             }
         }
         if (!listed) return false
-        return !isAllowed(settings.windows, now)
+        val timerActive = timerNow != null && BlockTimers.remainingMillis(settings.timer, timerNow) > 0
+        val scheduleBlocks = settings.enabled && validWindows(settings.windows) &&
+            (settings.windows.isNotEmpty() || settings.emptyScheduleConfirmed) && !isAllowed(settings.windows, now)
+        return timerActive || scheduleBlocks
     }
 
     /** True when any enabled rule (exact or mask) covers the given canonical E.164 number. */
