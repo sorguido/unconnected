@@ -2,7 +2,7 @@
   "schema_version": 1,
   "authoritative": false,
   "execution_path": "PRIMARY",
-  "phase": "P3",
+  "phase": "V1.2-P1",
   "phase_status": "COMPLETE",
   "completed_gates": [
     "P0 API feasibility and test plan",
@@ -21,47 +21,46 @@
     "88 JVM unit tests reported PASS on PR #3 head d7556ef; debug compile/lint/assemble reported PASS by AI PM, and manual GitHub Actions debug APK was downloaded and installed by owner",
     "Owner-reported physical Android tests of numeric ranges and counterchecks: all PASS on 2026-11-03 (not an agent-measured per-call/OEM receipt)",
     "v1.1.0 local Fedora official build with existing external signer; 88 JVM tests, zero failures/errors/skips; Debug and Release lint zero errors; package/version/SDK/signature checks PASS",
-    "v1.1.0 annotated tag at 599d622655f6e3275867dea147f460cb040d26e0 and non-draft/non-prerelease GitHub Release published; five assets downloaded back byte-identical; both checksums PASS; automatic tagged source verified; v1.0.0 tag/Release preserved"
+    "v1.1.0 annotated tag at 599d622655f6e3275867dea147f460cb040d26e0 and non-draft/non-prerelease GitHub Release published; five assets downloaded back byte-identical; both checksums PASS; automatic tagged source verified; v1.0.0 tag/Release preserved",
+    "V1.2-P1 (2026-11-04): complete independent timer; 125 JVM tests with zero failures/errors/skips, Debug lint zero errors/two inherited SDK warnings, actual development-signed offline APK/package/version/CRC/signature/SHA-256 verified; independent review findings corrected and rereview passed; stop at V1.2-P2 physical owner acceptance"
   ],
-  "pending_gates": [],
+  "pending_gates": [
+    "V1.2-P2_PHYSICAL_ACCEPTANCE \u2014 owner phone trials; docs/TIMER_DEVICE_TEST_GATE.md"
+  ],
   "host_modified": true,
   "relevant_artifacts": [
-    "evidence/runs/release-v1.1.0/verification.json",
-    "docs/BUILD.md",
-    "docs/SIGNING.md",
-    "docs/LICENSING.md",
-    "evidence/runs/gpl-v1.0.0/verification.md",
-    "evidence/runs/release-v1.0.0/publication.md",
-    "evidence/runs/dynamic-layout-1.0.0-vc6/verification.md",
-    "evidence/runs/dynamic-layout-1.0.0-vc6/review.md",
-    "evidence/runs/dynamic-layout-1.0.0-vc6/signature.json",
-    "README.md",
+    "evidence/runs/timer-v1.2.0/verification.md",
+    "evidence/runs/timer-v1.2.0/automated.json",
+    "evidence/runs/timer-v1.2.0/review.md",
+    "evidence/runs/timer-v1.2.0/source-inputs.sha256",
+    "docs/TIMER_DEVICE_TEST_GATE.md",
     "docs/PRODUCT_SPEC.md",
-    ".github/workflows/build-debug-apk.yml",
-    "tests/TEST_MATRIX.md"
+    "tests/TEST_MATRIX.md",
+    "docs/BUILD.md",
+    "evidence/runs/release-v1.1.0/verification.json"
   ],
   "relevant_corroborations": [
     "C1",
     "C2",
     "C3"
   ],
-  "next_action": "v1.1.0 release complete and postflight verified. No phone installation or settings changes authorized. Await owner direction for subsequent work; ROADMAP.md remains unchanged by explicit instruction.",
+  "next_action": "STOP at V1.2-P2. Owner verifies the delivered Debug APK/checksum, installs only in the personal profile and manually selects Debug for call screening, completes the phone checklist, then restores the previous screening app. No official signing, tag, release or publication is authorized.",
   "host_changes": [
     "Used Gradle dependency/build caches",
     "Started host ADB server for read-only device enumeration; no device attached",
     "Read the release candidate APK with build-tools 36.0.0 apksigner and aapt2 for verification only",
     "Reused installed Fedora JDK/Android SDK and existing Gradle caches for offline builds; no toolchain installation/update or global configuration change",
     "Read existing external signing properties/keystore only through the authorized Gradle signing mechanism; no private material copied or logged",
-    "Published and round-trip verified v1.1.0 assets and corresponding GPL source companion; preserved v1.0.0"
+    "Published and round-trip verified v1.1.0 assets and corresponding GPL source companion; preserved v1.0.0",
+    "V1.2-P1: authorized offline Gradle cache/lock access; Debug-only -Punsigned builds without official signing properties/key; public APK inspection and local deliverable copy; no toolchain update, device command, tag, push or publication"
   ],
   "device_changes": [],
-  "source_state": "Release v1.1.0 sources are tagged at 599d622655f6e3275867dea147f460cb040d26e0; versionName 1.1.0/versionCode 7. Only version metadata and stale BUILD/LICENSING references changed for release. Post-publication evidence/cache commit is separate; protected canonical files and README remain unchanged.",
-  "signed_candidate": "development/deliverables/release-v1.1.0/unconnected-1.1.0-vc7.apk",
+  "source_state": "Implementation committed at 4eb608db33074c2837fcc686e7227bd352ecd157 on development: v1.2.0/code8, independent timer, schema3 with legacy compatibility and persisted reboot anchors, localized functional keypad/countdown. 125 JVM tests, Debug lint and real Debug APK pass. Published v1.1.0 and protected canonical files remain unchanged. Evidence/cache commit is separate.",
   "published_apk_sha256": "68e043336cfb206cbe83a48a7e0393301f3b11ebb20986233f1555777845f556",
-  "verification_date": "2026-11-03",
+  "verification_date": "2026-11-04",
   "candidate_version": {
-    "versionName": "1.1.0",
-    "versionCode": 7
+    "versionName": "1.2.0-debug",
+    "versionCode": 8
   },
   "release": {
     "tag": "v1.1.0",
@@ -115,23 +114,22 @@
     "verification_receipt": "evidence/runs/release-v1.1.0/verification.json",
     "v1_0_0_preserved": true
   },
-  "owner_report": "Owner-reported PASS for all numeric-range physical-phone tests and counterchecks on 2026-11-03; no OEM/model, Android version or raw per-call receipt supplied. The release mandate explicitly authorized local preparation and GitHub publication. No device operations performed.",
-  "active_task": "v1.1.0 official release COMPLETE after real publication postflight",
-  "verified_source_baseline": "599d622655f6e3275867dea147f460cb040d26e0",
+  "owner_report": "No physical v1.2.0 acceptance yet. Historical v1.1.0 numeric-range acceptance and publication remain recorded under release history; they do not verify the timer.",
+  "active_task": "V1.2-P1 independent temporary call blocking timer COMPLETE; stop at owner physical gate V1.2-P2",
+  "verified_source_baseline": "4eb608db33074c2837fcc686e7227bd352ecd157",
   "known_v1_0_limitations": [
     "Owner decision on the two recorded code6 accessibility limitations, published as known limitations of v1.0.0: no audible save completion, and the temporary-pause sentence is announced but not displayed. No functional change was made for the release."
   ],
   "repository_visibility_current": "PUBLIC (observed via GitHub API on 2026-11-03; no visibility change performed in this update)",
   "main_head_at_handoff": "bddae47977f2fd2381cf4742f07a43674233271d",
   "planned_release": {
-    "versionName": "1.1.0",
-    "versionCode": 7,
-    "tag": "v1.1.0",
-    "status": "PUBLISHED_AND_POSTFLIGHT_VERIFIED",
-    "source_branch": "main",
-    "signer": "existing external Chromecast Kill Switch signing identity only",
-    "device_acceptance": "All numeric-range checks PASS, owner reported 2026-11-03; no OEM/version or raw call evidence supplied",
-    "release_commit": "599d622655f6e3275867dea147f460cb040d26e0"
+    "versionName": "1.2.0",
+    "versionCode": 8,
+    "tag": "v1.2.0",
+    "status": "NOT_AUTHORIZED \u2014 physical V1.2-P2 pending; future official signing/publication require new owner approval",
+    "source_branch": "development",
+    "signer": "existing external Chromecast identity only for a separately approved official release",
+    "device_acceptance": "PENDING for v1.2.0"
   },
   "previous_release": {
     "tag": "v1.0.0",
@@ -161,5 +159,40 @@
       "unconnected-1.0.0-source.tar.gz",
       "unconnected-1.0.0-source.tar.gz.sha256"
     ]
-  }
+  },
+  "active_branch": "development",
+  "implementation_commit": "4eb608db33074c2837fcc686e7227bd352ecd157",
+  "debug_candidate": {
+    "path": "development/deliverables/unconnected-1.2.0-debug-vc8.apk",
+    "checksum_path": "development/deliverables/unconnected-1.2.0-debug-vc8.apk.sha256",
+    "size": 23425965,
+    "sha256": "686efdefc9c6a88c1a1e772ec93e763343905441ade6ad10c170b2f97caaef5f",
+    "package": "it.sorguido.unconnected.debug",
+    "versionName": "1.2.0-debug",
+    "versionCode": 8,
+    "minSdk": 29,
+    "targetSdk": 36,
+    "signature_verified": true,
+    "signer_sha256": "c89c1294008f3b46c0bbaca0acc0146744730591ac443acc35472a7efa6a2262",
+    "signer_dn": "CN=Android Debug, O=Android, C=US",
+    "official_signer_distinct": true,
+    "zip_crc_verified": true,
+    "source_and_delivered_bytes_identical": true,
+    "checksum_check": "unconnected-1.2.0-debug-vc8.apk: OK",
+    "permissions": [
+      "uses-permission: name='android.permission.READ_CONTACTS'",
+      "uses-permission: name='it.sorguido.unconnected.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'"
+    ],
+    "internet_permission": false,
+    "installation_performed": false
+  },
+  "governance_note": "The attached owner mandate defines V1.2-P1 scope. Local ROADMAP.md still records v1.1.0; it was read in full and remains protected/unmodified.",
+  "limitations": [
+    "First observation after reboot estimates offline time from original bounded wall deadline; clock edits before it are inherently ambiguous. Persisted elapsed anchor protects subsequent observations and process recreation.",
+    "Expiry tombstones are persisted on a settings read/save, not on visual countdown ticks.",
+    "Android role/provider deadlines, native rendering, caller/notification behavior, screen-off and reboot dispatch require physical tests.",
+    "Two inherited lint warnings retain SDK 36; SDK migration outside timer scope."
+  ],
+  "physical_gate": "docs/TIMER_DEVICE_TEST_GATE.md",
+  "previous_official_signed_candidate": "development/deliverables/release-v1.1.0/unconnected-1.1.0-vc7.apk"
 }
